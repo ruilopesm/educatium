@@ -1,0 +1,42 @@
+<header class="px-4 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+    <div class="flex items-center gap-4">
+      <a href="/">
+        <img src={~p"/images/logo.svg"} width="36" />
+      </a>
+      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+        v<%= Application.spec(:educatium, :vsn) %>
+      </p>
+    </div>
+    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+      <%= if @current_user do %>
+        <.link
+          href={~p"/users/settings"}
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Settings
+        </.link>
+        <.link
+          href={~p"/users/log_out"}
+          method="delete"
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Log out <span aria-hidden="true">&rarr;</span>
+        </.link>
+      <% else %>
+        <.link
+          href={~p"/users/register"}
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Register
+        </.link>
+        <.link
+          href={~p"/users/log_in"}
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Log in <span aria-hidden="true">&rarr;</span>
+        </.link>
+      <% end %>
+    </div>
+  </div>
+</header>
