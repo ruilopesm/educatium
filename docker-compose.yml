@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:14.1
+    container_name: educatium_db
+    env_file: .env.dev
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_HOST: ${DB_HOST:-localhost}
+    volumes:
+      - /var/lib/postgresql/data
