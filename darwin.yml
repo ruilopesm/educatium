@@ -4,3 +4,6 @@ services:
   db:
     ports:
       - 5432:5432
+  web:
+    ports:
+      - 4000:4000
