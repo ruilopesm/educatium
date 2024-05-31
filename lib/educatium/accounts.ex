@@ -81,6 +81,21 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
+  Fetches or creates a user.
+
+  ## Examples
+    
+    iex> fetch_or_create_user(%{email: "user@mail.com", password: "password"})
+    {:ok, %User{}}
+  """
+  def fetch_or_create_user(attrs) do
+    case get_user_by_email(attrs.email) do
+      nil -> register_user(attrs)
+      user -> {:ok, user}
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples

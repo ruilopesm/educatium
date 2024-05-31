@@ -50,6 +50,9 @@ defmodule EducatiumWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
+
+    get "/auth/:provider", OAuthController, :request
+    get "/auth/:provider/callback", OAuthController, :callback
   end
 
   scope "/", EducatiumWeb do

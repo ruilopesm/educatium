@@ -7,6 +7,11 @@ defmodule Educatium.Application do
 
   @impl true
   def start(_type, _args) do
+    unless Mix.env() == :prod do
+      Dotenv.load(Path.expand("./.env.dev"))
+      Mix.Task.run("loadconfig")
+    end
+
     children = [
       EducatiumWeb.Telemetry,
       Educatium.Repo,
