@@ -19,7 +19,7 @@ defmodule Educatium.MixProject do
   def application do
     [
       mod: {Educatium.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :set_locale]
     ]
   end
 
@@ -74,7 +74,8 @@ defmodule Educatium.MixProject do
       # tools
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"}
+      {:dns_cluster, "~> 0.1.1"},
+      {:set_locale, "~> 0.2.1"}
     ]
   end
 
