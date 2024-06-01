@@ -10,7 +10,6 @@ defmodule EducatiumWeb.SetLocale do
 
   def call(conn, config) do
     locale = extract_accept_language(conn)
-    IO.puts locale
     gettext = config.gettext
     known_locales = Gettext.known_locales(gettext)
 
