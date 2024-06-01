@@ -21,4 +21,7 @@ defmodule EducatiumWeb.Gettext do
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
   use Gettext, otp_app: :educatium
+
+  # Get from config.exs
+  def default_locale, do: Application.get_env(:educatium, __MODULE__)[:default_locale]
 end
