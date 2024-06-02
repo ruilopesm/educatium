@@ -230,6 +230,7 @@ defmodule Educatium.Accounts do
     end
   end
 
+  
   ## Session
 
   @doc """
@@ -364,5 +365,35 @@ defmodule Educatium.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  # User details
+  
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user details.
+  """
+  def change_user_details(user, attrs \\ %{}) do
+    User.details_changeset(user, attrs)
+  end
+
+
+  @doc """
+  Updates the user details.
+  """
+  def update_user_details(user, attrs) do
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:user, User.details_changeset(user, attrs))
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  @doc """
+  Returns the list of filiation options.
+  """
+  def list_filiation_options() do
+    User.filiation_options()
   end
 end

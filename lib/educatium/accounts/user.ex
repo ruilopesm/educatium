@@ -5,11 +5,14 @@ defmodule Educatium.Accounts.User do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
+  @filiations [:student, :teacher, :university, :department, :course]
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :name, :string
+    field :filiation, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -101,6 +104,18 @@ defmodule Educatium.Accounts.User do
       %{changes: %{email: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :email, "did not change")
     end
+  end
+
+  def details_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :filiation])
+    |> validate_length(:name, max: 100)
+    |> validate_inclusion(:filiation, @filiations)
+  end
+
+
+  def filiation_options() do
+    @filiations
   end
 
   @doc """
