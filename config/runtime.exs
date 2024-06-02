@@ -20,6 +20,25 @@ if System.get_env("PHX_SERVER") do
   config :educatium, EducatiumWeb.Endpoint, server: true
 end
 
+if config_env() in [:dev, :test] do
+  import Dotenvy
+  source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
+
+  config :educatium, Educatium.Repo,
+    username: env!("DB_USERNAME", :string, "postgres"),
+    password: env!("DB_PASSWORD", :string, "postgres"),
+    database: env!("DB_NAME", :string, "educatium_#{config_env()}"),
+    hostname: env!("DB_HOST", :string, "localhost"),
+    port: env!("DB_PORT", :integer, 5432),
+    stacktrace: true,
+    show_sensitive_data_on_connection_error: true,
+    pool_size: 10
+
+  config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+    client_id: env!("GOOGLE_CLIENT_ID"),
+    client_secret: env!("GOOGLE_CLIENT_SECRET")
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

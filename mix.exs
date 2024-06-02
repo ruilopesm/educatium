@@ -77,8 +77,8 @@ defmodule Educatium.MixProject do
       # tools
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:dotenv, "~> 3.0.0"},
-      {:dns_cluster, "~> 0.1.1"}
+      {:dns_cluster, "~> 0.1.1"},
+      {:dotenvy, "~> 0.8.0"}
     ]
   end
 
