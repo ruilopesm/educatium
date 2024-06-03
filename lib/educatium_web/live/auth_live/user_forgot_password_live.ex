@@ -11,7 +11,7 @@ defmodule EducatiumWeb.UserForgotPasswordLive do
         <:subtitle>We'll send a password reset link to your inbox</:subtitle>
       </.header>
 
-      <.simple_form for={@form} id="reset_password_form" phx-submit="send_email">
+      <.simple_form for={@form} id="reset_password_form" phx-submit="send_email" class="mt-10">
         <.input field={@form[:email]} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with="Sending..." class="w-full">

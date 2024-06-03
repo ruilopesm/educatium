@@ -17,6 +17,14 @@ defmodule EducatiumWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    live "/resources", ResourceLive.Index, :index
+
+    # TODO: Set correct permissions
+    live "/resources/new", ResourceLive.Index, :new
+    live "/resources/:id/edit", ResourceLive.Index, :edit
+
+    live "/resources/:id", ResourceLive.Show, :show
+    live "/resources/:id/show/edit", ResourceLive.Show, :edit
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

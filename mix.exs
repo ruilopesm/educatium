@@ -36,17 +36,13 @@ defmodule Educatium.MixProject do
       {:phoenix, "~> 1.7.12"},
       {:phoenix_live_view, "~> 0.20.2"},
       {:phoenix_html, "~> 4.0"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:bandit, "~> 1.2"},
 
       # database
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-
-      # testing
-      {:floki, ">= 0.30.0", only: :test},
 
       # frontend
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
@@ -71,6 +67,10 @@ defmodule Educatium.MixProject do
       # security
       {:argon2_elixir, "~> 3.0"},
 
+      # testing
+      {:floki, ">= 0.30.0", only: :test},
+      {:faker, "~> 0.18", only: [:dev, :test]},
+
       # tools
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
@@ -87,7 +87,8 @@ defmodule Educatium.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
+      "ecto.seed": ["run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],

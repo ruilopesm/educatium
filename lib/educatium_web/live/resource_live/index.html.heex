@@ -1,0 +1,51 @@
+<.header>
+  Listing Resources
+  <:actions>
+    <.link patch={~p"/resources/new"}>
+      <.button>New Resource</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="resources"
+  rows={@streams.resources}
+  row_click={fn {_id, resource} -> JS.navigate(~p"/resources/#{resource}") end}
+>
+  <:col :let={{_id, resource}} label="Title"><%= resource.title %></:col>
+  <:col :let={{_id, resource}} label="Description"><%= resource.description %></:col>
+  <:col :let={{_id, resource}} label="Type"><%= resource.type %></:col>
+  <:col :let={{_id, resource}} label="Date"><%= resource.date %></:col>
+  <:col :let={{_id, resource}} label="Published"><%= resource.published %></:col>
+  <:col :let={{_id, resource}} label="Visibility"><%= resource.visibility %></:col>
+  <:action :let={{_id, resource}}>
+    <div class="sr-only">
+      <.link navigate={~p"/resources/#{resource}"}>Show</.link>
+    </div>
+    <.link patch={~p"/resources/#{resource}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, resource}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: resource.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="resource-modal"
+  show
+  on_cancel={JS.patch(~p"/resources")}
+>
+  <.live_component
+    module={EducatiumWeb.ResourceLive.FormComponent}
+    id={@resource.id || :new}
+    title={@page_title}
+    action={@live_action}
+    resource={@resource}
+    patch={~p"/resources"}
+  />
+</.modal>

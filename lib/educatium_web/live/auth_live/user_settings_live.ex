@@ -17,6 +17,7 @@ defmodule EducatiumWeb.UserSettingsLive do
           id="email_form"
           phx-submit="update_email"
           phx-change="validate_email"
+          class="mt-10"
         >
           <.input field={@email_form[:email]} type="email" label="Email" required />
           <.input
@@ -42,6 +43,7 @@ defmodule EducatiumWeb.UserSettingsLive do
           phx-change="validate_password"
           phx-submit="update_password"
           phx-trigger-action={@trigger_submit}
+          class="mt-10"
         >
           <input
             name={@password_form[:email].name}

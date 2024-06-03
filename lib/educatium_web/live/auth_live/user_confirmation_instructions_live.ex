@@ -11,7 +11,12 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
         <:subtitle>We'll send a new confirmation link to your inbox</:subtitle>
       </.header>
 
-      <.simple_form for={@form} id="resend_confirmation_form" phx-submit="send_instructions">
+      <.simple_form
+        for={@form}
+        id="resend_confirmation_form"
+        phx-submit="send_instructions"
+        class="mt-10"
+      >
         <.input field={@form[:email]} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with="Sending..." class="w-full">
