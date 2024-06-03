@@ -4,7 +4,8 @@ defmodule Educatium.Feed do
   """
   use Educatium, :context
 
-  alias Educatium.Feed.Post
+  alias Educatium.Accounts.User
+  alias Educatium.Feed.{Post, Upvote, Downvote}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -111,11 +112,56 @@ defmodule Educatium.Feed do
   ## Examples
 
       iex> change_post(post)
-      %Todo{...}
+      %Post{}
 
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
+  end
+
+  @doc """
+  Upvotes a post, by creating an upvote for the given user.
+  This upvote creation will, automatically, increment the post's `upvotes_count` field.
+
+  ## Examples
+
+      iex> upvote_post!(post, user)
+      %Post{}
+
+  """
+  def upvote_post!(%Post{} = post, %User{} = user) do
+    %Upvote{}
+    |> Upvote.changeset(%{post_id: post.id, user_id: user.id})
+    |> Repo.insert!()
+
+    updated_post =
+      get_post!(post.id)
+      |> Repo.preload(:resource)
+
+    broadcast({1, updated_post}, :post_updated)
+    updated_post
+  end
+
+  @doc """
+  Downvotes a post, by creating a downvote for the given user.
+  This downvote creation will, automatically, increment the post's `downvotes_count` field.
+
+  ## Examples
+
+      iex> downvote_post!(post, user)
+      %Post{}
+  """
+  def downvote_post!(%Post{} = post, %User{} = user) do
+    %Downvote{}
+    |> Downvote.changeset(%{post_id: post.id, user_id: user.id})
+    |> Repo.insert!()
+
+    updated_post =
+      get_post!(post.id)
+      |> Repo.preload(:resource)
+
+    broadcast({1, updated_post}, :post_updated)
+    updated_post
   end
 
   @topic "posts"
@@ -129,7 +175,7 @@ defmodule Educatium.Feed do
 
   defp broadcast({:error, _reason} = error, _event), do: error
 
-  defp broadcast({1, [post]}, event) do
+  defp broadcast({1, post}, event) do
     Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
     {:ok, post}
   end

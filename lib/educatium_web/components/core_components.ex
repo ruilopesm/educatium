@@ -449,6 +449,7 @@ defmodule EducatiumWeb.CoreComponents do
   Renders a header with title.
   """
   attr :class, :string, default: nil
+  attr :size, :string, values: ~w(lg xl 2xl 3xl), default: "lg"
 
   slot :inner_block, required: true
   slot :subtitle
@@ -458,10 +459,10 @@ defmodule EducatiumWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class={[text_size(@size), "font-semibold leading-8 text-zinc-800"]}>
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="text-sm leading-6 text-zinc-600">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -469,6 +470,8 @@ defmodule EducatiumWeb.CoreComponents do
     </header>
     """
   end
+
+  defp text_size(size), do: "text-#{size}"
 
   @doc ~S"""
   Renders a table with generic styling.

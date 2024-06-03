@@ -1,8 +1,8 @@
-defmodule Educatium.Repo.Migrations.CreateUpvotes do
+defmodule Educatium.Repo.Migrations.CreateDownvotes do
   use Ecto.Migration
 
   def change do
-    create table(:upvotes, primary_key: false) do
+    create table(:downvotes, primary_key: false) do
       add :id, :binary_id, primary_key: true
 
       add :user_id, references(:users, on_delete: :delete_all, type: :binary_id)
@@ -11,6 +11,6 @@ defmodule Educatium.Repo.Migrations.CreateUpvotes do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:upvotes, [:user_id, :post_id], name: :unique_upvotes)
+    create unique_index(:downvotes, [:user_id, :post_id], name: :unique_downvotes)
   end
 end

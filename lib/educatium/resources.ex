@@ -54,7 +54,7 @@ defmodule Educatium.Resources do
 
   """
   def create_resource(attrs \\ %{}, opts \\ []) do
-    opts = Keyword.validate!(opts, [with_post: true])
+    opts = Keyword.validate!(opts, with_post: true)
 
     if opts[:with_post] do
       create_resource_with_post(attrs)

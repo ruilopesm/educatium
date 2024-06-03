@@ -2,6 +2,7 @@ defmodule EducatiumWeb.HomeLive do
   use EducatiumWeb, :live_view
 
   alias Educatium.Feed
+  alias EducatiumWeb.HomeLive.Components
 
   @impl true
   def mount(_params, _session, socket) do
@@ -9,28 +10,28 @@ defmodule EducatiumWeb.HomeLive do
 
     {:ok,
      socket
-     |> stream(:posts, Feed.list_posts(preloads: [resource: :user]))
+     |> stream(:posts, Feed.list_posts(preloads: :resource))
      |> assign(:form, to_form(%{}, as: "post"))}
   end
 
   @impl true
   def handle_event("search", %{"post" => ""}, socket) do
     {:noreply,
-      socket
-      |> stream(:posts, Feed.list_posts(preloads: [resource: :user]))}
+     socket
+     |> stream(:posts, Feed.list_posts(preloads: :resource))}
   end
 
   @impl true
   def handle_event("search", %{"post" => post}, socket) do
     {:noreply,
      socket
-     |> stream(:posts, Feed.search_posts(post, preloads: [resource: :user]))}
+     |> stream(:posts, Feed.search_posts(post, preloads: :resource))}
   end
 
   @impl true
   def handle_info({:post_updated, post}, socket) do
     {:noreply,
-      socket
-      |> stream_insert(:posts, post)}
+     socket
+     |> stream_insert(:posts, post)}
   end
 end
