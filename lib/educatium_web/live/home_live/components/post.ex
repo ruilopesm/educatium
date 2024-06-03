@@ -106,4 +106,15 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
     {:noreply, assign(socket, post: updated_post)}
   end
+
+  # TODO: Complete after current_user (or maybe let not logged in users see resources?)
+  defp current_user_upvoted?(post, user) do
+    post.upvotes
+    |> Enum.any?(&(&1.user_id == user.id))
+  end
+
+  defp current_user_downvoted?(post, user) do
+    post.downvotes
+    |> Enum.any?(&(&1.user_id == user.id))
+  end
 end

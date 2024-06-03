@@ -11,7 +11,9 @@ defmodule EducatiumWeb.HomeLive do
     {:ok,
      socket
      |> stream(:posts, Feed.list_posts(preloads: :resource))
-     |> assign(:form, to_form(%{}, as: "post"))}
+     |> assign(:form, to_form(%{}, as: "post"))
+     # TODO: Handle new post creation (PubSub-based)
+     |> assign(:new_posts_count, 0)}
   end
 
   @impl true
@@ -26,6 +28,14 @@ defmodule EducatiumWeb.HomeLive do
     {:noreply,
      socket
      |> stream(:posts, Feed.search_posts(post, preloads: :resource), reset: true)}
+  end
+
+  @impl true
+  def handle_event("show-new-posts", _, socket) do
+    {:noreply,
+     socket
+     |> assign(:new_posts_count, 0)
+     |> stream(:posts, Feed.list_posts(preloads: :resource), reset: true)}
   end
 
   @impl true

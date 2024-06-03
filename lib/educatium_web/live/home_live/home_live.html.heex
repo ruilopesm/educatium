@@ -15,6 +15,12 @@
   />
 </.simple_form>
 
+<%= if @new_posts_count > 0 do %>
+  <div phx-click="show-new-posts" class="text-center mt-6 text-sm text-gray-500 cursor-pointer">
+    <%= ngettext("Show 1 post", "Show %{count} new posts", @new_posts_count) %>
+  </div>
+<% end %>
+
 <ul id="feed" phx-update="stream" class="flex flex-col space-y-4 mt-6">
   <li :for={{id, post} <- @streams.posts} id={id}>
     <.live_component id={id} module={Components.Post} post={post} />
