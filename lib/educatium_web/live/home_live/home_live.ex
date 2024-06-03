@@ -18,14 +18,14 @@ defmodule EducatiumWeb.HomeLive do
   def handle_event("search", %{"post" => ""}, socket) do
     {:noreply,
      socket
-     |> stream(:posts, Feed.list_posts(preloads: :resource))}
+     |> stream(:posts, Feed.list_posts(preloads: :resource), reset: true)}
   end
 
   @impl true
   def handle_event("search", %{"post" => post}, socket) do
     {:noreply,
      socket
-     |> stream(:posts, Feed.search_posts(post, preloads: :resource))}
+     |> stream(:posts, Feed.search_posts(post, preloads: :resource), reset: true)}
   end
 
   @impl true
