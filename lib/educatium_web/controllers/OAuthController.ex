@@ -10,9 +10,12 @@ defmodule EducatiumWeb.OAuthController do
 
   def callback(%{assigns: %{ueberauth_auth: %{info: user_info}}} = conn, %{"provider" => "google"}) do
     user_params = %{email: user_info.email, password: random_password()}
+    user_details = %{"full_name" => user_info.name}
 
+    IO.inspect(user_info)
     case Accounts.fetch_or_create_user(user_params) do
       {:ok, user} ->
+        Accounts.update_user_details(user, user_details)
         UserAuth.log_in_user(conn, user)
 
       _ ->

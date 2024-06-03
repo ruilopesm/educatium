@@ -162,14 +162,11 @@ defmodule Educatium.Accounts.User do
     end
   end
 
-  def setup_changeset(user, attrs) do
+  def details_changeset(user, attrs) do
     user
-    |> cast(attrs, [:full_name, :filiation])
+    |> cast(attrs, [:full_name, :filiation, :active])
     |> validate_length(:full_name, max: 100)
     |> validate_inclusion(:filiation, @filiations)
-    |> change(%{
-      active: true
-    })
   end
 
   def filiation_options() do
