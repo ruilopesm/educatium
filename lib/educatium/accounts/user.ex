@@ -10,9 +10,11 @@ defmodule Educatium.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
-    field :confirmed_at, :naive_datetime
-    field :name, :string
+    field :full_name, :string
     field :filiation, :string
+
+    field :confirmed_at, :naive_datetime
+    field :active, :boolean, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -106,18 +108,6 @@ defmodule Educatium.Accounts.User do
     end
   end
 
-  def details_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:name, :filiation])
-    |> validate_length(:name, max: 100)
-    |> validate_inclusion(:filiation, @filiations)
-  end
-
-
-  def filiation_options() do
-    @filiations
-  end
-
   @doc """
   A user changeset for changing the password.
 
@@ -170,5 +160,19 @@ defmodule Educatium.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  def setup_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:full_name, :filiation])
+    |> validate_length(:full_name, max: 100)
+    |> validate_inclusion(:filiation, @filiations)
+    |> change(%{
+      active: true
+    })
+  end
+
+  def filiation_options() do
+    @filiations
   end
 end

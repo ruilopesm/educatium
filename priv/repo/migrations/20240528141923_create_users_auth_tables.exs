@@ -9,8 +9,9 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
-      add :name, :string
+      add :full_name, :string
       add :filiation, :string
+      add :active, :boolean, default: false, null: false
       timestamps(type: :utc_datetime)
     end
 

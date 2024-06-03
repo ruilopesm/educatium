@@ -17,7 +17,7 @@ defmodule EducatiumWeb.UserSetupLive do
         phx-submit="update_details"
         phx-change="validate_details"
       >
-        <.input field={@user_details_form[:name]} type="text" label="Name" value={@current_user.name} required />
+        <.input field={@user_details_form[:full_name]} type="text" label="Full name" value={@current_user.full_name} required />
         <.input field={@user_details_form[:filliation]} type="select" options={@filiation_options} label="Filliation" required />
         <:actions>
           <.button phx-disable-with="Changing...">Save details</.button>
@@ -53,8 +53,8 @@ defmodule EducatiumWeb.UserSetupLive do
   def handle_event("update_details", %{"user" => params}, socket) do
     user = socket.assigns.current_user
 
-    case Accounts.update_user_details(user, params) do
-      {:ok, updated_user} ->
+    case Accounts.setup_user_details(user, params) do
+      {:ok, _updated_user} ->
         info = "Your account details have been updated."
         {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
 

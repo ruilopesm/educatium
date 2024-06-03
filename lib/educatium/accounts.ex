@@ -373,16 +373,16 @@ defmodule Educatium.Accounts do
   Returns an `%Ecto.Changeset{}` for changing the user details.
   """
   def change_user_details(user, attrs \\ %{}) do
-    User.details_changeset(user, attrs)
+    User.setup_changeset(user, attrs)
   end
 
 
   @doc """
   Updates the user details.
   """
-  def update_user_details(user, attrs) do
+  def setup_user_details(user, attrs) do
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.details_changeset(user, attrs))
+    |> Ecto.Multi.update(:user, User.setup_changeset(user, attrs))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
