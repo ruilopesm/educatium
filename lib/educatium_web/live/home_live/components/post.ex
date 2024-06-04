@@ -23,6 +23,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       class="block w-full px-6 py-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50"
     >
       <div class="flex gap-3">
+        <!-- FIXME: Should be user's avatar -->
         <img src="https://i.pravatar.cc/300" alt="Hailey image" class="w-12 h-12 rounded-full" />
         <div class="grid gap-3">
           <div class="grid gap-0.5">
@@ -52,62 +53,87 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       </div>
     </.link>
     <div class="flex gap-3 mt-6 absolute left-[22px] bottom-3">
-      <object>
-        <button
-          phx-click="upvote"
-          phx-target={@myself}
-          class="flex gap-1 items-center text-gray-600 text-xs font-medium leading-4 hover:text-green-500"
-        >
-          <.icon name="hero-chevron-up" class="size-5" />
-          <span><%= @post.upvotes_count %></span>
-        </button>
-      </object>
-      <object>
-        <button
-          phx-click="downvote"
-          phx-target={@myself}
-          class="flex gap-1 items-center text-gray-600 text-xs font-medium leading-4 hover:text-red-500"
-        >
-          <.icon name="hero-chevron-down" class="size-5" />
-          <span><%= @post.downvotes_count %></span>
-        </button>
-      </object>
-      <object>
-        <.link
-          href={~p"/resources/#{@post.resource.id}"}
-          class="flex gap-1 items-center text-gray-600 text-xs font-medium leading-4 hover:text-yellow-500"
-        >
-          <.icon name="hero-chat-bubble-oval-left" class="size-5" />
-          <span>7</span>
-        </.link>
-      </object>
+      <button
+        phx-click="upvote"
+        phx-target={@myself}
+        class={[
+          "flex gap-1 items-center text-xs font-medium leading-4 text-gray-600 hover:text-green-500",
+          current_user_upvoted?(@post, @current_user) && "text-green-500 hover:text-green-800"
+        ]}
+      >
+        <.icon name="hero-chevron-up" class="size-5" />
+        <span><%= @post.upvotes_count %></span>
+      </button>
+
+      <button
+        phx-click="downvote"
+        phx-target={@myself}
+        class={[
+          "flex gap-1 items-center text-xs font-medium leading-4 text-gray-600 hover:text-red-500",
+          current_user_downvoted?(@post, @current_user) && "text-red-500 hover:text-red-800"
+        ]}
+      >
+        <.icon name="hero-chevron-down" class="size-5" />
+        <span><%= @post.downvotes_count %></span>
+      </button>
+
+      <.link
+        href={~p"/resources/#{@post.resource.id}"}
+        class="flex gap-1 items-center text-gray-600 text-xs font-medium leading-4 hover:text-gray-800"
+      >
+        <.icon name="hero-chat-bubble-oval-left" class="size-5" />
+        <span>7</span>
+      </.link>
     </div>
     """
   end
 
-  # FIXME: Should be current_user
-  alias Educatium.Repo
-  alias Educatium.Accounts.User
-
   @impl true
   def handle_event("upvote", _, socket) do
-    user = hd(Repo.all(User))
+    user = socket.assigns.current_user
     post = socket.assigns.post
-    updated_post = Feed.upvote_post!(post, user)
 
-    {:noreply, assign(socket, post: updated_post)}
+    if current_user_downvoted?(post, user) do
+      notify_parent({:error, gettext("You can't upvote a post you've downvoted for.")})
+      {:noreply, socket}
+    else
+      upvote_post(socket, post, user)
+    end
   end
 
   @impl true
   def handle_event("downvote", _, socket) do
-    user = hd(Repo.all(User))
+    user = socket.assigns.current_user
     post = socket.assigns.post
-    updated_post = Feed.downvote_post!(post, user)
 
-    {:noreply, assign(socket, post: updated_post)}
+    if current_user_upvoted?(post, user) do
+      notify_parent({:error, gettext("You can't downvote a post you've upvoted for.")})
+      {:noreply, socket}
+    else
+      downvote_post(socket, post, user)
+    end
   end
 
-  # TODO: Complete after current_user (or maybe let not logged in users see resources?)
+  defp upvote_post(socket, post, user) do
+    if current_user_upvoted?(post, user) do
+      update_post = Feed.delete_upvote!(post, user)
+      {:noreply, assign(socket, post: update_post)}
+    else
+      updated_post = Feed.upvote_post!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
+    end
+  end
+
+  defp downvote_post(socket, post, user) do
+    if current_user_downvoted?(post, user) do
+      update_post = Feed.delete_downvote!(post, user)
+      {:noreply, assign(socket, post: update_post)}
+    else
+      updated_post = Feed.downvote_post!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
+    end
+  end
+
   defp current_user_upvoted?(post, user) do
     post.upvotes
     |> Enum.any?(&(&1.user_id == user.id))

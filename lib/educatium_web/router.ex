@@ -13,18 +13,25 @@ defmodule EducatiumWeb.Router do
     plug :fetch_current_user
   end
 
+  ## Normal routes
+
   scope "/", EducatiumWeb do
-    pipe_through :browser
+    pipe_through [:browser, :require_authenticated_user]
 
-    live "/", HomeLive
-    live "/resources", ResourceLive.Index, :index
+    live_session :require_authenticated_user,
+      on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
+      live "/", HomeLive
+      live "/resources", ResourceLive.Index, :index
 
-    # TODO: Set correct permissions
-    live "/resources/new", ResourceLive.Index, :new
-    live "/resources/:id/edit", ResourceLive.Index, :edit
+      live "/resources/new", ResourceLive.Index, :new
+      live "/resources/:id/edit", ResourceLive.Index, :edit
 
-    live "/resources/:id", ResourceLive.Show, :show
-    live "/resources/:id/show/edit", ResourceLive.Show, :edit
+      live "/resources/:id", ResourceLive.Show, :show
+      live "/resources/:id/show/edit", ResourceLive.Show, :edit
+
+      live "/users/settings", UserSettingsLive, :edit
+      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -58,16 +65,6 @@ defmodule EducatiumWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
-  end
-
-  scope "/", EducatiumWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    live_session :require_authenticated_user,
-      on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-    end
   end
 
   scope "/", EducatiumWeb do

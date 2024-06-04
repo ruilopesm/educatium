@@ -23,6 +23,6 @@
 
 <ul id="feed" phx-update="stream" class="flex flex-col space-y-4 mt-6">
   <li :for={{id, post} <- @streams.posts} id={id}>
-    <.live_component id={id} module={Components.Post} post={post} />
+    <.live_component id={id} module={Components.Post} post={post} current_user={@current_user} />
   </li>
 </ul>

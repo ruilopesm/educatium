@@ -120,6 +120,20 @@ defmodule Educatium.Feed do
   end
 
   @doc """
+  Gets a post's upvote.
+
+  ## Examples
+
+      iex> get_upvote!(post, user)
+      %Upvote{}
+  """
+  def get_upvote!(%Post{} = post, %User{} = user) do
+    Upvote
+    |> where([u], u.post_id == ^post.id and u.user_id == ^user.id)
+    |> Repo.one!()
+  end
+
+  @doc """
   Upvotes a post, by creating an upvote for the given user.
   This upvote creation will, automatically, increment the post's `upvotes_count` field.
 
@@ -136,10 +150,50 @@ defmodule Educatium.Feed do
 
     updated_post =
       get_post!(post.id)
-      |> Repo.preload(:resource)
+      |> Repo.preload(Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
+  end
+
+  @doc """
+  Deletes an upvote for the given user and post.
+
+  ## Examples
+
+        iex> delete_upvote!(post, user)
+        %Post{}
+
+  """
+  def delete_upvote!(%Post{} = post, %User{} = user) do
+    upvote = get_upvote!(post, user)
+
+    Multi.new()
+    |> Multi.delete(:upvote, upvote)
+    |> Multi.update(:post, Post.changeset(post, %{upvotes_count: post.upvotes_count - 1}))
+    |> Repo.transaction()
+
+    updated_post =
+      get_post!(post.id)
+      |> Repo.preload(Post.preloads())
+
+    broadcast({1, updated_post}, :post_updated)
+    updated_post
+  end
+
+  @doc """
+  Gets a post's downvote.
+
+  ## Examples
+
+      iex> get_downvote!(post, user)
+      %Downvote{}
+
+  """
+  def get_downvote!(%Post{} = post, %User{} = user) do
+    Downvote
+    |> where([d], d.post_id == ^post.id and d.user_id == ^user.id)
+    |> Repo.one!()
   end
 
   @doc """
@@ -158,7 +212,23 @@ defmodule Educatium.Feed do
 
     updated_post =
       get_post!(post.id)
-      |> Repo.preload(:resource)
+      |> Repo.preload(Post.preloads())
+
+    broadcast({1, updated_post}, :post_updated)
+    updated_post
+  end
+
+  def delete_downvote!(%Post{} = post, %User{} = user) do
+    downvote = get_downvote!(post, user)
+
+    Multi.new()
+    |> Multi.delete(:downvote, downvote)
+    |> Multi.update(:post, Post.changeset(post, %{downvotes_count: post.downvotes_count - 1}))
+    |> Repo.transaction()
+
+    updated_post =
+      get_post!(post.id)
+      |> Repo.preload(Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
@@ -172,8 +242,6 @@ defmodule Educatium.Feed do
   def subscribe do
     Phoenix.PubSub.subscribe(Educatium.PubSub, @topic)
   end
-
-  defp broadcast({:error, _reason} = error, _event), do: error
 
   defp broadcast({1, post}, event) do
     Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})

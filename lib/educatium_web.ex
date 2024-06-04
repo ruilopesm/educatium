@@ -62,6 +62,9 @@ defmodule EducatiumWeb do
     quote do
       use Phoenix.LiveComponent
 
+      # Useful live component helpers
+      def notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
       unquote(html_helpers())
     end
   end
