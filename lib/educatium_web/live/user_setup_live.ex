@@ -2,6 +2,8 @@ defmodule EducatiumWeb.UserSetupLive do
   use EducatiumWeb, :live_view
 
   alias Educatium.Accounts
+  alias Educatium.Accounts.Student
+  alias Educatium.Accounts.Teacher
 
   def render(assigns) do
     ~H"""
@@ -12,54 +14,125 @@ defmodule EducatiumWeb.UserSetupLive do
 
     <div>
       <.simple_form
-        for={@user_details_form}
-        id="user_setup_form"
-        phx-submit="update_details"
-        phx-change="validate_details"
+        for={@role_form}
+        id="role"
+        phx-change="change_role"
       >
-        <.input field={@user_details_form[:full_name]} type="text" label="Full name" value={@current_user.full_name} required />
-        <.input field={@user_details_form[:filliation]} type="select" options={@filiation_options} label="Filliation" required />
-        <:actions>
-          <.button phx-disable-with="Changing...">Save details</.button>
-        </:actions>
+        <.input 
+          field={@role_form[:role]}
+          type="select" 
+          options={["student", "teacher"]} 
+          value={@role}
+          phx-change="change_role" 
+          label="Select the type of account you want to create"
+        />
       </.simple_form>
     </div>
+
+    <%= if @role == "student" do %>
+      <div>
+        <.simple_form
+          for={@student_form}
+          id="student_form"
+          phx-submit="submit_student"
+          phx-change="validate_student"
+        >
+          <.input field={@student_form[:first_name]} type="text" label="First name" required />
+          <.input field={@student_form[:last_name]} type="text" label="Last name" required />
+          <.input field={@student_form[:course]} type="text" label="Course" required />
+          <.input field={@student_form[:university]} type="text" label="University" required />
+          <:actions>
+            <.button phx-disable-with="Changing...">Save details</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+    <% else %>
+      <div>
+        <.simple_form
+          for={@teacher_form}
+          id="teacher_form"
+          phx-submit="submit_teacher"
+          phx-change="validate_teacher"
+        >
+          <.input field={@teacher_form[:first_name]} type="text" label="First name" required />
+          <.input field={@teacher_form[:last_name]} type="text" label="Last name" required />
+          <.input field={@teacher_form[:university]} type="text" label="University" required />
+          <.input field={@teacher_form[:department]} type="text" label="Department" required />
+          <.input field={@teacher_form[:course]} type="text" label="Course" required />
+          <:actions>
+            <.button phx-disable-with="Changing...">Save details</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+    <% end %>
     """
   end
 
   def mount(_params, _session, socket) do
-    user = socket.assigns.current_user
-    user_details_changeset = Accounts.change_user_details(user)
-    filiation_options = Accounts.list_filiation_options()
+    student_changeset = Accounts.change_student(%Student{})
+    teacher_changeset = Accounts.change_teacher(%Teacher{})
+    role_form = %{role: "student"}
 
     socket =
       socket
-      |> assign(:user_details_form, to_form(user_details_changeset))
-      |> assign(:filiation_options, filiation_options)
+      |> assign(student_form: to_form(student_changeset))
+      |> assign(teacher_form: to_form(teacher_changeset))
+      |> assign(:role_form, to_form(role_form))
+      |> assign(:role, role_form[:role])
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
   end
 
-  def handle_event("validate_details", %{"user" => params}, socket) do
-    details_form = socket.assigns.current_user
-    |> Accounts.change_user_details(params)
-    |> Map.put(:action, :validate)
-    |> to_form()
+  def handle_event("validate_student", %{"student" => params}, socket) do
+    student_form = %Student{}
+      |> Accounts.change_student(params)
+      |> Map.put(:action, :validate)
+      |> to_form()
 
-    {:noreply, assign(socket, user_details_form: details_form)}
+    {:noreply, assign(socket, student_form: student_form)}
   end
 
-  def handle_event("update_details", %{"user" => params}, socket) do
+  def handle_event("submit_student", %{"student" => params}, socket) do
     user = socket.assigns.current_user
 
-    case Accounts.setup_user_details(user, params) do
-      {:ok, _updated_user} ->
+    params = Map.put(params, "user_id", user.id)
+    case Accounts.create_student(user, params) do
+      {:ok, _student} ->
+        IO.puts("OK")
         info = "Your account details have been updated."
         {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, user_details_form: to_form(Map.put(changeset, :action, :insert)))}
+        {:noreply, assign(socket, form: to_form(Map.put(changeset, :action, :insert)))}
     end
+  end
+
+  def handle_event("validate_teacher", %{"teacher" => params}, socket) do
+    teacher_form = %Teacher{}
+      |> Accounts.change_teacher(params)
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, teacher_form: teacher_form)}
+  end
+
+  def handle_event("submit_teacher", %{"teacher" => params}, socket) do
+    user = socket.assigns.current_user
+
+    params = Map.put(params, "user_id", user.id)
+    case Accounts.create_teacher(user, params) do
+      {:ok, _teacher} ->
+        IO.puts("OK")
+        info = "Your account details have been updated."
+        {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, form: to_form(Map.put(changeset, :action, :insert)))}
+    end
+  end
+
+  def handle_event("change_role", %{"role" => role}, socket) do
+    {:noreply, socket |> assign(:role, role)}
   end
 end

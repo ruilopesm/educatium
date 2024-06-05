@@ -3,18 +3,23 @@ defmodule Educatium.Accounts.User do
 
   import Ecto.Changeset
 
+  @required_fields [:email, :password]
+  @optional_fields [:role, :confirmed_at, :active]
+  @roles [:student, :teacher]
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @filiations [:student, :teacher, :university, :department, :course]
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
-    field :full_name, :string
-    field :filiation, :string
+    field :role, Ecto.Enum, values: @roles
 
     field :confirmed_at, :naive_datetime
     field :active, :boolean, default: false
+
+    has_one :student, Educatium.Accounts.Student
+    has_one :teacher, Educatium.Accounts.Teacher
 
     timestamps(type: :utc_datetime)
   end
@@ -44,7 +49,7 @@ defmodule Educatium.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, @required_fields)
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -162,14 +167,8 @@ defmodule Educatium.Accounts.User do
     end
   end
 
-  def details_changeset(user, attrs) do
+  def changeset(user, attrs) do
     user
-    |> cast(attrs, [:full_name, :filiation, :active])
-    |> validate_length(:full_name, max: 100)
-    |> validate_inclusion(:filiation, @filiations)
-  end
-
-  def filiation_options() do
-    @filiations
+    |> cast(attrs, @optional_fields)
   end
 end
