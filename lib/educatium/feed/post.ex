@@ -28,7 +28,6 @@ defmodule Educatium.Feed.Post do
     post
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
-    |> validate_inclusion(:type, @types)
   end
 
   def preloads, do: @preloads

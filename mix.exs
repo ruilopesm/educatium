@@ -44,6 +44,10 @@ defmodule Educatium.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
 
+      # auth
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_google, "~> 0.10"},
+
       # frontend
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
@@ -74,7 +78,8 @@ defmodule Educatium.MixProject do
       # tools
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"}
+      {:dns_cluster, "~> 0.1.1"},
+      {:dotenvy, "~> 0.8.0"}
     ]
   end
 

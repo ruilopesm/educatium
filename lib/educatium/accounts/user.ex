@@ -3,14 +3,22 @@ defmodule Educatium.Accounts.User do
 
   alias Educatium.Resources.Resource
 
+  @roles ~w(student teacher)a
+
   @required_fields ~w(email password)a
-  @optional_fields ~w(confirmed_at)a
+  @optional_fields ~w(confirmed_at active)a
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    field :role, Ecto.Enum, values: @roles
+
     field :confirmed_at, :naive_datetime
+    field :active, :boolean, default: false
+
+    has_one :student, Educatium.Accounts.Student
+    has_one :teacher, Educatium.Accounts.Teacher
 
     has_many :resources, Resource
 
@@ -159,4 +167,12 @@ defmodule Educatium.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  @doc false
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, @optional_fields)
+  end
+
+  def roles, do: @roles
 end

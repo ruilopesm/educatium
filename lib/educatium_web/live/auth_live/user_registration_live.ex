@@ -12,7 +12,7 @@ defmodule EducatiumWeb.UserRegistrationLive do
         <:subtitle>
           <%= gettext("Already registered?") %>
           <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-          <%= gettext("Log in") %>
+            <%= gettext("Log in") %>
           </.link>
           <%= gettext("to your account now.") %>
         </:subtitle>
@@ -36,7 +36,9 @@ defmodule EducatiumWeb.UserRegistrationLive do
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
-          <.button phx-disable-with={gettext("Creating account...")} class="w-full"><%= gettext("Create an account") %></.button>
+          <.button phx-disable-with={gettext("Creating account...")} class="w-full">
+            <%= gettext("Create an account") %>
+          </.button>
         </:actions>
       </.simple_form>
     </div>

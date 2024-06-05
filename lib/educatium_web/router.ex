@@ -12,29 +12,25 @@ defmodule EducatiumWeb.Router do
     plug :put_root_layout, html: {EducatiumWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug EducatiumWeb.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
+    plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
     plug :fetch_current_user
   end
+
+  pipeline :active, do: plug EducatiumWeb.Plugs.ActiveUser
 
   ## Normal routes
 
   scope "/", EducatiumWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser, :require_authenticated_user, :active]
 
-    live_session :require_authenticated_user,
-      on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-      live "/", HomeLive
-      live "/resources", ResourceLive.Index, :index
+    live "/", HomeLive
+    live "/resources", ResourceLive.Index, :index
 
-      live "/resources/new", ResourceLive.Index, :new
-      live "/resources/:id/edit", ResourceLive.Index, :edit
+    live "/resources/new", ResourceLive.Index, :new
+    live "/resources/:id/edit", ResourceLive.Index, :edit
 
-      live "/resources/:id", ResourceLive.Show, :show
-      live "/resources/:id/show/edit", ResourceLive.Show, :edit
-
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-    end
+    live "/resources/:id", ResourceLive.Show, :show
+    live "/resources/:id/show/edit", ResourceLive.Show, :edit
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -68,6 +64,23 @@ defmodule EducatiumWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
+
+    get "/auth/:provider", OAuthController, :request
+    get "/auth/:provider/callback", OAuthController, :callback
+  end
+
+  scope "/", EducatiumWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_user,
+      on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
+      live "/users/setup", UserSetupLive, :edit
+
+      pipe_through :active
+
+      live "/users/settings", UserSettingsLive, :edit
+      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
   end
 
   scope "/", EducatiumWeb do

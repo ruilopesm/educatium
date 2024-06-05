@@ -28,8 +28,6 @@ defmodule Educatium.Resources.Resource do
     resource
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
-    |> validate_inclusion(:type, @types)
-    |> validate_inclusion(:visibility, @visibilities)
   end
 
   def types, do: @types

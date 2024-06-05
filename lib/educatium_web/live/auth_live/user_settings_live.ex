@@ -30,7 +30,9 @@ defmodule EducatiumWeb.UserSettingsLive do
             required
           />
           <:actions>
-            <.button phx-disable-with={gettext("Changing...")}><%= gettext("Change Email") %></.button>
+            <.button phx-disable-with={gettext("Changing...")}>
+              <%= gettext("Change Email") %>
+            </.button>
           </:actions>
         </.simple_form>
       </div>
@@ -51,7 +53,12 @@ defmodule EducatiumWeb.UserSettingsLive do
             id="hidden_user_email"
             value={@current_email}
           />
-          <.input field={@password_form[:password]} type="password" label={gettext("New password")} required />
+          <.input
+            field={@password_form[:password]}
+            type="password"
+            label={gettext("New password")}
+            required
+          />
           <.input
             field={@password_form[:password_confirmation]}
             type="password"
@@ -67,7 +74,9 @@ defmodule EducatiumWeb.UserSettingsLive do
             required
           />
           <:actions>
-            <.button phx-disable-with={gettext("Changing...")}><%= gettext("Change Password") %></.button>
+            <.button phx-disable-with={gettext("Changing...")}>
+              <%= gettext("Change Password") %>
+            </.button>
           </:actions>
         </.simple_form>
       </div>
