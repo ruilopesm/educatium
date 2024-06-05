@@ -11,6 +11,7 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :confirmed_at, :naive_datetime
       add :role, :string
       add :active, :boolean, default: false, null: false
+
       timestamps(type: :utc_datetime)
     end
 
@@ -22,6 +23,7 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :token, :binary, null: false
       add :context, :string, null: false
       add :sent_to, :string
+
       timestamps(updated_at: false)
     end
 

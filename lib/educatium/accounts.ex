@@ -2,9 +2,7 @@ defmodule Educatium.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
-  import Ecto.Query, warn: false
-  alias Educatium.Repo
+  use Educatium, :context
 
   alias Educatium.Accounts.{User, UserToken, UserNotifier}
 

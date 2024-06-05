@@ -202,7 +202,7 @@ defmodule EducatiumWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="space-y-8 bg-white">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -367,6 +367,33 @@ defmodule EducatiumWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "search"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          <.icon name="hero-magnifying-glass-solid" class="h-4 w-4 text-zinc-500" />
+        </div>
+        <input
+          type="search"
+          id={@id}
+          name={@name}
+          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          class={[
+            "block w-full p-3 ps-10 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+            "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            @errors != [] && "border-rose-400 focus:border-rose-400"
+          ]}
+          {@rest}
+        />
+        <.error :for={msg <- @errors}><%= msg %></.error>
+      </div>
+    </div>
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
@@ -422,6 +449,7 @@ defmodule EducatiumWeb.CoreComponents do
   Renders a header with title.
   """
   attr :class, :string, default: nil
+  attr :size, :string, values: ~w(lg xl 2xl 3xl), default: "lg"
 
   slot :inner_block, required: true
   slot :subtitle
@@ -431,10 +459,10 @@ defmodule EducatiumWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class={[text_size(@size), "font-semibold leading-8 text-zinc-800"]}>
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="text-sm leading-6 text-zinc-600">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -442,6 +470,8 @@ defmodule EducatiumWeb.CoreComponents do
     </header>
     """
   end
+
+  defp text_size(size), do: "text-#{size}"
 
   @doc ~S"""
   Renders a table with generic styling.

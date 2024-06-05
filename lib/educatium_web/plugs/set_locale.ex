@@ -1,4 +1,7 @@
-defmodule EducatiumWeb.SetLocale do
+defmodule EducatiumWeb.Plugs.SetLocale do
+  @moduledoc """
+  A plug that sets the locale based on the Accept-Language header.
+  """
   import Plug.Conn
 
   defmodule Config do

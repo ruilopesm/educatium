@@ -13,6 +13,7 @@ defmodule EducatiumWeb.UserResetPasswordLive do
         id="reset_password_form"
         phx-submit="reset_password"
         phx-change="validate"
+        class="mt-10"
       >
         <.error :if={@form.errors != []}>
           <%= gettext("Oops, something went wrong! Please check the errors below.") %>

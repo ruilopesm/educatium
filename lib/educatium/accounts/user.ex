@@ -1,14 +1,13 @@
 defmodule Educatium.Accounts.User do
-  use Ecto.Schema
+  use Educatium, :schema
 
-  import Ecto.Changeset
+  alias Educatium.Resources.Resource
 
-  @required_fields ~w(email password)a
-  @optional_fields ~w(role confirmed_at active)a
   @roles ~w(student teacher)a
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @required_fields ~w(email password)a
+  @optional_fields ~w(confirmed_at active)a
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
@@ -20,6 +19,8 @@ defmodule Educatium.Accounts.User do
 
     has_one :student, Educatium.Accounts.Student
     has_one :teacher, Educatium.Accounts.Teacher
+
+    has_many :resources, Resource
 
     timestamps(type: :utc_datetime)
   end
@@ -49,7 +50,7 @@ defmodule Educatium.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, @required_fields)
+    |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -167,8 +168,11 @@ defmodule Educatium.Accounts.User do
     end
   end
 
+  @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, @optional_fields)
   end
+
+  def roles, do: @roles
 end

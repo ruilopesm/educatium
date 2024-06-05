@@ -4,8 +4,6 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   If the user is not active, it redirects them to the setup page.
   """
 
-  import Plug.Conn
-
   def init(opts), do: opts
 
   def call(conn, _opts) do

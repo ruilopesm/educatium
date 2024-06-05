@@ -18,6 +18,11 @@ module.exports = {
       }
     },
   },
+  safelist: [
+    {
+      pattern: /text-(lg|xl|2xl|3xl)/,
+    }
+  ],
   plugins: [
     require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules

@@ -1,0 +1,36 @@
+<.header>
+  <%= @resource.title %>
+  <:subtitle>This is a resource record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/resources/#{@resource}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit resource</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @resource.title %></:item>
+  <:item title="Description"><%= @resource.description %></:item>
+  <:item title="Type"><%= @resource.type %></:item>
+  <:item title="Date"><%= @resource.date %></:item>
+  <:item title="Published"><%= @resource.inserted_at %></:item>
+  <:item title="Visibility"><%= @resource.visibility %></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to resources</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="resource-modal"
+  show
+  on_cancel={JS.patch(~p"/resources/#{@resource}")}
+>
+  <.live_component
+    module={EducatiumWeb.ResourceLive.FormComponent}
+    id={@resource.id}
+    title={@page_title}
+    action={@live_action}
+    resource={@resource}
+    patch={~p"/resources/#{@resource}"}
+  />
+</.modal>
