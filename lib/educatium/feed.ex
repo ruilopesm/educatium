@@ -52,7 +52,10 @@ defmodule Educatium.Feed do
       %Post{}
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id, preloads \\ []) do
+    Repo.get!(Post, id)
+    |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a post.
@@ -148,9 +151,7 @@ defmodule Educatium.Feed do
     |> Upvote.changeset(%{post_id: post.id, user_id: user.id})
     |> Repo.insert!()
 
-    updated_post =
-      get_post!(post.id)
-      |> Repo.preload(Post.preloads())
+    updated_post = get_post!(post.id, Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
@@ -173,9 +174,7 @@ defmodule Educatium.Feed do
     |> Multi.update(:post, Post.changeset(post, %{upvotes_count: post.upvotes_count - 1}))
     |> Repo.transaction()
 
-    updated_post =
-      get_post!(post.id)
-      |> Repo.preload(Post.preloads())
+    updated_post = get_post!(post.id, Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
@@ -210,9 +209,7 @@ defmodule Educatium.Feed do
     |> Downvote.changeset(%{post_id: post.id, user_id: user.id})
     |> Repo.insert!()
 
-    updated_post =
-      get_post!(post.id)
-      |> Repo.preload(Post.preloads())
+    updated_post = get_post!(post.id, Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
@@ -226,9 +223,7 @@ defmodule Educatium.Feed do
     |> Multi.update(:post, Post.changeset(post, %{downvotes_count: post.downvotes_count - 1}))
     |> Repo.transaction()
 
-    updated_post =
-      get_post!(post.id)
-      |> Repo.preload(Post.preloads())
+    updated_post = get_post!(post.id, Post.preloads())
 
     broadcast({1, updated_post}, :post_updated)
     updated_post
