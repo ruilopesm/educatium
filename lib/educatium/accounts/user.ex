@@ -3,9 +3,9 @@ defmodule Educatium.Accounts.User do
 
   import Ecto.Changeset
 
-  @required_fields [:email, :password]
-  @optional_fields [:role, :confirmed_at, :active]
-  @roles [:student, :teacher]
+  @required_fields ~w(email password)a
+  @optional_fields ~w(role confirmed_at active)a
+  @roles ~w(student teacher)a
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

@@ -97,10 +97,10 @@ defmodule EducatiumWeb.UserSetupLive do
 
     params = Map.put(params, "user_id", user.id)
 
-    case Accounts.create_student(user, params) do
+    case Accounts.create_student(params) do
       {:ok, _student} ->
         info = "Your account details have been updated."
-        {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
+        {:noreply, socket |> put_flash(:info, info) |> redirect(to: ~p"/")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(Map.put(changeset, :action, :insert)))}
@@ -122,10 +122,10 @@ defmodule EducatiumWeb.UserSetupLive do
 
     params = Map.put(params, "user_id", user.id)
 
-    case Accounts.create_teacher(user, params) do
+    case Accounts.create_teacher(params) do
       {:ok, _teacher} ->
         info = "Your account details have been updated."
-        {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
+        {:noreply, socket |> put_flash(:info, info) |> redirect(to: ~p"/")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(Map.put(changeset, :action, :insert)))}

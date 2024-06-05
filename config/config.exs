@@ -61,7 +61,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Configure Ueberauth oAuth
+# Configure Ueberauth OAuth
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}

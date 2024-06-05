@@ -370,14 +370,14 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
-  Updates the name of a user.
+  Updates an user.
 
   ## Examples
 
-      iex> update_user(user, %{first_name: "New Name", last_name: "New Last Name"})
+      iex> update_user(user, %{field: value})
       {:ok, %User{}}
 
-      iex> update_user(user, %{first_name: "Invalid Name", last_name: "Invalid Last Name"})
+      iex> update_user(user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -405,6 +405,16 @@ defmodule Educatium.Accounts do
   alias Educatium.Accounts.Teacher
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student changes.
+  ## Examples
+      iex> change_teacher(teacher)
+      %Ecto.Changeset{data: %Teacher{}}
+  """
+  def change_teacher(%Teacher{} = teacher, attrs \\ %{}) do
+    Teacher.changeset(teacher, attrs)
+  end
+
+  @doc """
   Creates a teacher.
 
   ## Examples
@@ -416,15 +426,10 @@ defmodule Educatium.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_teacher(user, attrs) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:teacher, Teacher.changeset(%Teacher{}, attrs))
-    |> Ecto.Multi.update(:user, User.changeset(user, %{active: true, role: "student"}))
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{teacher: teacher}} -> {:ok, teacher}
-      {:error, :teacher, changeset, _} -> {:error, changeset}
-    end
+  def create_teacher(attrs) do
+    %Teacher{}
+    |> Teacher.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -450,6 +455,16 @@ defmodule Educatium.Accounts do
   alias Educatium.Accounts.Student
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student changes.
+  ## Examples
+      iex> change_student(student)
+      %Ecto.Changeset{data: %Student{}}
+  """
+  def change_student(%Student{} = student, attrs \\ %{}) do
+    Student.changeset(student, attrs)
+  end
+
+  @doc """
   Creates a student.
 
   ## Examples
@@ -461,25 +476,10 @@ defmodule Educatium.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_student(user, attrs) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:student, Student.changeset(%Student{}, attrs))
-    |> Ecto.Multi.update(:user, User.changeset(user, %{active: true, role: "student"}))
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{student: student}} -> {:ok, student}
-      {:error, :student, changeset, _} -> {:error, changeset}
-    end
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking student changes.
-  ## Examples
-      iex> change_teacher(teacher)
-      %Ecto.Changeset{data: %Teacher{}}
-  """
-  def change_teacher(%Teacher{} = teacher, attrs \\ %{}) do
-    Teacher.changeset(teacher, attrs)
+  def create_student(attrs) do
+    %Student{}
+    |> Student.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -498,15 +498,5 @@ defmodule Educatium.Accounts do
     student
     |> Student.changeset(attrs)
     |> Repo.update()
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking student changes.
-  ## Examples
-      iex> change_student(student)
-      %Ecto.Changeset{data: %Student{}}
-  """
-  def change_student(%Student{} = student, attrs \\ %{}) do
-    Student.changeset(student, attrs)
   end
 end

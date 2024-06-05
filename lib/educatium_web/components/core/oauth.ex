@@ -1,6 +1,5 @@
 defmodule EducatiumWeb.Core.Oauth do
   use Phoenix.Component
-  use EducatiumWeb, :live_view
 
   def google(assigns) do
     ~H"""
