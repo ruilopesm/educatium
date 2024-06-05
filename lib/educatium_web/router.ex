@@ -20,19 +20,6 @@ defmodule EducatiumWeb.Router do
 
   ## Normal routes
 
-  scope "/", EducatiumWeb do
-    pipe_through [:browser, :require_authenticated_user, :active]
-
-    live "/", HomeLive
-    live "/resources", ResourceLive.Index, :index
-
-    live "/resources/new", ResourceLive.Index, :new
-    live "/resources/:id/edit", ResourceLive.Index, :edit
-
-    live "/resources/:id", ResourceLive.Show, :show
-    live "/resources/:id/show/edit", ResourceLive.Show, :edit
-  end
-
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
@@ -56,7 +43,7 @@ defmodule EducatiumWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{EducatiumWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
@@ -74,9 +61,19 @@ defmodule EducatiumWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
+
       live "/users/setup", UserSetupLive, :edit
 
       pipe_through :active
+
+      live "/", HomeLive
+      live "/resources", ResourceLive.Index, :index
+
+      live "/resources/new", ResourceLive.Index, :new
+      live "/resources/:id/edit", ResourceLive.Index, :edit
+
+      live "/resources/:id", ResourceLive.Show, :show
+      live "/resources/:id/show/edit", ResourceLive.Show, :edit
 
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

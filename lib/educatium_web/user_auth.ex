@@ -34,7 +34,7 @@ defmodule EducatiumWeb.UserAuth do
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> assign(:current_user, user)
+    # |> assign(:current_user, user)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
@@ -85,7 +85,7 @@ defmodule EducatiumWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> assign(:current_user, nil)
+    # |> assign(:current_user, nil)
     |> redirect(to: ~p"/")
   end
 
