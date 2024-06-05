@@ -30,7 +30,7 @@ defmodule Educatium.Accounts.Teacher do
     |> validate_required(@required_fields)
     |> prepare_changes(&apply_teacher_role_to_user/1)
   end
-  
+
   defp apply_teacher_role_to_user(changeset) do
     if user_id = get_field(changeset, :user_id) do
       query = from u in User, where: u.id == ^user_id
