@@ -1,15 +1,5 @@
 import Config
 
-# Configure your database
-config :educatium, Educatium.Repo,
-  username: System.get_env("DB_USERNAME") || "postgres",
-  password: System.get_env("DB_PASSWORD") || "postgres",
-  hostname: System.get_env("DB_HOST") || "localhost",
-  database: "educatium_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
-
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

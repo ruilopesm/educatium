@@ -3,13 +3,23 @@ defmodule Educatium.Accounts.User do
 
   import Ecto.Changeset
 
+  @required_fields ~w(email password)a
+  @optional_fields ~w(role confirmed_at active)a
+  @roles ~w(student teacher)a
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    field :role, Ecto.Enum, values: @roles
+
     field :confirmed_at, :naive_datetime
+    field :active, :boolean, default: false
+
+    has_one :student, Educatium.Accounts.Student
+    has_one :teacher, Educatium.Accounts.Teacher
 
     timestamps(type: :utc_datetime)
   end
@@ -39,7 +49,7 @@ defmodule Educatium.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, @required_fields)
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -155,5 +165,10 @@ defmodule Educatium.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, @optional_fields)
   end
 end

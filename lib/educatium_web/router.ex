@@ -16,8 +16,12 @@ defmodule EducatiumWeb.Router do
     plug :fetch_current_user
   end
 
+  pipeline :active do
+    plug EducatiumWeb.Plugs.ActiveUser
+  end
+
   scope "/", EducatiumWeb do
-    pipe_through :browser
+    pipe_through [:browser, :active]
 
     live "/", HomeLive
   end
@@ -53,6 +57,9 @@ defmodule EducatiumWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
+
+    get "/auth/:provider", OAuthController, :request
+    get "/auth/:provider/callback", OAuthController, :callback
   end
 
   scope "/", EducatiumWeb do
@@ -60,6 +67,10 @@ defmodule EducatiumWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
+      live "/users/setup", UserSetupLive, :edit
+
+      pipe_through :active
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

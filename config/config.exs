@@ -61,6 +61,12 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Configure Ueberauth OAuth
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
+  ]
+
 config :educatium, EducatiumWeb.Gettext, default_locale: "pt", locales: ~w(pt en)
 
 # Import environment specific config. This must remain at the bottom

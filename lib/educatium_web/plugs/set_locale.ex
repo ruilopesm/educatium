@@ -49,5 +49,5 @@ defmodule EducatiumWeb.SetLocale do
     %{tag: captures["tag"], quality: quality}
   end
 
-  defp known_language?(tag, known_languages), do: Enum.any?(known_languages, & &1 =~ tag)
+  defp known_language?(tag, known_languages), do: Enum.any?(known_languages, &(&1 =~ tag))
 end
