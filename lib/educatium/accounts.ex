@@ -58,7 +58,7 @@ defmodule Educatium.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id, preloads \\ []) do 
+  def get_user!(id, preloads \\ []) do
     Repo.get!(User, id)
     |> Repo.preload(preloads)
   end
@@ -233,7 +233,6 @@ defmodule Educatium.Accounts do
     end
   end
 
-  
   ## Session
 
   @doc """
@@ -482,11 +481,10 @@ defmodule Educatium.Accounts do
   def change_teacher(%Teacher{} = teacher, attrs \\ %{}) do
     Teacher.changeset(teacher, attrs)
   end
-  
 
   @doc """
   Updates a student.
-  
+
   ## Examples
 
       iex> update_student(student, %{field: value})

@@ -64,10 +64,9 @@ defmodule EducatiumWeb.Router do
 
   scope "/", EducatiumWeb do
     pipe_through [:browser, :require_authenticated_user]
-  
+
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-
       live "/users/setup", UserSetupLive, :edit
 
       pipe_through :active

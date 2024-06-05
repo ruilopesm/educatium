@@ -15,7 +15,7 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
         <.input field={@form[:email]} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with="Sending..." class="w-full">
-          <%= gettext("Resend confirmation instructions") %>
+            <%= gettext("Resend confirmation instructions") %>
           </.button>
         </:actions>
       </.simple_form>
@@ -41,7 +41,9 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
     end
 
     info =
-      gettext("If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
+      gettext(
+        "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      )
 
     {:noreply,
      socket

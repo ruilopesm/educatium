@@ -9,21 +9,19 @@ defmodule EducatiumWeb.UserSetupLive do
     ~H"""
     <.header class="text-center">
       Account Details
-      <:subtitle>To finish your account registration please provide some additional information</:subtitle>
+      <:subtitle>
+        To finish your account registration please provide some additional information
+      </:subtitle>
     </.header>
 
     <div>
-      <.simple_form
-        for={@role_form}
-        id="role"
-        phx-change="change_role"
-      >
-        <.input 
+      <.simple_form for={@role_form} id="role" phx-change="change_role">
+        <.input
           field={@role_form[:role]}
-          type="select" 
-          options={["student", "teacher"]} 
+          type="select"
+          options={["student", "teacher"]}
           value={@role}
-          phx-change="change_role" 
+          phx-change="change_role"
           label="Select the type of account you want to create"
         />
       </.simple_form>
@@ -85,7 +83,8 @@ defmodule EducatiumWeb.UserSetupLive do
   end
 
   def handle_event("validate_student", %{"student" => params}, socket) do
-    student_form = %Student{}
+    student_form =
+      %Student{}
       |> Accounts.change_student(params)
       |> Map.put(:action, :validate)
       |> to_form()
@@ -97,6 +96,7 @@ defmodule EducatiumWeb.UserSetupLive do
     user = socket.assigns.current_user
 
     params = Map.put(params, "user_id", user.id)
+
     case Accounts.create_student(user, params) do
       {:ok, _student} ->
         IO.puts("OK")
@@ -109,7 +109,8 @@ defmodule EducatiumWeb.UserSetupLive do
   end
 
   def handle_event("validate_teacher", %{"teacher" => params}, socket) do
-    teacher_form = %Teacher{}
+    teacher_form =
+      %Teacher{}
       |> Accounts.change_teacher(params)
       |> Map.put(:action, :validate)
       |> to_form()
@@ -121,6 +122,7 @@ defmodule EducatiumWeb.UserSetupLive do
     user = socket.assigns.current_user
 
     params = Map.put(params, "user_id", user.id)
+
     case Accounts.create_teacher(user, params) do
       {:ok, _teacher} ->
         IO.puts("OK")
