@@ -58,7 +58,7 @@ defmodule EducatiumWeb.UserSetupLive do
           <.input field={@teacher_form[:department]} type="text" label="Department" required />
           <.input field={@teacher_form[:course]} type="text" label="Course" required />
           <:actions>
-            <.button phx-disable-with="Changing...">Save details</.button>
+            <.button phx-disable-with={gettext("Changing...")}>Save details</.button>
           </:actions>
         </.simple_form>
       </div>
