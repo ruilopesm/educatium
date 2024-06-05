@@ -69,7 +69,7 @@ defmodule Educatium.Feed do
       {:error, ...}
 
   """
-  def create_post(attrs \\ %{}) do
+  def create_post(attrs) do
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()

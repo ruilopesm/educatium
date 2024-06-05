@@ -49,14 +49,9 @@ defmodule Educatium.Resources do
       iex> create_resource(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
-      iex> create_resource(%{field: value}, with_post: true)
-      {:ok, %Resource{}}
-
   """
-  def create_resource(attrs \\ %{}, opts \\ []) do
-    opts = Keyword.validate!(opts, with_post: true)
-
-    if opts[:with_post] do
+  def create_resource(attrs) do
+    if attrs[:visibility] == :public do
       create_resource_with_post(attrs)
     else
       %Resource{}

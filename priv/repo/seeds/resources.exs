@@ -32,7 +32,7 @@ defmodule Educatium.Repo.Seeds.Resources do
         visibility: :public,
         user_id: Enum.random(users).id
       }
-      |> Resources.create_resource(with_post: true)
+      |> Resources.create_resource()
     end
   end
 
