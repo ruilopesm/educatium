@@ -1,6 +1,8 @@
 defmodule EducatiumWeb.Router do
   use EducatiumWeb, :router
 
+  alias EducatiumWeb.Gettext
+
   import EducatiumWeb.UserAuth
 
   pipeline :browser do
@@ -10,6 +12,7 @@ defmodule EducatiumWeb.Router do
     plug :put_root_layout, html: {EducatiumWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug EducatiumWeb.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
     plug :fetch_current_user
   end
 

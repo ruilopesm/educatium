@@ -7,8 +7,8 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        No confirmation instructions received?
-        <:subtitle>We'll send a new confirmation link to your inbox</:subtitle>
+        <%= gettext("No confirmation instructions received?") %>
+        <:subtitle><%= gettext("We'll send a new confirmation link to your inbox") %></:subtitle>
       </.header>
 
       <.simple_form
@@ -20,14 +20,14 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
         <.input field={@form[:email]} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with="Sending..." class="w-full">
-            Resend confirmation instructions
+          <%= gettext("Resend confirmation instructions") %>
           </.button>
         </:actions>
       </.simple_form>
 
       <p class="text-center mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
+        <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
+        | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
       </p>
     </div>
     """
@@ -46,7 +46,7 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
     end
 
     info =
-      "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      gettext("If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
 
     {:noreply,
      socket

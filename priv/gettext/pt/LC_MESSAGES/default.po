@@ -1,0 +1,307 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/educatium_web/components/core_components.ex:484
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Ações"
+
+#: lib/educatium_web/components/core_components.ex:160
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "A tentar reconectar"
+
+#: lib/educatium_web/components/core_components.ex:151
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr "Erro!"
+
+#: lib/educatium_web/components/core_components.ex:172
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Espera enquanto voltamos ao normal"
+
+#: lib/educatium_web/components/core_components.ex:167
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo correu mal!"
+
+#: lib/educatium_web/components/core_components.ex:150
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr "Sucesso!"
+
+#: lib/educatium_web/components/core_components.ex:155
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Não conseguimos encontrar uma ligação à internet"
+
+#: lib/educatium_web/components/core_components.ex:76
+#: lib/educatium_web/components/core_components.ex:130
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "fechar"
+
+#: lib/educatium_web/live/user_registration_live.ex:11
+#, elixir-autogen, elixir-format
+msgid "Register for an account"
+msgstr "Criar uma conta"
+
+#: lib/educatium_web/live/user_settings_live.ex:130
+#, elixir-autogen, elixir-format
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr "Um link para confirmar a mudança de email foi enviada para o novo endereço."
+
+#: lib/educatium_web/live/user_settings_live.ex:9
+#, elixir-autogen, elixir-format
+msgid "Account Settings"
+msgstr "Definições de Conta"
+
+#: lib/educatium_web/controllers/user_session_controller.ex:8
+#, elixir-autogen, elixir-format
+msgid "Account created successfully!"
+msgstr "Conta criada com sucesso!"
+
+#: lib/educatium_web/live/user_registration_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Already registered?"
+msgstr "Já tem conta?"
+
+#: lib/educatium_web/live/user_settings_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr "Trocar Email"
+
+#: lib/educatium_web/live/user_settings_live.ex:68
+#, elixir-autogen, elixir-format
+msgid "Change Password"
+msgstr "Trocar Password"
+
+#: lib/educatium_web/live/user_settings_live.ex:32
+#: lib/educatium_web/live/user_settings_live.ex:68
+#, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "A trocar..."
+
+#: lib/educatium_web/live/user_confirmation_live.ex:9
+#, elixir-autogen, elixir-format
+msgid "Confirm Account"
+msgstr "Confirmar conta"
+
+#: lib/educatium_web/live/user_confirmation_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "Confirm my account"
+msgstr "Confirmar"
+
+#: lib/educatium_web/live/user_reset_password_live.ex:25
+#: lib/educatium_web/live/user_settings_live.ex:56
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr "Confirmar nova password"
+
+#: lib/educatium_web/live/user_registration_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr "Criar conta"
+
+#: lib/educatium_web/live/user_registration_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr "A criar conta..."
+
+#: lib/educatium_web/live/user_settings_live.ex:27
+#: lib/educatium_web/live/user_settings_live.ex:62
+#, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr "Password atual"
+
+#: lib/educatium_web/live/user_login_live.ex:10
+#, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr "Não tem uma conta?"
+
+#: lib/educatium_web/live/user_login_live.ex:19
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr "Email"
+
+#: lib/educatium_web/live/user_settings_live.ex:83
+#, elixir-autogen, elixir-format
+msgid "Email change link is invalid or it has expired."
+msgstr "O link de mudança de email é inválido ou já expirou."
+
+#: lib/educatium_web/live/user_settings_live.ex:80
+#, elixir-autogen, elixir-format
+msgid "Email changed successfully."
+msgstr "Email trocado com sucesso."
+
+#: lib/educatium_web/live/user_forgot_password_live.ex:10
+#: lib/educatium_web/live/user_login_live.ex:25
+#, elixir-autogen, elixir-format
+msgid "Forgot your password?"
+msgstr "Esqueceu-se da password?"
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:44
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Se o seu email está no nosso sistema e ainda não foi confirmado, irá receber um email com as instruções em breve."
+
+#: lib/educatium_web/live/user_forgot_password_live.ex:43
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr "Se o seu email está no nosso sistema, irá receber as instruções de como alterar a password em breve."
+
+#: lib/educatium_web/controllers/user_session_controller.ex:31
+#, elixir-autogen, elixir-format
+msgid "Invalid email or password"
+msgstr "Email ou password inválidos"
+
+#: lib/educatium_web/live/user_login_live.ex:23
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in"
+msgstr "Manter-me conectado"
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:25
+#: lib/educatium_web/live/user_confirmation_live.ex:20
+#: lib/educatium_web/live/user_forgot_password_live.ex:24
+#: lib/educatium_web/live/user_registration_live.ex:15
+#: lib/educatium_web/live/user_reset_password_live.ex:35
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr "Entrar"
+
+#: lib/educatium_web/live/user_login_live.ex:8
+#, elixir-autogen, elixir-format
+msgid "Log in to account"
+msgstr "Entrar no Educatium"
+
+#: lib/educatium_web/controllers/user_session_controller.ex:39
+#, elixir-autogen, elixir-format
+msgid "Logged out successfully."
+msgstr "Desconectado com sucesso."
+
+#: lib/educatium_web/live/user_settings_live.ex:10
+#, elixir-autogen, elixir-format
+msgid "Manage your account email address and password settings"
+msgstr "Controla as definições da tua conta"
+
+#: lib/educatium_web/live/user_reset_password_live.ex:21
+#: lib/educatium_web/live/user_settings_live.ex:52
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr "Nova password"
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:10
+#, elixir-autogen, elixir-format
+msgid "No confirmation instructions received?"
+msgstr "Não recebeu as instruções para confirmação?"
+
+#: lib/educatium_web/live/user_registration_live.ex:31
+#: lib/educatium_web/live/user_reset_password_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr "Oops, algo aconteceu de errado! Por favor, veja o erros abaixo."
+
+#: lib/educatium_web/live/user_login_live.ex:20
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr "Password"
+
+#: lib/educatium_web/live/user_reset_password_live.ex:63
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr "Alteração da password feita com sucesso."
+
+#: lib/educatium_web/controllers/user_session_controller.ex:14
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully!"
+msgstr "Atualização da password feita com sucesso!"
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:24
+#: lib/educatium_web/live/user_confirmation_live.ex:19
+#: lib/educatium_web/live/user_forgot_password_live.ex:23
+#: lib/educatium_web/live/user_reset_password_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr "Registar"
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Resend confirmation instructions"
+msgstr "Reenviar instruções de confirmação"
+
+#: lib/educatium_web/live/user_reset_password_live.ex:9
+#: lib/educatium_web/live/user_reset_password_live.ex:29
+#, elixir-autogen, elixir-format
+msgid "Reset Password"
+msgstr "Alterar Password"
+
+#: lib/educatium_web/live/user_reset_password_live.ex:81
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr "Link para alteração de password é inválido ou já expirou."
+
+#: lib/educatium_web/live/user_reset_password_live.ex:29
+#, elixir-autogen, elixir-format
+msgid "Resetting..."
+msgstr "A alterar..."
+
+#: lib/educatium_web/live/user_forgot_password_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Send password reset instructions"
+msgstr "Confirmar"
+
+#: lib/educatium_web/live/user_login_live.ex:12
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr "Criar"
+
+#: lib/educatium_web/live/user_confirmation_live.ex:53
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr "Link de confirmação é inválido ou já expirou."
+
+#: lib/educatium_web/live/user_confirmation_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr "Utilizador confirmado com sucesso."
+
+#: lib/educatium_web/live/user_confirmation_instructions_live.ex:11
+#, elixir-autogen, elixir-format
+msgid "We'll send a new confirmation link to your inbox"
+msgstr "Iremos enviar um link de confirmação para o seu email"
+
+#: lib/educatium_web/live/user_forgot_password_live.ex:11
+#, elixir-autogen, elixir-format
+msgid "We'll send a password reset link to your inbox"
+msgstr "Iremos enviar um link para alteração da password para o seu email"
+
+#: lib/educatium_web/controllers/user_session_controller.ex:18
+#, elixir-autogen, elixir-format
+msgid "Welcome back!"
+msgstr "Bem-vindo de volta!"
+
+#: lib/educatium_web/user_auth.ex:161
+#, elixir-autogen, elixir-format
+msgid "You must log in to access this page."
+msgstr "Tem que estar logado para aceder a esta página."
+
+#: lib/educatium_web/live/user_login_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "for an account now."
+msgstr "uma agora."
+
+#: lib/educatium_web/live/user_registration_live.ex:17
+#, elixir-autogen, elixir-format
+msgid "to your account now."
+msgstr "na sua conta agora."
