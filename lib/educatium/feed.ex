@@ -240,8 +240,8 @@ defmodule Educatium.Feed do
   """
   def invert_vote!(%Post{} = post, %User{} = user, type: type) do
     case type do
-      :upvote -> invert_upvote(post, user)
-      :downvote -> invert_downvote(post, user)
+      :upvote -> convert_downvote_to_upvote(post, user)
+      :downvote -> convert_upvote_to_downvote(post, user)
     end
 
     updated_post = get_post!(post.id, Post.preloads())
@@ -249,7 +249,7 @@ defmodule Educatium.Feed do
     updated_post
   end
 
-  defp invert_upvote(%Post{} = post, %User{} = user) do
+  defp convert_downvote_to_upvote(post, user) do
     Multi.new()
     |> Multi.delete(:downvote, get_downvote!(post, user))
     |> Multi.insert(:upvote, fn _ ->
@@ -266,7 +266,7 @@ defmodule Educatium.Feed do
     |> Repo.transaction()
   end
 
-  defp invert_downvote(%Post{} = post, %User{} = user) do
+  defp convert_upvote_to_downvote(post, user) do
     Multi.new()
     |> Multi.delete(:upvote, get_upvote!(post, user))
     |> Multi.insert(:downvote, fn _ ->
