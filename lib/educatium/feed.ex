@@ -152,7 +152,6 @@ defmodule Educatium.Feed do
     |> Repo.insert!()
 
     updated_post = get_post!(post.id, Post.preloads())
-
     broadcast({1, updated_post}, :post_updated)
     updated_post
   end
@@ -175,7 +174,6 @@ defmodule Educatium.Feed do
     |> Repo.transaction()
 
     updated_post = get_post!(post.id, Post.preloads())
-
     broadcast({1, updated_post}, :post_updated)
     updated_post
   end
@@ -210,7 +208,6 @@ defmodule Educatium.Feed do
     |> Repo.insert!()
 
     updated_post = get_post!(post.id, Post.preloads())
-
     broadcast({1, updated_post}, :post_updated)
     updated_post
   end
@@ -224,9 +221,66 @@ defmodule Educatium.Feed do
     |> Repo.transaction()
 
     updated_post = get_post!(post.id, Post.preloads())
-
     broadcast({1, updated_post}, :post_updated)
     updated_post
+  end
+
+  @doc """
+  Inverts a vote for the given user and post.
+  Receives the type of vote to invert, which can be either `:upvote` or `:downvote`.
+
+  ## Examples
+
+      iex> invert_vote!(post, user, type: :upvote)
+      %Post{}
+
+      iex> invert_vote!(post, user, type: :downvote)
+      %Post{}
+
+  """
+  def invert_vote!(%Post{} = post, %User{} = user, type: type) do
+    case type do
+      :upvote -> invert_upvote(post, user)
+      :downvote -> invert_downvote(post, user)
+    end
+
+    updated_post = get_post!(post.id, Post.preloads())
+    broadcast({1, updated_post}, :post_updated)
+    updated_post
+  end
+
+  defp invert_upvote(%Post{} = post, %User{} = user) do
+    Multi.new()
+    |> Multi.delete(:downvote, get_downvote!(post, user))
+    |> Multi.insert(:upvote, fn _ ->
+      %Upvote{}
+      |> Upvote.changeset(%{post_id: post.id, user_id: user.id})
+    end)
+    |> Multi.update(
+      :post,
+      Post.changeset(post, %{
+        downvotes_count: post.downvotes_count - 1,
+        upvotes_count: post.upvotes_count + 1
+      })
+    )
+    |> Repo.transaction()
+  end
+
+  defp invert_downvote(%Post{} = post, %User{} = user) do
+    Multi.new()
+    |> Multi.delete(:upvote, get_upvote!(post, user))
+    |> Multi.insert(:downvote, fn _ ->
+      %Downvote{}
+      |> Downvote.changeset(%{post_id: post.id, user_id: user.id})
+    end)
+    |> Multi.update(
+      :post,
+      Post.changeset(post, %{
+        downvotes_count: post.downvotes_count + 1,
+        upvotes_count: post.upvotes_count - 1
+      })
+    )
+    |> Repo.transaction()
   end
 
   @topic "posts"

@@ -94,8 +94,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
     post = socket.assigns.post
 
     if current_user_downvoted?(post, user) do
-      notify_parent({:error, gettext("You can't upvote a post you've downvoted for.")})
-      {:noreply, socket}
+      invert_vote(socket, post, user, type: :upvote)
     else
       upvote_post(socket, post, user)
     end
@@ -107,8 +106,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
     post = socket.assigns.post
 
     if current_user_upvoted?(post, user) do
-      notify_parent({:error, gettext("You can't downvote a post you've upvoted for.")})
-      {:noreply, socket}
+      invert_vote(socket, post, user, type: :downvote)
     else
       downvote_post(socket, post, user)
     end
@@ -116,8 +114,8 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   defp upvote_post(socket, post, user) do
     if current_user_upvoted?(post, user) do
-      update_post = Feed.delete_upvote!(post, user)
-      {:noreply, assign(socket, post: update_post)}
+      updated_post = Feed.delete_upvote!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
     else
       updated_post = Feed.upvote_post!(post, user)
       {:noreply, assign(socket, post: updated_post)}
@@ -126,12 +124,17 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   defp downvote_post(socket, post, user) do
     if current_user_downvoted?(post, user) do
-      update_post = Feed.delete_downvote!(post, user)
-      {:noreply, assign(socket, post: update_post)}
+      updated_post = Feed.delete_downvote!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
     else
       updated_post = Feed.downvote_post!(post, user)
       {:noreply, assign(socket, post: updated_post)}
     end
+  end
+
+  defp invert_vote(socket, post, user, type: type) when type in [:upvote, :downvote] do
+    updated_post = Feed.invert_vote!(post, user, type: type)
+    {:noreply, assign(socket, post: updated_post)}
   end
 
   defp current_user_upvoted?(post, user) do
