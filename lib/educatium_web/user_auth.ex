@@ -3,6 +3,7 @@ defmodule EducatiumWeb.UserAuth do
 
   import Plug.Conn
   import Phoenix.Controller
+  import EducatiumWeb.Gettext
 
   alias Educatium.Accounts
 
@@ -159,7 +160,7 @@ defmodule EducatiumWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, gettext("You must log in to access this page."))
         |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
 
       {:halt, socket}
