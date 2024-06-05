@@ -99,7 +99,6 @@ defmodule EducatiumWeb.UserSetupLive do
 
     case Accounts.create_student(user, params) do
       {:ok, _student} ->
-        IO.puts("OK")
         info = "Your account details have been updated."
         {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
 
@@ -125,7 +124,6 @@ defmodule EducatiumWeb.UserSetupLive do
 
     case Accounts.create_teacher(user, params) do
       {:ok, _teacher} ->
-        IO.puts("OK")
         info = "Your account details have been updated."
         {:noreply, socket |> put_flash(:info, info) |> redirect(to: "/")}
 

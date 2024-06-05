@@ -4,7 +4,7 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   If the user is not active, it redirects them to the setup page.
   """
 
-  import Plug.Conn
+  use EducatiumWeb, :verified_routes
 
   def init(opts), do: opts
 
@@ -13,7 +13,7 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
 
     if current_user && !current_user.active do
       conn
-      |> Phoenix.Controller.redirect(to: "/users/setup")
+      |> Phoenix.Controller.redirect(to: ~p"/users/setup")
     else
       conn
     end
