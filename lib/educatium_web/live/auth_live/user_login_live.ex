@@ -1,8 +1,6 @@
 defmodule EducatiumWeb.UserLoginLive do
   use EducatiumWeb, :live_view
 
-  alias EducatiumWeb.Core.Oauth
-
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">
@@ -40,7 +38,7 @@ defmodule EducatiumWeb.UserLoginLive do
       </.simple_form>
 
       <div class="flex justify-center mt-4">
-        <Oauth.google login_uri={~p"/auth/google"} />
+        <.oauth type={:google} login_uri={~p"/auth/google"} />
       </div>
     </div>
     """

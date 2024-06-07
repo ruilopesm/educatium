@@ -84,13 +84,11 @@ defmodule EducatiumWeb do
 
   defp html_helpers do
     quote do
-      # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components and translation
       import EducatiumWeb.CoreComponents
       import EducatiumWeb.Gettext
+      import EducatiumWeb.Utils
 
-      # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 
       # Routes generation with the ~p sigil

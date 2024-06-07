@@ -1,14 +1,11 @@
 defmodule Educatium.Accounts.Student do
-  use Ecto.Schema
-
-  import Ecto.Changeset
-  import Ecto.Query
+  use Educatium, :schema
 
   alias Educatium.Accounts.User
 
   @required_fields ~w(first_name last_name course university user_id)a
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+  @optional_fields ~w()a
+
   schema "students" do
     field :first_name, :string
     field :last_name, :string
@@ -20,12 +17,10 @@ defmodule Educatium.Accounts.Student do
     timestamps(type: :utc_datetime)
   end
 
-  @doc """
-  A student changeset.
-  """
+  @doc false
   def changeset(student, attrs) do
     student
-    |> cast(attrs, @required_fields)
+    |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> prepare_changes(&apply_student_role_to_user/1)
   end

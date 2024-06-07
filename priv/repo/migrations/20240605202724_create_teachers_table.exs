@@ -9,6 +9,7 @@ defmodule Educatium.Repo.Migrations.CreateTeachersTable do
       add :university, :string, null: false
       add :course, :string, null: false
       add :department, :string, null: false
+
       add :user_id, references(:users, on_delete: :delete_all, type: :binary_id), null: false
 
       timestamps()
