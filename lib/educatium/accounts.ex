@@ -179,7 +179,11 @@ defmodule Educatium.Accounts do
 
   ## Examples
 
-      iex> deliver_user_update_email_instructions(user, current_email, &url(~p"/users/settings/confirm_email/#{&1})")
+      iex> deliver_user_update_email_instructions(
+      ...>   user,
+      ...>   current_email,
+      ...>   &url(~p"/users/settings/confirm_email/#{&1}")
+      ...> )
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -350,7 +354,10 @@ defmodule Educatium.Accounts do
 
   ## Examples
 
-      iex> reset_user_password(user, %{password: "new long password", password_confirmation: "new long password"})
+      iex> reset_user_password(user, %{
+      ...>   password: "new long password",
+      ...>   password_confirmation: "new long password"
+      ...> })
       {:ok, %User{}}
 
       iex> reset_user_password(user, %{password: "valid", password_confirmation: "not the same"})

@@ -9,7 +9,7 @@ defmodule EducatiumWeb.Utils do
   ## Examples
 
      iex> build_options_for_select([:student, :teacher])
-      ["Student": "student", "Teacher": "teacher"]
+     [Student: "student", Teacher: "teacher"]
   """
   def build_options_for_select(roles) do
     Enum.map(roles, fn role ->
