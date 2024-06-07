@@ -52,9 +52,18 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <p class="text-gray-500 text-xs font-normal leading-4"><%= @post.resource.description %></p>
       </div>
     </.link>
-    <div class="flex gap-1 mt-3 absolute right-[22px] top-3 text-gray-500">
-          <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
+    <div class="flex gap-1 mt-3 absolute right-[22px] top-3 text-gray-500 items-end">
+      <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
+      <div class="relative group">
           <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90"/>
+          <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+            <%= if @post.view_count == 1 do %>
+              1 view
+            <% else %>
+              <%= @post.view_count %> views
+            <% end %>
+          </div>
+      </div>
     </div>
     <div class="flex gap-3 mt-6 absolute left-[22px] bottom-3">
       <button
