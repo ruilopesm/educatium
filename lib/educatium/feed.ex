@@ -57,6 +57,13 @@ defmodule Educatium.Feed do
     |> Repo.preload(preloads)
   end
 
+  def increment_post_views!(post_id) do
+    post = get_post!(post_id)
+    post
+    |> Post.changeset(%{view_count: post.view_count + 1})
+    |> Repo.update()
+  end
+
   @doc """
   Creates a post.
 
@@ -138,7 +145,7 @@ defmodule Educatium.Feed do
 
   @doc """
   Upvotes a post, by creating an upvote for the given user.
-  This upvote creation will, automatically, increment the post's `upvotes_count` field.
+  This upvote creation will, automatically, increment the post's `upvote_count` field.
 
   ## Examples
 
@@ -170,7 +177,7 @@ defmodule Educatium.Feed do
 
     Multi.new()
     |> Multi.delete(:upvote, upvote)
-    |> Multi.update(:post, Post.changeset(post, %{upvotes_count: post.upvotes_count - 1}))
+    |> Multi.update(:post, Post.changeset(post, %{upvote_count: post.upvote_count - 1}))
     |> Repo.transaction()
 
     updated_post = get_post!(post.id, Post.preloads())
@@ -195,7 +202,7 @@ defmodule Educatium.Feed do
 
   @doc """
   Downvotes a post, by creating a downvote for the given user.
-  This downvote creation will, automatically, increment the post's `downvotes_count` field.
+  This downvote creation will, automatically, increment the post's `downvote_count` field.
 
   ## Examples
 
@@ -217,7 +224,7 @@ defmodule Educatium.Feed do
 
     Multi.new()
     |> Multi.delete(:downvote, downvote)
-    |> Multi.update(:post, Post.changeset(post, %{downvotes_count: post.downvotes_count - 1}))
+    |> Multi.update(:post, Post.changeset(post, %{downvote_count: post.downvote_count - 1}))
     |> Repo.transaction()
 
     updated_post = get_post!(post.id, Post.preloads())
@@ -259,8 +266,8 @@ defmodule Educatium.Feed do
     |> Multi.update(
       :post,
       Post.changeset(post, %{
-        downvotes_count: post.downvotes_count - 1,
-        upvotes_count: post.upvotes_count + 1
+        downvote_count: post.downvote_count - 1,
+        upvote_count: post.upvote_count + 1
       })
     )
     |> Repo.transaction()
@@ -276,8 +283,8 @@ defmodule Educatium.Feed do
     |> Multi.update(
       :post,
       Post.changeset(post, %{
-        downvotes_count: post.downvotes_count + 1,
-        upvotes_count: post.upvotes_count - 1
+        downvote_count: post.downvote_count + 1,
+        upvote_count: post.upvote_count - 1
       })
     )
     |> Repo.transaction()

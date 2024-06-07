@@ -8,12 +8,13 @@ defmodule Educatium.Feed.Post do
 
   @types ~w(resource)a
 
-  @required_fields ~w(upvotes_count downvotes_count type)a
+  @required_fields ~w(view_count upvote_count downvote_count type)a
   @optional_fields ~w()a
 
   schema "posts" do
-    field :upvotes_count, :integer, default: 0
-    field :downvotes_count, :integer, default: 0
+    field :view_count, :integer, default: 0
+    field :upvote_count, :integer, default: 0
+    field :downvote_count, :integer, default: 0
     field :type, Ecto.Enum, values: @types
 
     has_one :resource, Resource

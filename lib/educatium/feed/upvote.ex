@@ -26,7 +26,7 @@ defmodule Educatium.Feed.Upvote do
   defp increment_post_upvotes(changeset) do
     if post_id = get_change(changeset, :post_id) do
       query = from Post, where: [id: ^post_id]
-      changeset.repo.update_all(query, inc: [upvotes_count: 1])
+      changeset.repo.update_all(query, inc: [upvote_count: 1])
     end
 
     changeset

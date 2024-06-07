@@ -3,9 +3,10 @@ defmodule Educatium.Repo.Migrations.CreatePosts do
 
   def change do
     create table(:posts, primary_key: false) do
+      add :view_count, :integer, default: 0
       add :id, :binary_id, primary_key: true
-      add :upvotes_count, :integer, default: 0
-      add :downvotes_count, :integer, default: 0
+      add :upvote_count, :integer, default: 0
+      add :downvote_count, :integer, default: 0
       add :type, :string, null: false
 
       timestamps(type: :utc_datetime)
