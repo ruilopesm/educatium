@@ -118,6 +118,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
     resource_params = Map.put(resource_params, "user_id", socket.assigns.current_user.id)
 
     IO.inspect(resource_path, label: "resource_path")
+
     case Resources.create_resource(resource_params, resource_path) do
       {:ok, _resource} ->
         {:noreply,

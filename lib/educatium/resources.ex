@@ -95,7 +95,6 @@ defmodule Educatium.Resources do
     |> Repo.transaction()
   end
 
-
   @doc """
   Updates a resource.
 
@@ -170,7 +169,7 @@ defmodule Educatium.Resources do
 
   @doc """
   Creates a file.
-  
+
   ## Examples
 
       iex> create_file(%{field: value})
@@ -189,15 +188,18 @@ defmodule Educatium.Resources do
   defp process_resource_item(resource, parent_directory, :dir, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
+
     attrs = %{
       name: Path.basename(path),
       resource_id: resource.id,
-      parent_directory_id: parent_directory_id  
+      parent_directory_id: parent_directory_id
     }
 
     with {:ok, directory} <- create_directory(attrs) do
       for item <- Elixir.File.ls!(path) do
-        item_path = Path.join(path, item) # Full path to item
+        # Full path to item
+        item_path = Path.join(path, item)
+
         if Elixir.File.dir?(item_path) do
           process_resource_item(resource, directory, :dir, item_path)
         else
@@ -215,6 +217,7 @@ defmodule Educatium.Resources do
   defp process_resource_item(resource, parent_directory, :file, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
+
     attrs = %{
       name: Path.basename(path),
       resource_id: resource.id,
