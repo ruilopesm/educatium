@@ -64,7 +64,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
     {:ok,
      socket
-     |> assign(files: [], status: nil, dir_name: nil)
+     |> assign(files: [], status: nil, resource_path: nil)
      |> allow_upload(:dir,
        accept: :any,
        max_entries: 1,
@@ -76,9 +76,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
      |> assign_form(changeset)}
   end
 
-  def handle_event("validate", %{"_target" => ["undefined"]}, socket) do
-    # TODO: change the target of this event form something more meaningful
-
+  def handle_event("validate", %{"_target" => ["dir"]}, socket) do
     {:noreply, assign(socket, status: "compressing files...")}
   end
 
@@ -94,7 +92,10 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
   def handle_event("save", %{"resource" => resource_params}, socket) do
     assigns = socket.assigns
-    save_resource(socket, assigns.action, resource_params, assigns.dir_name)
+    result = save_resource(socket, assigns.action, resource_params, assigns.resource_path)
+    File.rm_rf!(assigns.resource_path)
+
+    result
   end
 
   defp save_resource(socket, :edit, resource_params, resource_path) do
@@ -102,7 +103,6 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
     case Resources.update_resource(socket.assigns.resource, resource_params, resource_path) do
       {:ok, resource} ->
-        File.rm_rf!(resource_path)
         notify_parent({:saved, resource})
 
         {:noreply,
@@ -120,7 +120,6 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
     case Resources.create_resource(resource_params, resource_path) do
       {:ok, _resource} ->
-        File.rm_rf!(resource_path)
         {:noreply,
          socket
          |> put_flash(:info, "Resource created successfully")
@@ -145,12 +144,12 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
           {:ok, {dest_path, paths}}
         end)
 
-      dir_name = Path.basename(dest)
+      resource_name = Path.basename(dest)
 
       {:noreply,
        socket
-       |> assign(status: "\"#{dir_name}\" uploaded!")
-       |> assign(dir_name: dest)}
+       |> assign(status: "\"#{resource_name}\" uploaded!")
+       |> assign(resource_path: dest)}
     else
       {:noreply, assign(socket, status: "uploading...")}
     end
