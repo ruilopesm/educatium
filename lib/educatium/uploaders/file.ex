@@ -10,7 +10,6 @@ defmodule Educatium.Uploaders.File do
 
   # Override the storage directory:
   def storage_dir(_version, {_file, scope}) do
-    IO.inspect(scope, label: "scope")
     "uploads/user/files/#{scope.resource_id}"
   end
 
