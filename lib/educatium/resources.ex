@@ -43,10 +43,10 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> create_resource(%{field: value}, resource_dir_name)
+      iex> create_resource(%{field: value}, "/resources/resource1")
       {:ok, %Resource{}}
 
-      iex> create_resource(%{field: bad_value}, resource_dir_name)
+      iex> create_resource(%{field: bad_value}, "/resources/resource1")
       {:error, %Ecto.Changeset{}}
 
   """
@@ -100,10 +100,10 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> update_resource(resource, %{field: new_value}, resource_path)
+      iex> update_resource(resource, %{field: new_value}, "/resources/resource1")
       {:ok, %Resource{}}
 
-      iex> update_resource(resource, %{field: bad_value}, resource_path)
+      iex> update_resource(resource, %{field: bad_value}, "/resources/resource1")
       {:error, %Ecto.Changeset{}}
 
   """
@@ -205,8 +205,8 @@ defmodule Educatium.Resources do
 
       {:ok, directory}
     else
-      {:error, changeset} -> {:error, changeset}
-      _ -> {:error, "Failed to create directory"}
+      {:error, error} -> {:error, error}
+      _ -> {:error, :failed_to_create_directory}
     end
   end
 
