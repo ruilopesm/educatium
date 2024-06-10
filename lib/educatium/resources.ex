@@ -199,12 +199,8 @@ defmodule Educatium.Resources do
       for item <- Elixir.File.ls!(path) do
         # Full path to item
         item_path = Path.join(path, item)
-
-        if Elixir.File.dir?(item_path) do
-          process_resource_item(resource, directory, :dir, item_path)
-        else
-          process_resource_item(resource, directory, :file, item_path)
-        end
+        item_type = if Elixir.File.dir?(item_path), do: :dir, else: :file
+        process_resource_item(resource, directory, item_type, item_path)
       end
 
       {:ok, directory}
@@ -217,11 +213,16 @@ defmodule Educatium.Resources do
   defp process_resource_item(resource, parent_directory, :file, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
+    name = Path.basename(path)
 
     attrs = %{
-      name: Path.basename(path),
+      name: name,
       resource_id: resource.id,
-      directory_id: parent_directory_id
+      directory_id: parent_directory_id,
+      file: %Plug.Upload{
+        path: path,
+        filename: name
+      }
     }
 
     create_file(attrs)

@@ -1,7 +1,6 @@
 defmodule Educatium.Uploaders.File do
   use Waffle.Definition
 
-  # Include ecto support (requires package waffle_ecto installed):
   use Waffle.Ecto.Definition
 
   @versions [:original]
@@ -11,7 +10,8 @@ defmodule Educatium.Uploaders.File do
 
   # Override the storage directory:
   def storage_dir(_version, {_file, scope}) do
-    "uploads/user/files/#{scope.id}"
+    IO.inspect(scope, label: "scope")
+    "uploads/user/files/#{scope.resource_id}"
   end
 
   # Override the bucket on a per definition basis:

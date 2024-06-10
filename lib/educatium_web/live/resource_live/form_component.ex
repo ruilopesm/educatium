@@ -102,6 +102,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
     case Resources.update_resource(socket.assigns.resource, resource_params, resource_path) do
       {:ok, resource} ->
+        File.rm_rf!(resource_path)
         notify_parent({:saved, resource})
 
         {:noreply,
@@ -117,10 +118,9 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
   defp save_resource(socket, :new, resource_params, resource_path) do
     resource_params = Map.put(resource_params, "user_id", socket.assigns.current_user.id)
 
-    IO.inspect(resource_path, label: "resource_path")
-
     case Resources.create_resource(resource_params, resource_path) do
       {:ok, _resource} ->
+        File.rm_rf!(resource_path)
         {:noreply,
          socket
          |> put_flash(:info, "Resource created successfully")

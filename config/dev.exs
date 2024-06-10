@@ -71,6 +71,7 @@ config :phoenix_live_view,
   # Enable helpful, but potentially expensive runtime checks
   enable_expensive_runtime_checks: true
 
+# Configure waffle local storage
 config :waffle,
   storage: Waffle.Storage.Local,
   storage_dir_prefix: "priv/waffle/private"
