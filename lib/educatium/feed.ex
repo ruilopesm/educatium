@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Post, Upvote, Downvote}
+  alias Educatium.Feed.{Post, Upvote, Downvote,Comment}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -21,6 +21,22 @@ defmodule Educatium.Feed do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
     |> where([_, r], r.visibility == :public)
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of comments.
+
+  ## Examples
+
+      iex> list_comments()
+      [%Comment{}, ...]
+
+  """
+  def list_comments(resource_id,opts \\ []) do
+    Comment
+    |> join(:left, [c], p in Post, on: p.id == c.post_id)
     |> apply_filters(opts)
     |> Repo.all()
   end
@@ -90,6 +106,24 @@ defmodule Educatium.Feed do
   def create_post(attrs) do
     %Post{}
     |> Post.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a comment for the given post.
+
+  ## Examples
+
+      iex> create_comment(post, %{field: value})
+      {:ok, %Comment{}}
+
+      iex> create_comment(post, %{field: bad_value})
+      {:error, ...}
+
+  """
+  def create_comment(attrs) do
+    %Comment{}
+    |> Comment.changeset(attrs)
     |> Repo.insert()
   end
 

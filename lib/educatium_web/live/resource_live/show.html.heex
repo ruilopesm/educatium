@@ -16,6 +16,35 @@
   <:item title="Published"><%= @resource.inserted_at %></:item>
   <:item title="Visibility"><%= @resource.visibility %></:item>
 </.list>
+<hr class="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700">
+
+<div class="mt-6 py-2 top-1 items-end">
+
+  <div>
+    <h2 class="text-xl font-bold mb-4">Comments</h2>
+    <form phx-submit="post_comment" class="flex flex-col space-y-4">
+      <textarea 
+        name="comment[body]" 
+        class="resize-none p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        rows="4" 
+        placeholder="Write your comment here..."
+        required>
+      </textarea>
+      <input type="hidden" name="comment[post_id]" value={@resource.post_id}>
+      <button 
+        type="submit" 
+        class="self-end bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Post
+      </button>
+    </form>
+  </div>
+
+  <ul id="comments" phx-update="stream" class="mt-6 flex flex-col space-y-4">
+    <li :for={{id, comment} <- @streams.comments} id={id} >
+      <.live_component id={id} module={Components.Comment} comment={comment} current_user={@current_user} />
+    </li>
+  </ul>
+</div>
 
 <.back navigate={~p"/"}>Back to resources</.back>
 

@@ -2,9 +2,9 @@ defmodule Educatium.Feed.Post do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
-  alias Educatium.Feed.{Upvote, Downvote}
+  alias Educatium.Feed.{Upvote, Downvote,Comment}
 
-  @preloads ~w(resource upvotes downvotes)a
+  @preloads ~w(resource upvotes downvotes comments)a
 
   @types ~w(resource)a
 
@@ -18,6 +18,7 @@ defmodule Educatium.Feed.Post do
     field :type, Ecto.Enum, values: @types
 
     has_one :resource, Resource
+    has_many :comments, Comment
     has_many :upvotes, Upvote
     has_many :downvotes, Downvote
 

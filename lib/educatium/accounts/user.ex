@@ -21,6 +21,7 @@ defmodule Educatium.Accounts.User do
     has_one :teacher, Educatium.Accounts.Teacher
 
     has_many :resources, Resource
+    has_many :comments, Educatium.Feed.Comment
 
     timestamps(type: :utc_datetime)
   end
