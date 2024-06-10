@@ -29,7 +29,7 @@ defmodule EducatiumWeb.UserSetupLive do
         id="student_form"
         phx-submit="submit_student"
         phx-change="validate_student"
-        class="mt-10"
+        class="mt-8"
       >
         <.input field={@student_form[:first_name]} label={gettext("First name")} required />
         <.input field={@student_form[:last_name]} label={gettext("Last name")} required />
@@ -47,7 +47,7 @@ defmodule EducatiumWeb.UserSetupLive do
         id="teacher_form"
         phx-submit="submit_teacher"
         phx-change="validate_teacher"
-        class="mt-10"
+        class="mt-6"
       >
         <.input field={@teacher_form[:first_name]} label={gettext("First name")} required />
         <.input field={@teacher_form[:last_name]} label={gettext("Last name")} required />
