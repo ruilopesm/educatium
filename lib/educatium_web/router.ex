@@ -18,8 +18,6 @@ defmodule EducatiumWeb.Router do
 
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
 
-  ## Normal routes
-
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
@@ -56,6 +54,8 @@ defmodule EducatiumWeb.Router do
     get "/auth/:provider/callback", OAuthController, :callback
   end
 
+  ## Normal routes
+
   scope "/", EducatiumWeb do
     pipe_through [:browser, :require_authenticated_user]
 
@@ -63,19 +63,26 @@ defmodule EducatiumWeb.Router do
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
       live "/users/setup", UserSetupLive, :edit
 
-      pipe_through :active
+      pipe_through [:active]
 
       live "/", HomeLive
-      live "/resources", ResourceLive.Index, :index
 
-      live "/resources/new", ResourceLive.Index, :new
-      live "/resources/:id/edit", ResourceLive.Index, :edit
+      scope "/resources" do
+        live "/", ResourceLive.Index, :index
 
-      live "/resources/:id", ResourceLive.Show, :show
-      live "/resources/:id/show/edit", ResourceLive.Show, :edit
+        live "/new", ResourceLive.Index, :new
+        live "/:id/edit", ResourceLive.Index, :edit
 
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+        live "/:id", ResourceLive.Show, :show
+        live "/:id/show/edit", ResourceLive.Show, :edit
+      end
+
+      scope "/users" do
+        live "/settings", UserSettingsLive, :edit
+        live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+        live "/:id", UserLive.Show, :show
+      end
     end
   end
 

@@ -20,12 +20,23 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import "../vendor/alpine"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken}
+  params: {_csrf_token: csrfToken},
+  dom: {
+    onBeforeElUpdated(from, to) {
+      // If the element we are updating is an Alpine component...
+      if (from._x_dataStack) {
+        // Then temporarily clone it (with it's data) to the "to" element.
+        // This should simulate LiveView being aware of Alpine changes.
+        window.Alpine.clone(from, to);
+      }
+    },
+  },
 })
 
 // Show progress bar on live navigation and form submits

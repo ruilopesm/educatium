@@ -65,11 +65,12 @@ defmodule Educatium.Feed do
   ## Examples
 
       iex> increment_post_views!(123)
-			%Post{...}
+      %Post{...}
 
   """
   def increment_post_views!(post_id) do
     post = get_post!(post_id)
+
     post
     |> Post.changeset(%{view_count: post.view_count + 1})
     |> Repo.update()

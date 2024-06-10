@@ -1,0 +1,7 @@
+<div class="flex items-center justify-between">
+  <.header size="3xl">
+    <%= display_name(@user) %> <span :if={@is_current_user}>(<%= gettext("you") %>)</span>
+    <:subtitle><%= display_role(@user.role) %></:subtitle>
+  </.header>
+  <.avatar class="size-44" fallback={extract_initials(@user.first_name, @user.last_name)} size={:xl} />
+</div>

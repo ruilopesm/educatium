@@ -6,43 +6,41 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage resource records in your database.</:subtitle>
-      </.header>
+    <.header>
+      <%= @title %>
+      <:subtitle>Use this form to manage resource records in your database.</:subtitle>
+    </.header>
 
-      <.simple_form
-        for={@form}
-        id="resource-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-        class="mt-10"
-      >
-        <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:description]} type="text" label="Description" />
-        <.input
-          field={@form[:type]}
-          type="select"
-          label="Type"
-          prompt="Choose a value"
-          options={Ecto.Enum.values(Educatium.Resources.Resource, :type)}
-        />
-        <.input field={@form[:date]} type="date" label="Date" />
-        <.input field={@form[:published]} type="datetime-local" label="Published" />
-        <.input
-          field={@form[:visibility]}
-          type="select"
-          label="Visibility"
-          prompt="Choose a value"
-          options={Ecto.Enum.values(Educatium.Resources.Resource, :visibility)}
-        />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Resource</.button>
-        </:actions>
-      </.simple_form>
-    </div>
+    <.simple_form
+      for={@form}
+      id="resource-form"
+      phx-target={@myself}
+      phx-change="validate"
+      phx-submit="save"
+      class="mt-10"
+    >
+      <.input field={@form[:title]} type="text" label="Title" />
+      <.input field={@form[:description]} type="text" label="Description" />
+      <.input
+        field={@form[:type]}
+        type="select"
+        label="Type"
+        prompt="Choose a value"
+        options={Ecto.Enum.values(Educatium.Resources.Resource, :type)}
+      />
+      <.input field={@form[:date]} type="date" label="Date" />
+      <.input field={@form[:published]} type="datetime-local" label="Published" />
+      <.input
+        field={@form[:visibility]}
+        type="select"
+        label="Visibility"
+        prompt="Choose a value"
+        options={Ecto.Enum.values(Educatium.Resources.Resource, :visibility)}
+      />
+      <:actions>
+        <.button phx-disable-with="Saving...">Save Resource</.button>
+      </:actions>
+    </.simple_form>
     """
   end
 

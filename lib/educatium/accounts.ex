@@ -5,7 +5,6 @@ defmodule Educatium.Accounts do
   use Educatium, :context
 
   alias Educatium.Accounts.{User, UserToken, UserNotifier}
-  alias Educatium.Accounts.{Student, Teacher}
 
   ## Database getters
 
@@ -376,135 +375,33 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
-  Updates an user.
+  Completes the user setup.
 
   ## Examples
 
-      iex> update_user(user, %{field: value})
+      iex> complete_user_setup(user, %{field: value})
       {:ok, %User{}}
 
-      iex> update_user(user, %{field: bad_value})
-      {:error, ...}
+      iex> complete_user_setup(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(user, attrs) do
+  def complete_user_setup(user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.setup_changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Returns a data structure for tracking user changes.
+  Returns a data structure for tracking user changes regarding his setup completion.
 
   ## Examples
 
-      iex> change_user(user)
+      iex> change_user_setup(user)
       %User{}
 
   """
-  def change_user(user, attrs \\ %{}) do
-    User.changeset(user, attrs)
-  end
-
-  ## Teacher
-
-  @doc """
-  Creates a teacher.
-
-  ## Examples
-
-      iex> create_teacher(%{field: value})
-      {:ok, %Teacher{}}
-
-      iex> create_teacher(%{field: bad_value})
-      {:error, ...}
-
-  """
-  def create_teacher(attrs) do
-    %Teacher{}
-    |> Teacher.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a teacher.
-
-  ## Examples
-
-      iex> update_teacher(teacher, %{field: value})
-      {:ok, %Teacher{}}
-
-      iex> update_teacher(teacher, %{field: bad_value})
-      {:error, ...}
-
-  """
-  def update_teacher(%Teacher{} = teacher, attrs) do
-    teacher
-    |> Teacher.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Returns a data structure for tracking teacher changes.
-
-  ## Examples
-
-      iex> change_teacher(teacher)
-      %Teacher{}
-
-  """
-  def change_teacher(%Teacher{} = teacher, attrs \\ %{}) do
-    Teacher.changeset(teacher, attrs)
-  end
-
-  ## Student
-
-  @doc """
-  Creates a student.
-
-  ## Examples
-
-      iex> create_student(%{field: value})
-      {:ok, %Student{}}
-
-      iex> create_student(%{field: bad_value})
-      {:error, ...}
-
-  """
-  def create_student(attrs) do
-    %Student{}
-    |> Student.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a student.
-
-  ## Examples
-
-      iex> update_student(student, %{field: value})
-      {:ok, %Student{}}
-
-      iex> update_student(student, %{field: bad_value})
-      {:error, ...}
-
-  """
-  def update_student(%Student{} = student, attrs) do
-    student
-    |> Student.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Returns a data structure for tracking student changes.
-
-  ## Examples
-
-      iex> change_student(student)
-      %Student{}
-
-  """
-  def change_student(%Student{} = student, attrs \\ %{}) do
-    Student.changeset(student, attrs)
+  def change_user_setup(user, attrs \\ %{}) do
+    User.setup_changeset(user, attrs)
   end
 end

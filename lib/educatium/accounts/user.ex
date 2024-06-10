@@ -7,18 +7,23 @@ defmodule Educatium.Accounts.User do
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active)a
+  @setup_fields ~w(first_name last_name course department university role)a
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+
+    field :first_name, :string
+    field :last_name, :string
+    field :course, :string
+    field :department, :string
+    field :university, :string
+
     field :role, Ecto.Enum, values: @roles
 
     field :confirmed_at, :naive_datetime
     field :active, :boolean, default: false
-
-    has_one :student, Educatium.Accounts.Student
-    has_one :teacher, Educatium.Accounts.Teacher
 
     has_many :resources, Resource
 
@@ -134,6 +139,16 @@ defmodule Educatium.Accounts.User do
   end
 
   @doc """
+  A user changeset for completing the setup.
+  """
+  def setup_changeset(user, attrs) do
+    user
+    |> cast(attrs, @setup_fields ++ @optional_fields)
+    |> validate_required(@setup_fields)
+    |> change(active: true)
+  end
+
+  @doc """
   Confirms the account by setting `confirmed_at`.
   """
   def confirm_changeset(user) do
@@ -166,12 +181,6 @@ defmodule Educatium.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
-  end
-
-  @doc false
-  def changeset(user, attrs) do
-    user
-    |> cast(attrs, @optional_fields)
   end
 
   def roles, do: @roles
