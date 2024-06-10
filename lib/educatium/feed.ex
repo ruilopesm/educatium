@@ -57,6 +57,16 @@ defmodule Educatium.Feed do
     |> Repo.preload(preloads)
   end
 
+  @doc """
+  Increments a post's view count by one.
+
+  Raises if the Post does not exist.
+
+  ## Examples
+
+      iex> increment_post_views!(123)
+
+  """
   def increment_post_views!(post_id) do
     post = get_post!(post_id)
     post
