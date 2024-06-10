@@ -57,11 +57,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       <div class="relative group">
           <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90"/>
           <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-            <%= if @post.view_count == 1 do %>
-              1 view
-            <% else %>
-              <%= @post.view_count %> views
-            <% end %>
+           <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
           </div>
       </div>
     </div>
