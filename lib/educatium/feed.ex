@@ -65,6 +65,7 @@ defmodule Educatium.Feed do
   ## Examples
 
       iex> increment_post_views!(123)
+			%Post{...}
 
   """
   def increment_post_views!(post_id) do
