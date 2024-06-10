@@ -16,7 +16,7 @@ defmodule EducatiumWeb.Router do
     plug :fetch_current_user
   end
 
-  pipeline :active, do: plug EducatiumWeb.Plugs.ActiveUser
+  pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
 
   ## Normal routes
 
@@ -61,7 +61,6 @@ defmodule EducatiumWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-
       live "/users/setup", UserSetupLive, :edit
 
       pipe_through :active

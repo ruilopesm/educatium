@@ -3,7 +3,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
   alias Educatium.Resources
 
-  @uploads_dir Path.expand("../../../../priv/uploads", __DIR__)
+  @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]
 
   @impl true
   def render(assigns) do
@@ -32,7 +32,6 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
           options={Ecto.Enum.values(Educatium.Resources.Resource, :type)}
           required
         />
-        <.input field={@form[:date]} type="date" label="Date" />
         <.input
           field={@form[:visibility]}
           type="select"
@@ -41,14 +40,16 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
           options={Ecto.Enum.values(Educatium.Resources.Resource, :visibility)}
           required
         />
+
         <p :if={@status}><%= @status %></p>
         <div class={@status && "hidden"}>
           <.live_file_input upload={@uploads.dir} class="hidden" />
-          <input id="dir" type="file" webkitdirectory={true} phx-hook="ZipUpload" required />
+          <input id="dir" type="file" webkitdirectory={true} phx-hook="ZipUpload" />
         </div>
         <%= for entry <- @uploads.dir.entries do %>
           <%= entry.progress %>%
         <% end %>
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Resource</.button>
         </:actions>
@@ -63,42 +64,22 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
 
     {:ok,
      socket
-     |> assign(files: [], status: nil)
+     |> assign(files: [], status: nil, dir_name: nil)
      |> allow_upload(:dir,
-      accept: :any,
-      max_entries: 1,
-      auto_upload: true,
-      max_file_size: 1_000_000_000,
-      progress: &handle_progress/3
+       accept: :any,
+       max_entries: 1,
+       auto_upload: true,
+       max_file_size: 1_000_000_000,
+       progress: &handle_progress/3
      )
      |> assign(assigns)
      |> assign_form(changeset)}
   end
 
-  def handle_event("validate", %{"_target" =>  ["undefined"]}, socket) do
+  def handle_event("validate", %{"_target" => ["undefined"]}, socket) do
     # TODO: change the target of this event form something more meaningful
 
     {:noreply, assign(socket, status: "compressing files...")}
-  end
-
-  def handle_progress(:dir, entry, socket) do
-    if entry.done? do
-      File.mkdir_p!(@uploads_dir)
-
-      [{dest, _paths}] =
-        consume_uploaded_entries(socket, :dir, fn %{path: path}, _entry ->
-          {:ok, [{:zip_comment, []}, {:zip_file, first, _, _, _, _} | _]} =
-            :zip.list_dir(~c"#{path}")
-
-          dest_path = Path.join(@uploads_dir, Path.basename(to_string(first)))
-          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{@uploads_dir}")
-          {:ok, {dest_path, paths}}
-        end)
-
-      {:noreply, assign(socket, status: "\"#{Path.basename(dest)}\" uploaded!")}
-    else
-      {:noreply, assign(socket, status: "uploading...")}
-    end
   end
 
   @impl true
@@ -112,36 +93,65 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
   end
 
   def handle_event("save", %{"resource" => resource_params}, socket) do
-    save_resource(socket, socket.assigns.action, resource_params)
+    assigns = socket.assigns
+    save_resource(socket, assigns.action, resource_params, assigns.dir_name)
   end
 
-  defp save_resource(socket, :edit, resource_params) do
-    case Resources.update_resource(socket.assigns.resource, resource_params) do
+  defp save_resource(socket, :edit, resource_params, resource_path) do
+    resource_params = Map.put(resource_params, "user_id", socket.assigns.current_user.id)
+
+    case Resources.update_resource(socket.assigns.resource, resource_params, resource_path) do
       {:ok, resource} ->
         notify_parent({:saved, resource})
 
         {:noreply,
          socket
          |> put_flash(:info, "Resource updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_patch(to: ~p"/resources")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
     end
   end
 
-  defp save_resource(socket, :new, resource_params) do
-    case Resources.create_resource(resource_params) do
-      {:ok, resource} ->
-        notify_parent({:saved, resource})
+  defp save_resource(socket, :new, resource_params, resource_path) do
+    resource_params = Map.put(resource_params, "user_id", socket.assigns.current_user.id)
 
+    IO.inspect(resource_path, label: "resource_path")
+    case Resources.create_resource(resource_params, resource_path) do
+      {:ok, _resource} ->
         {:noreply,
          socket
          |> put_flash(:info, "Resource created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_patch(to: ~p"/resources")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
+    end
+  end
+
+  defp handle_progress(:dir, entry, socket) do
+    if entry.done? do
+      File.mkdir_p!(@uploads_dir)
+
+      [{dest, _paths}] =
+        consume_uploaded_entries(socket, :dir, fn %{path: path}, _entry ->
+          {:ok, [{:zip_comment, []}, {:zip_file, first, _, _, _, _} | _]} =
+            :zip.list_dir(~c"#{path}")
+
+          dest_path = Path.join(@uploads_dir, Path.basename(to_string(first)))
+          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{@uploads_dir}")
+          {:ok, {dest_path, paths}}
+        end)
+
+      dir_name = Path.basename(dest)
+
+      {:noreply,
+       socket
+       |> assign(status: "\"#{dir_name}\" uploaded!")
+       |> assign(dir_name: dest)}
+    else
+      {:noreply, assign(socket, status: "uploading...")}
     end
   end
 
