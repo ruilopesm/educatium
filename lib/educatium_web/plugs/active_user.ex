@@ -1,6 +1,7 @@
 defmodule EducatiumWeb.Plugs.ActiveUser do
   @moduledoc """
-  A plug that checks if the current user is active.
+  A plug that checks if the current user is confirmed and active.
+  If the user is not confirmed, it redirects them to the confirmation setup page.
   If the user is not active, it redirects them to the setup page.
   """
 
