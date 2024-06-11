@@ -2,6 +2,9 @@ defmodule EducatiumWeb.Utils do
   @moduledoc """
   Utility functions for rendering data on views.
   """
+  import EducatiumWeb.Gettext
+
+  alias Timex.Format.DateTime.Formatters.Relative
 
   @doc """
   Build options for a select input.
@@ -90,5 +93,30 @@ defmodule EducatiumWeb.Utils do
     else
       string
     end
+  end
+
+  @doc """
+  Returns a relative datetime string for the given datetime.
+
+  ## Examples
+
+      iex> relative_datetime(Timex.today() |> Timex.shift(years: -3))
+      "3 years ago"
+
+      iex> relative_datetime(Timex.today() |> Timex.shift(years: 3))
+      "in 3 years"
+
+      iex> relative_datetime(Timex.today() |> Timex.shift(months: -8))
+      "8 months ago"
+
+      iex> relative_datetime(Timex.today() |> Timex.shift(months: 8))
+      "in 8 months"
+
+      iex> relative_datetime(Timex.today() |> Timex.shift(days: -1))
+      "yesterday"
+
+  """
+  def relative_datetime(datetime) do
+    Relative.lformat!(datetime, "{relative}", Gettext.get_locale())
   end
 end

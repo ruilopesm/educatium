@@ -131,7 +131,7 @@ defmodule EducatiumWeb.CoreComponents do
 
   defp build_avatar_size_class(size) do
     case size do
-      :xs -> "size-8 text-xs"
+      :sm -> "size-8 text-xs"
       :md -> "size-16 text-lg"
       :lg -> "size-20 text-3xl"
       :xl -> "size-24 text-4xl"

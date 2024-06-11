@@ -31,7 +31,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
               Rui Lopes <span class="text-gray-500">adicionou um novo recurso</span>
             </h2>
             <h3 class="text-gray-500 text-xs font-normal leading-4">
-              Estudante | Qui, 10h03m
+              <%= display_role(@current_user.role) %> | <%= relative_datetime(@current_user.inserted_at) %>
             </h3>
           </div>
           <div class="gap-1 flex">
