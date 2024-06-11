@@ -72,6 +72,10 @@ defmodule Educatium.MixProject do
       # security
       {:argon2_elixir, "~> 3.0"},
 
+      # uploads
+      {:waffle, "~> 1.1"},
+      {:waffle_ecto, "~> 0.0"},
+
       # testing
       {:floki, ">= 0.30.0", only: :test},
       {:faker, "~> 0.18", only: [:dev, :test]},

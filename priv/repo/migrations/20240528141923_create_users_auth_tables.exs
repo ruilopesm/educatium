@@ -9,6 +9,7 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
 
+      add :avatar, :string
       add :handler, :citext
       add :first_name, :string
       add :last_name, :string

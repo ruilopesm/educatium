@@ -2,8 +2,6 @@ defmodule EducatiumWeb.Utils do
   @moduledoc """
   Utility functions for rendering data on views.
   """
-  import EducatiumWeb.Gettext
-
   alias Timex.Format.DateTime.Formatters.Relative
 
   @doc """

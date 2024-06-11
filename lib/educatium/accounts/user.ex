@@ -2,6 +2,7 @@ defmodule Educatium.Accounts.User do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
+  alias Educatium.Uploaders.Avatar
 
   @roles ~w(student teacher)a
 
@@ -16,6 +17,7 @@ defmodule Educatium.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
 
+    field :avatar, Avatar.Type
     field :handler, :string
     field :first_name, :string
     field :last_name, :string
@@ -148,6 +150,15 @@ defmodule Educatium.Accounts.User do
     |> cast(attrs, @required_fields ++ @setup_fields ++ @optional_fields)
     |> validate_email()
     |> validate_handler()
+  end
+
+  @doc """
+  A user changeset for updating the user's avatar.
+  """
+  def avatar_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:avatar])
+    |> cast_attachments(attrs, [:avatar])
   end
 
   @doc """

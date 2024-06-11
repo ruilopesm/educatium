@@ -254,6 +254,23 @@ defmodule Educatium.Accounts do
     end
   end
 
+  @doc """
+  Updates the user avatar.
+
+  ## Examples
+
+      iex> update_user_avatar(user, %{avatar: %Plug.Upload{filename: "valid.jpg"}})
+      {:ok, %User{}}
+
+      iex> update_user_avatar(user, %{avatar: %Plug.Upload{filename: "invalid.txt"}})
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user_avatar(user, attrs) do
+    user
+    |> User.avatar_changeset(attrs)
+    |> Repo.update()
+  end
+
   ## Session
 
   @doc """
