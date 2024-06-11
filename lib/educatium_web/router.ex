@@ -40,14 +40,17 @@ defmodule EducatiumWeb.Router do
   ## Authentication routes
 
   scope "/", EducatiumWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
+    pipe_through :browser
+
+    live "/users/reset_password", UserForgotPasswordLive, :new
+    live "/users/reset_password/:token", UserResetPasswordLive, :edit
+    
+    pipe_through :redirect_if_user_is_authenticated
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
