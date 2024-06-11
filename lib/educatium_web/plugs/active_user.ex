@@ -5,6 +5,8 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   If the user is not active, it redirects them to the setup page.
   """
 
+  import EducatiumWeb.Gettext
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
@@ -26,7 +28,10 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
     if current_user.confirmed_at do
       {:ok, conn}
     else
-      {:error, Phoenix.Controller.redirect(conn, to: "/users/confirm")}
+      {:error, 
+        conn
+        |> Phoenix.Controller.put_flash(:error, gettext("Please confirm your account"))
+        |> Phoenix.Controller.redirect(to: "/users/confirm")}
     end
   end
 
@@ -34,7 +39,10 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
     if current_user.active do
       {:ok, conn}
     else
-      {:error, Phoenix.Controller.redirect(conn, to: "/users/setup")}
+      {:error, 
+        conn
+        |> Phoenix.Controller.put_flash(:error, gettext("Please complete your account setup"))
+        |> Phoenix.Controller.redirect(to: "/users/setup")}
     end
   end
 end

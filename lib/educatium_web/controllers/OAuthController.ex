@@ -12,7 +12,7 @@ defmodule EducatiumWeb.OAuthController do
     user_params = %{
       email: user_info.email,
       password: random_password(),
-      confirmed_at: DateTime.utc_now()
+      confirmed_at: NaiveDateTime.utc_now()
     }
 
     case Accounts.fetch_or_create_user(user_params) do
