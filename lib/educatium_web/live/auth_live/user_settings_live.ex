@@ -151,34 +151,4 @@ defmodule EducatiumWeb.UserSettingsLive do
         {:noreply, assign(socket, :email_form, to_form(Map.put(changeset, :action, :insert)))}
     end
   end
-
-  # def handle_event("validate_password", params, socket) do
-  #   %{"current_password" => password, "user" => user_params} = params
-  #
-  #   password_form =
-  #     socket.assigns.current_user
-  #     |> Accounts.change_user_password(user_params)
-  #     |> Map.put(:action, :validate)
-  #     |> to_form()
-  #
-  #   {:noreply, assign(socket, password_form: password_form, current_password: password)}
-  # end
-  #
-  # def handle_event("update_password", params, socket) do
-  #   %{"current_password" => password, "user" => user_params} = params
-  #   user = socket.assigns.current_user
-  #
-  #   case Accounts.update_user_password(user, password, user_params) do
-  #     {:ok, user} ->
-  #       password_form =
-  #         user
-  #         |> Accounts.change_user_password(user_params)
-  #         |> to_form()
-  #
-  #       {:noreply, assign(socket, trigger_submit: true, password_form: password_form)}
-  #
-  #     {:error, changeset} ->
-  #       {:noreply, assign(socket, password_form: to_form(changeset))}
-  #   end
-  # end
 end

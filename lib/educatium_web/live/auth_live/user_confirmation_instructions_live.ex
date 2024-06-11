@@ -8,7 +8,9 @@ defmodule EducatiumWeb.UserConfirmationInstructionsLive do
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         <%= gettext("Verify your inbox for the confirmation email") %>
-        <:subtitle><%= gettext("If you didn't receive the confirmation email resend it bellow") %></:subtitle>
+        <:subtitle>
+          <%= gettext("If you didn't receive the confirmation email resend it bellow") %>
+        </:subtitle>
       </.header>
 
       <.simple_form

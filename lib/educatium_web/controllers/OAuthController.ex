@@ -9,7 +9,11 @@ defmodule EducatiumWeb.OAuthController do
   @rand_pass_length 32
 
   def callback(%{assigns: %{ueberauth_auth: %{info: user_info}}} = conn, %{"provider" => "google"}) do
-    user_params = %{email: user_info.email, password: random_password(), confirmed_at: DateTime.utc_now()}
+    user_params = %{
+      email: user_info.email,
+      password: random_password(),
+      confirmed_at: DateTime.utc_now()
+    }
 
     case Accounts.fetch_or_create_user(user_params) do
       {:ok, user} ->
