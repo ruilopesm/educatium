@@ -9,11 +9,31 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   def call(conn, _opts) do
     current_user = conn.assigns.current_user
 
-    if current_user && !current_user.active do
-      conn
-      |> Phoenix.Controller.redirect(to: "/users/setup")
+    if current_user do
+      with {:ok, conn} <- user_confirmed(conn, current_user),
+           {:ok, conn} <- user_active(conn, current_user) do
+        conn
+      else
+        {:error, conn} -> conn
+      end
     else
       conn
+    end
+  end
+
+  defp user_confirmed(conn, current_user) do
+    if current_user.confirmed_at do
+      {:ok, conn}
+    else
+      {:error, Phoenix.Controller.redirect(conn, to: "/users/confirm")}
+    end
+  end
+
+  defp user_active(conn, current_user) do
+    if current_user.active do
+      {:ok, conn}
+    else
+      {:error, Phoenix.Controller.redirect(conn, to: "/users/setup")}
     end
   end
 end
