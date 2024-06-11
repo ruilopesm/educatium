@@ -119,4 +119,17 @@ defmodule EducatiumWeb.Utils do
   def relative_datetime(datetime) do
     Relative.lformat!(datetime, "{relative}", Gettext.get_locale())
   end
+
+  @doc """
+  Display first and last name as a full name.
+
+  ## Examples
+
+      iex> full_name(%{first_name: "John", last_name: "Doe"})
+      "John Doe"
+
+  """
+  def full_name(%{first_name: first_name, last_name: last_name}) do
+    "#{first_name} #{last_name}"
+  end
 end
