@@ -2,6 +2,7 @@ defmodule EducatiumWeb.UserSettingsLive do
   use EducatiumWeb, :live_view
 
   alias Educatium.Accounts
+  alias Educatium.Uploaders.Avatar
 
   def render(assigns) do
     ~H"""
@@ -11,7 +12,28 @@ defmodule EducatiumWeb.UserSettingsLive do
     </.header>
 
     <div class="space-y-12 divide-y">
-      <div>
+      <div id="rest">
+        <.simple_form
+          for={@user}
+          id="user_form"
+          phx-submit="update_user"
+          phx-change="validate_user"
+          class="mt-10"
+        >
+          <.input field={@user[:handler]} label={gettext("Handler")} required />
+          <.input field={@user[:first_name]} label={gettext("First name")} />
+          <.input field={@user[:last_name]} label={gettext("Last name")} />
+          <.input field={@user[:course]} label={gettext("Course")} />
+          <.input field={@user[:university]} label={gettext("University")} />
+          <:actions>
+            <.button phx-disable-with={gettext("Updating...")}>
+              <%= gettext("Update details") %>
+            </.button>
+          </:actions>
+        </.simple_form>
+      </div>
+
+      <div id="email">
         <.simple_form
           for={@email_form}
           id="email_form"
@@ -36,7 +58,8 @@ defmodule EducatiumWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-      <div>
+
+      <div id="password">
         <.simple_form
           for={@password_form}
           id="password_form"
@@ -101,6 +124,7 @@ defmodule EducatiumWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    user_changeset = Accounts.change_user(user)
 
     socket =
       socket
@@ -109,9 +133,43 @@ defmodule EducatiumWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:user, to_form(user_changeset))
       |> assign(:trigger_submit, false)
+      |> allow_upload(:avatar, accept: Avatar.extensions_whitelist(), max_entries: 1)
 
     {:ok, socket}
+  end
+
+  def handle_event("validate_user", params, socket) do
+    user = socket.assigns.current_user
+
+    user_changeset =
+      user
+      |> Accounts.change_user(params["user"])
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, user: user_changeset)}
+  end
+
+  def handle_event("update_user", params, socket) do
+    user = socket.assigns.current_user
+
+    case Accounts.update_user(user, params["user"]) do
+      {:ok, user} ->
+        user_changeset = Accounts.change_user(user)
+
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Your details have been updated."))
+         |> assign(user: to_form(user_changeset))}
+
+      {:error, changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, gettext("There was an error updating your details."))
+         |> assign(user: to_form(changeset))}
+    end
   end
 
   def handle_event("validate_email", params, socket) do
