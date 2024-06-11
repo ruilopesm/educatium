@@ -59,12 +59,15 @@ defmodule EducatiumWeb.Router do
   scope "/", EducatiumWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    live_session :redirect_if_user_is_active,
+      on_mount: [{EducatiumWeb.UserAuth, :redirect_if_user_is_active}] do
+      live "/users/setup", UserSetupLive, :edit
+    end
+
+    pipe_through [:active]
+
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/setup", UserSetupLive, :edit
-
-      pipe_through [:active]
-
       live "/", HomeLive
 
       scope "/resources" do
@@ -81,7 +84,7 @@ defmodule EducatiumWeb.Router do
         live "/settings", UserSettingsLive, :edit
         live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
-        live "/:id", UserLive.Show, :show
+        live "/:handler", UserLive.Show, :show
       end
     end
   end

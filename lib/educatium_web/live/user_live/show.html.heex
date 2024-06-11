@@ -1,7 +1,56 @@
 <div class="flex items-center justify-between">
-  <.header size="3xl">
-    <%= display_name(@user) %> <span :if={@is_current_user}>(<%= gettext("you") %>)</span>
-    <:subtitle><%= display_role(@user.role) %></:subtitle>
-  </.header>
-  <.avatar class="size-44" fallback={extract_initials(@user.first_name, @user.last_name)} size={:xl} />
+  <div class="items-left flex flex-col space-y-3">
+    <.header size="3xl">
+      <%= display_name(@user) %> <span :if={@is_current_user}>(<%= gettext("you") %>)</span>
+      <:subtitle><%= display_handler(@user.handler) %></:subtitle>
+    </.header>
+    <%= if !@is_current_user do %>
+      <.button type="submit" class="w-32"><%= gettext("Follow") %></.button>
+    <% end %>
+  </div>
+  <.avatar
+    class="size-44"
+    fallback={extract_initials(@user.first_name, @user.last_name)}
+    size={:xl}
+  />
 </div>
+
+<.list>
+  <:item title={gettext("Email")}><%= @user.email %></:item>
+  <:item title={gettext("Education")}><%= @user.course %>, <%= @user.university %></:item>
+  <:item title={gettext("Role")}><%= display_role(@user.role) %></:item>
+</.list>
+
+<hr class="my-10" />
+
+<ul class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+  <li
+    :for={resource <- @resources}
+    class="max-h-72 max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow"
+  >
+    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+      <%= resource.title %>
+    </h5>
+    <div class="flex gap-1">
+      <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-emerald-600">
+        Teste
+      </span>
+      <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-indigo-600">
+        EngWeb
+      </span>
+      <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
+        +2
+      </span>
+    </div>
+    <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
+      <%= slice_string(resource.description, 120) %>
+    </p>
+    <.link
+      href={~p"/resources/#{resource}"}
+      class="text-brand inline-flex items-center font-medium hover:underline"
+    >
+      <%= gettext("More details") %>
+      <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
+    </.link>
+  </li>
+</ul>

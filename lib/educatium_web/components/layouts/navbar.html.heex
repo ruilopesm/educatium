@@ -9,7 +9,7 @@
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <%= if @current_user do %>
+      <%= if @current_user && @current_user.active do %>
         <div class="flex sm:ml-6 sm:items-center">
           <button
             type="button"
@@ -85,7 +85,9 @@
             </div>
           </div>
         </div>
-      <% else %>
+      <% end %>
+
+      <%= if @current_user && !@current_user.active do %>
         <.link
           href={~p"/users/log_in"}
           class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"

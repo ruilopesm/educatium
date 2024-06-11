@@ -5,7 +5,7 @@ defmodule EducatiumWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.header class="text-center">
+    <.header size="3xl" class="text-center">
       <%= gettext("Account Settings") %>
       <:subtitle><%= gettext("Manage your account email address and password settings") %></:subtitle>
     </.header>

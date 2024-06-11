@@ -22,10 +22,17 @@ defmodule EducatiumWeb.UserSetupLive do
         value={@role}
         label={gettext("Select the type of account you want to create")}
       />
+
+      <.input
+        field={@form[:handler]}
+        label={gettext("Handler")}
+        value={@recommended_handler}
+        required
+      />
+
       <.input field={@form[:first_name]} label={gettext("First name")} required />
       <.input field={@form[:last_name]} label={gettext("Last name")} required />
       <.input field={@form[:course]} label={gettext("Course")} required />
-      <.input field={@form[:department]} label={gettext("Department")} required />
       <.input field={@form[:university]} label={gettext("University")} required />
       <:actions>
         <.button phx-disable-with={gettext("Saving...")}><%= gettext("Save Details") %></.button>
@@ -40,12 +47,13 @@ defmodule EducatiumWeb.UserSetupLive do
   def mount(_params, _session, socket) do
     role = Atom.to_string(@default_role)
     changeset = Accounts.change_user_setup(%User{})
+    recommended_handler = build_recommended_handler(socket.assigns.current_user)
 
     {:ok,
      socket
      |> assign_form(changeset)
      |> assign(:role, role)
-     |> assign(:trigger_submit, false)}
+     |> assign(:recommended_handler, recommended_handler)}
   end
 
   @impl true
@@ -76,5 +84,20 @@ defmodule EducatiumWeb.UserSetupLive do
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, form: to_form(changeset))
+  end
+
+  @forbidden_characters "!#$%&'*+-/=?^`{|}~"
+
+  defp build_recommended_handler(user) do
+    email_local_part =
+      user.email
+      |> String.split("@")
+      |> List.first()
+
+    String.replace(
+      email_local_part,
+      ~r/[#{@forbidden_characters}]+/,
+      ""
+    )
   end
 end

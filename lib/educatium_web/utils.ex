@@ -43,6 +43,18 @@ defmodule EducatiumWeb.Utils do
   end
 
   @doc """
+  Display the handler of a user.
+
+  ## Examples
+
+     iex> display_handler("john_doe")
+     "@john_doe"
+  """
+  def display_handler(handler) do
+    "@#{handler}"
+  end
+
+  @doc """
   Return the initials of a name.
 
   ## Examples
@@ -56,5 +68,27 @@ defmodule EducatiumWeb.Utils do
     last = String.at(last_name, 0)
 
     "#{first}#{last}"
+  end
+
+  @doc """
+  Return the slice of size N of a string.
+
+  Appends three dots at the end of the string if the slice is smaller than the original string.
+
+  ## Examples
+
+     iex> slice_string("Hello, World!", 5)
+     "Hello..."
+
+      iex> slice_string("Hello, World!", 20)
+      "Hello, World!"
+
+  """
+  def slice_string(string, n) do
+    if String.length(string) > n do
+      String.slice(string, 0, n) <> "..."
+    else
+      string
+    end
   end
 end

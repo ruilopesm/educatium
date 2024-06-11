@@ -7,17 +7,19 @@ defmodule Educatium.Accounts.User do
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active)a
-  @setup_fields ~w(first_name last_name course department university role)a
+  @setup_fields ~w(handler first_name last_name course university role)a
+
+  @derive {Phoenix.Param, key: :handler}
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
 
+    field :handler, :string
     field :first_name, :string
     field :last_name, :string
     field :course, :string
-    field :department, :string
     field :university, :string
 
     field :role, Ecto.Enum, values: @roles
@@ -60,7 +62,7 @@ defmodule Educatium.Accounts.User do
     |> validate_password(opts)
   end
 
-  defp validate_email(changeset, opts) do
+  defp validate_email(changeset, opts \\ []) do
     changeset
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
@@ -139,13 +141,35 @@ defmodule Educatium.Accounts.User do
   end
 
   @doc """
+  A user changeset for updating the user.
+  """
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, @required_fields ++ @setup_fields ++ @optional_fields)
+    |> validate_email()
+    |> validate_handler()
+  end
+
+  @doc """
   A user changeset for completing the setup.
   """
   def setup_changeset(user, attrs) do
     user
-    |> cast(attrs, @setup_fields ++ @optional_fields)
+    |> cast(attrs, @setup_fields)
     |> validate_required(@setup_fields)
+    |> validate_handler()
     |> change(active: true)
+  end
+
+  defp validate_handler(changeset) do
+    changeset
+    |> validate_format(:handler, ~r/^[a-zA-Z0-9_.]+$/,
+      message:
+        gettext("must only contain alphanumeric characters, numbers, underscores and periods")
+    )
+    |> validate_length(:handler, min: 3, max: 30)
+    |> unsafe_validate_unique(:handler, Educatium.Repo)
+    |> unique_constraint(:handler)
   end
 
   @doc """

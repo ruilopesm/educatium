@@ -40,7 +40,7 @@ defmodule EducatiumWeb.HomeLive do
   end
 
   @impl true
-  def handle_event("increment_post_views", %{"id" => id}, socket) do
+  def handle_event("increment-post-views", %{"id" => id}, socket) do
     Feed.increment_post_views!(id)
     {:noreply, socket}
   end
