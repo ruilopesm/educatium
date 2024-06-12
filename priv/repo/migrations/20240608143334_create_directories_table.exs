@@ -10,7 +10,7 @@ defmodule Educatium.Repo.Migrations.CreateDirectoriesTable do
       add :resource_id, references(:resources, on_delete: :delete_all, type: :binary_id),
         null: false
 
-      add :parent_directory_id, references(:directories, on_delete: :delete_all, type: :binary_id)
+      add :directory_id, references(:directories, on_delete: :delete_all, type: :binary_id)
 
       timestamps(type: :utc_datetime)
     end

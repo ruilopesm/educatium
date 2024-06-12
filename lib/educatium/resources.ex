@@ -29,14 +29,17 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> get_resource!(123)
+      iex> get_resource!(123, [:directory])
       %Resource{}
 
-      iex> get_resource!(456)
+      iex> get_resource!(456, [:directory])
       ** (Ecto.NoResultsError)
 
   """
-  def get_resource!(id), do: Repo.get!(Resource, id)
+  def get_resource!(id, preloads \\ []) do
+    Repo.get!(Resource, id)
+    |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a resource.
@@ -168,6 +171,25 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Gets a single directory.
+
+  Raises `Ecto.NoResultsError` if the Directory does not exist.
+
+  ## Examples
+
+      iex> get_directory!(123)
+      %Directory{}
+
+      iex> get_directory!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_directory!(id, preloads \\ []) do
+    Repo.get!(Directory, id)
+    |> Repo.preload(preloads)
+  end
+
+  @doc """
   Creates a file.
 
   ## Examples
@@ -192,7 +214,7 @@ defmodule Educatium.Resources do
     attrs = %{
       name: Path.basename(path),
       resource_id: resource.id,
-      parent_directory_id: parent_directory_id
+      directory_id: parent_directory_id
     }
 
     with {:ok, directory} <- create_directory(attrs) do

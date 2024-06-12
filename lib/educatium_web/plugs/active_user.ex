@@ -28,10 +28,10 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
     if current_user.confirmed_at do
       {:ok, conn}
     else
-      {:error, 
-        conn
-        |> Phoenix.Controller.put_flash(:error, gettext("Please confirm your account"))
-        |> Phoenix.Controller.redirect(to: "/users/confirm")}
+      {:error,
+       conn
+       |> Phoenix.Controller.put_flash(:error, gettext("Please confirm your account"))
+       |> Phoenix.Controller.redirect(to: "/users/confirm")}
     end
   end
 
@@ -39,10 +39,10 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
     if current_user.active do
       {:ok, conn}
     else
-      {:error, 
-        conn
-        |> Phoenix.Controller.put_flash(:error, gettext("Please complete your account setup"))
-        |> Phoenix.Controller.redirect(to: "/users/setup")}
+      {:error,
+       conn
+       |> Phoenix.Controller.put_flash(:error, gettext("Please complete your account setup"))
+       |> Phoenix.Controller.redirect(to: "/users/setup")}
     end
   end
 end
