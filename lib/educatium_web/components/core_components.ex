@@ -17,6 +17,7 @@ defmodule EducatiumWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
+
   import EducatiumWeb.Gettext
 
   @doc """
@@ -90,6 +91,54 @@ defmodule EducatiumWeb.CoreComponents do
   end
 
   @doc """
+  Renders an avatar.
+
+  ## Examples
+
+      <.avatar name="John Doe" />
+      <.avatar name="John Doe" src="https://example.com/avatar.jpg" />
+
+  """
+  attr :src, :string, default: nil, doc: "the URL of the image"
+
+  attr :fallback, :string,
+    default: "",
+    doc: "the fallback to display if no image is provided or exists"
+
+  attr :size, :atom,
+    values: [:xs, :sm, :md, :lg, :xl],
+    default: :md,
+    doc: "the size of the avatar"
+
+  attr :class, :string, default: "", doc: "additional classes to apply to the avatar"
+
+  def avatar(assigns) do
+    ~H"""
+    <span class={[
+      "rounded-full font-medium leading-none flex shrink-0 items-center justify-center select-none bg-gray-400 text-white",
+      @src && "bg-transparent",
+      build_avatar_size_class(@size),
+      @class
+    ]}>
+      <%= if @src do %>
+        <img src={@src} class="rounded-full size-full" />
+      <% else %>
+        <%= @fallback %>
+      <% end %>
+    </span>
+    """
+  end
+
+  defp build_avatar_size_class(size) do
+    case size do
+      :sm -> "size-8 text-xs"
+      :md -> "size-16 text-lg"
+      :lg -> "size-20 text-3xl"
+      :xl -> "size-24 text-4xl"
+    end
+  end
+
+  @doc """
   Renders flash notices.
 
   ## Examples
@@ -149,29 +198,6 @@ defmodule EducatiumWeb.CoreComponents do
     <div id={@id}>
       <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
       <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
-      <.flash
-        id="client-error"
-        kind={:error}
-        title={gettext("We can't find the internet")}
-        phx-disconnected={show(".phx-client-error #client-error")}
-        phx-connected={hide("#client-error")}
-        hidden
-      >
-        <%= gettext("Attempting to reconnect") %>
-        <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
-      </.flash>
-
-      <.flash
-        id="server-error"
-        kind={:error}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error")}
-        phx-connected={hide("#server-error")}
-        hidden
-      >
-        <%= gettext("Hang in there while we get back on track") %>
-        <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
-      </.flash>
     </div>
     """
   end

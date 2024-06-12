@@ -1,0 +1,105 @@
+<div class="flex items-center justify-between">
+  <div class="items-left flex flex-col space-y-3">
+    <.header size="3xl">
+      <%= display_name(@user) %> <span :if={@is_current_user}>(<%= gettext("you") %>)</span>
+      <:subtitle><%= display_handle(@user.handle) %></:subtitle>
+    </.header>
+    <%= if !@is_current_user do %>
+      <.button type="submit" class="w-32"><%= gettext("Follow") %></.button>
+    <% end %>
+  </div>
+  <%= if @current_user.avatar do %>
+    <.avatar
+      class="size-44"
+      src={Avatar.url({@user.avatar, @user}, :original)}
+      fallback={extract_initials(@user.first_name, @user.last_name)}
+      size={:xl}
+    />
+  <% else %>
+    <.avatar
+      class="size-44"
+      fallback={extract_initials(@user.first_name, @user.last_name)}
+      size={:xl}
+    />
+  <% end %>
+</div>
+
+<.list>
+  <:item title={gettext("Email")}><%= @user.email %></:item>
+  <:item title={gettext("Education")}><%= @user.course %>, <%= @user.university %></:item>
+  <:item title={gettext("Role")}><%= display_role(@user.role) %></:item>
+</.list>
+
+<hr class="mt-10 mb-2" />
+
+<div class="flex justify-end mb-6 md:mb-8">
+  <.link href={~p"/resources/new"}>
+    <.button><%= gettext("Create resource") %></.button>
+  </.link>
+</div>
+
+<ul class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+  <li
+    :for={resource <- @resources}
+    class="max-h-72 max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow"
+  >
+    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+      <%= resource.title %>
+    </h5>
+    <div class="flex gap-1">
+      <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-emerald-600">
+        Teste
+      </span>
+      <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-indigo-600">
+        EngWeb
+      </span>
+      <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
+        +2
+      </span>
+    </div>
+    <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
+      <%= slice_string(resource.description, 120) %>
+    </p>
+    <.link
+      href={~p"/resources/#{resource}"}
+      class="text-brand inline-flex items-center font-medium hover:underline"
+    >
+      <%= gettext("More details") %>
+      <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
+    </.link>
+  </li>
+</ul>
+
+<%= if length(@resources) == 0 do %>
+  <div class="text-center">
+    <svg
+      class="mx-auto h-12 w-12 text-gray-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        vector-effect="non-scaling-stroke"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+      />
+    </svg>
+    <h3 class="mt-2 text-sm font-semibold text-zinc-900"><%= gettext("No resources") %></h3>
+    <p class="mt-1 text-sm text-gray-500">
+      <%= if @is_current_user do %>
+        <%= gettext("Get started by creating a new resource") %>
+      <% else %>
+        <%= gettext("This user has not created any resources yet") %>
+      <% end %>
+    </p>
+
+    <div :if={@is_current_user} class="mt-4">
+      <.link href={~p"/resources/new"}>
+        <.button class="w-32"><%= gettext("Create resource") %></.button>
+      </.link>
+    </div>
+  </div>
+<% end %>

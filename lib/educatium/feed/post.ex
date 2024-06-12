@@ -31,6 +31,6 @@ defmodule Educatium.Feed.Post do
     |> validate_required(@required_fields)
   end
 
-  def preloads, do: @preloads
+  def preloads, do: @preloads ++ [resource: :user]
   def types, do: @types
 end

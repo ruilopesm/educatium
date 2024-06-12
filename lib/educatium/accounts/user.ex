@@ -2,23 +2,32 @@ defmodule Educatium.Accounts.User do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
+  alias Educatium.Uploaders.Avatar
 
   @roles ~w(student teacher)a
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active)a
+  @setup_fields ~w(handle first_name last_name course university role)a
+
+  @derive {Phoenix.Param, key: :handle}
 
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+
+    field :avatar, Avatar.Type
+    field :handle, :string
+    field :first_name, :string
+    field :last_name, :string
+    field :course, :string
+    field :university, :string
+
     field :role, Ecto.Enum, values: @roles
 
     field :confirmed_at, :naive_datetime
     field :active, :boolean, default: false
-
-    has_one :student, Educatium.Accounts.Student
-    has_one :teacher, Educatium.Accounts.Teacher
 
     has_many :resources, Resource
 
@@ -55,7 +64,7 @@ defmodule Educatium.Accounts.User do
     |> validate_password(opts)
   end
 
-  defp validate_email(changeset, opts) do
+  defp validate_email(changeset, opts \\ []) do
     changeset
     |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
@@ -134,6 +143,46 @@ defmodule Educatium.Accounts.User do
   end
 
   @doc """
+  A user changeset for updating the user.
+  """
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, @required_fields ++ @setup_fields ++ @optional_fields)
+    |> validate_email()
+    |> validate_handle()
+  end
+
+  @doc """
+  A user changeset for updating the user's avatar.
+  """
+  def avatar_changeset(user, attrs) do
+    user
+    |> cast_attachments(attrs, [:avatar])
+  end
+
+  @doc """
+  A user changeset for completing the setup.
+  """
+  def setup_changeset(user, attrs) do
+    user
+    |> cast(attrs, @setup_fields)
+    |> validate_required(@setup_fields)
+    |> validate_handle()
+    |> change(active: true)
+  end
+
+  defp validate_handle(changeset) do
+    changeset
+    |> validate_format(:handle, ~r/^[a-zA-Z0-9_.]+$/,
+      message:
+        gettext("must only contain alphanumeric characters, numbers, underscores and periods")
+    )
+    |> validate_length(:handle, min: 3, max: 30)
+    |> unsafe_validate_unique(:handle, Educatium.Repo)
+    |> unique_constraint(:handle)
+  end
+
+  @doc """
   Confirms the account by setting `confirmed_at`.
   """
   def confirm_changeset(user) do
@@ -166,12 +215,6 @@ defmodule Educatium.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
-  end
-
-  @doc false
-  def changeset(user, attrs) do
-    user
-    |> cast(attrs, @optional_fields)
   end
 
   def roles, do: @roles

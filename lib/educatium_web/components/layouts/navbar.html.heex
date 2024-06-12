@@ -9,26 +9,98 @@
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <%= if @current_user do %>
-        <.link
-          href={~p"/users/settings"}
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-        >
-          <%= gettext("Settings") %>
-        </.link>
-        <.link
-          href={~p"/users/log_out"}
-          method="delete"
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-        >
-          <%= gettext("Log out") %> <span aria-hidden="true">&rarr;</span>
-        </.link>
-      <% else %>
+      <%= if @current_user && @current_user.active do %>
+        <div class="flex sm:ml-6 sm:items-center">
+          <button
+            type="button"
+            class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500"
+          >
+            <span class="absolute -inset-1.5"></span>
+            <span class="sr-only">View notifications</span>
+            <.icon name="hero-bell" /> 
+          </button>
+          <!-- Profile dropdown -->
+          <div x-data="{ open: false }" class="relative ml-3">
+            <div>
+              <button
+                type="button"
+                class="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:ring-brand focus:outline-none focus:ring-2 focus:ring-offset-2"
+                id="user-menu-button"
+                aria-expanded="false"
+                aria-haspopup="true"
+                @click="open = !open"
+                @click.away="open = false"
+                @keydown.escape="open = false"
+              >
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">Open user menu</span>
+                <%= if @current_user.avatar do %>
+                  <.avatar
+                    src={Educatium.Uploaders.Avatar.url({@current_user.avatar, @current_user}, :original)}
+                    fallback={extract_initials(@current_user.first_name, @current_user.last_name)}
+                    size={:sm}
+                  />
+                <% else %>
+                  <.avatar
+                    fallback={extract_initials(@current_user.first_name, @current_user.last_name)}
+                    size={:sm}
+                  />
+                <% end %>
+              </button>
+            </div>
+            <div
+              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="user-menu-button"
+              tabindex="-1"
+              x-show="open"
+              x-transition:enter="transition ease-out duration-200"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+            >
+              <.link
+                href={~p"/users/#{@current_user}"}
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                id="user-menu-item-0"
+              >
+                <%= gettext("Profile") %>
+              </.link>
+              <.link
+                href={~p"/users/settings"}
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                id="user-menu-item-1"
+              >
+                <%= gettext("Settings") %>
+              </.link>
+              <.link
+                method="delete"
+                href={~p"/users/log_out"}
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                id="user-menu-item-2"
+              >
+                <%= gettext("Log out") %>
+              </.link>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%= if @current_user && !@current_user.active do %>
         <.link
           href={~p"/users/log_in"}
           class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
         >
-          <%= gettext("Login") %> <span aria-hidden="true">&rarr;</span>
+          <%= gettext("Log in") %> <span aria-hidden="true">&rarr;</span>
         </.link>
       <% end %>
     </div>

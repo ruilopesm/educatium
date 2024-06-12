@@ -2,22 +2,110 @@ defmodule EducatiumWeb.UserSettingsLive do
   use EducatiumWeb, :live_view
 
   alias Educatium.Accounts
+  alias Educatium.Uploaders.Avatar
 
+  @impl true
   def render(assigns) do
     ~H"""
-    <.header class="text-center">
+    <.header size="3xl" class="text-center">
       <%= gettext("Account Settings") %>
       <:subtitle><%= gettext("Manage your account email address and password settings") %></:subtitle>
     </.header>
 
-    <div class="space-y-12 divide-y">
-      <div>
+    <div x-data="{ option: 'details' }">
+      <div class="mt-7 mb-10 flex justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500">
+        <ul class="-mb-px flex flex-wrap">
+          <li class="me-2">
+            <button
+              @click="option = 'details'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'details' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Details") %>
+            </button>
+          </li>
+          <li class="me-2">
+            <button
+              @click="option = 'email'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'email' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Email") %>
+            </button>
+          </li>
+          <li class="me-2">
+            <button
+              @click="option = 'password'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'password' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Password") %>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div x-show="option === 'details'">
+        <.simple_form
+          for={@user_form}
+          id="user_form"
+          phx-submit="update_user"
+          phx-change="validate_user"
+          phx-drop-target={@uploads.avatar.ref}
+        >
+          <div class="flex justify-center">
+            <.live_file_input upload={@uploads.avatar} class="hidden" />
+            <a onclick={"document.getElementById('#{@uploads.avatar.ref}').click()"}>
+              <div class={[
+                length(@uploads.avatar.entries) != 0 && "hidden",
+                "relative size-40 ring-2 ring-zinc-300 rounded-full cursor-pointer bg-zinc-400 sm:size-48 group hover:bg-tertiary"
+              ]}>
+                <div class="absolute flex h-full w-full items-center justify-center">
+                  <.icon
+                    name="hero-camera"
+                    class="mx-auto h-12 w-12 text-white group-hover:text-opacity-70 sm:size-20"
+                  />
+                </div>
+              </div>
+              <section :for={entry <- @uploads.avatar.entries}>
+                <article class="upload-entry group size-40 relative flex cursor-pointer items-center rounded-full bg-white sm:size-48">
+                  <div class="absolute z-10 flex h-full w-full items-center justify-center rounded-full">
+                    <.icon
+                      name="hero-camera"
+                      class="size-12 mx-auto rounded-full text-white text-opacity-0 group-hover:text-opacity-100 sm:size-20"
+                    />
+                  </div>
+                  <figure class="flex h-full w-full items-center justify-center rounded-full group-hover:opacity-80">
+                    <.live_img_preview
+                      entry={entry}
+                      class="size-40 rounded-full border-4 border-white object-cover object-center sm:size-48"
+                    />
+                  </figure>
+                </article>
+                <progress value={entry.progress} max="100" class="w-full mt-2"><%= entry.progress %>%</progress>
+              </section>
+            </a>
+          </div>
+
+          <.input field={@user_form[:handle]} label={gettext("Handle")} required />
+          <.input field={@user_form[:first_name]} label={gettext("First name")} required />
+          <.input field={@user_form[:last_name]} label={gettext("Last name")} required />
+          <.input field={@user_form[:course]} label={gettext("Course")} required />
+          <.input field={@user_form[:university]} label={gettext("University")} required />
+          <:actions>
+            <.button phx-disable-with={gettext("Updating...")}>
+              <%= gettext("Update details") %>
+            </.button>
+          </:actions>
+        </.simple_form>
+      </div>
+
+      <div x-show="option === 'email'">
         <.simple_form
           for={@email_form}
           id="email_form"
           phx-submit="update_email"
           phx-change="validate_email"
-          class="mt-10"
         >
           <.input field={@email_form[:email]} type="email" label="Email" required />
           <.input
@@ -37,7 +125,7 @@ defmodule EducatiumWeb.UserSettingsLive do
         </.simple_form>
       </div>
 
-      <div>
+      <div x-show="option === 'password'">
         <.simple_form
           for={@password_form}
           id="password_form"
@@ -46,7 +134,6 @@ defmodule EducatiumWeb.UserSettingsLive do
           phx-change="validate_password"
           phx-submit="update_password"
           phx-trigger-action={@trigger_submit}
-          class="mt-10"
         >
           <input
             name={@password_form[:email].name}
@@ -90,6 +177,7 @@ defmodule EducatiumWeb.UserSettingsLive do
     """
   end
 
+  @impl true
   def mount(%{"token" => token}, _session, socket) do
     socket =
       case Accounts.update_user_email(socket.assigns.current_user, token) do
@@ -103,23 +191,62 @@ defmodule EducatiumWeb.UserSettingsLive do
     {:ok, push_navigate(socket, to: ~p"/users/settings")}
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    user_changeset = Accounts.change_user(user)
 
     socket =
       socket
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
       |> assign(:current_email, user.email)
+      |> assign(:user_form, to_form(user_changeset))
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
+      |> allow_upload(:avatar, accept: Avatar.extensions_whitelist(), max_entries: 1)
 
     {:ok, socket}
   end
 
+  @impl true
+  def handle_event("validate_user", %{"user" => user_params}, socket) do
+    user = socket.assigns.current_user
+
+    user_changeset =
+      user
+      |> Accounts.change_user(user_params)
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, user_form: user_changeset)}
+  end
+
+  @impl true
+  def handle_event("update_user", params, socket) do
+    user = socket.assigns.current_user
+
+    case Accounts.update_user(user, params["user"], &consume_image_data(socket, &1)) do
+      {:ok, user} ->
+        user_changeset = Accounts.change_user(user)
+
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Your details have been updated."))
+         |> assign(user: to_form(user_changeset))}
+
+      {:error, changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, gettext("There was an error updating your details."))
+         |> assign(user: to_form(changeset))}
+    end
+  end
+
+  @impl true
   def handle_event("validate_email", params, socket) do
     %{"current_password" => password, "user" => user_params} = params
 
@@ -132,6 +259,7 @@ defmodule EducatiumWeb.UserSettingsLive do
     {:noreply, assign(socket, email_form: email_form, email_form_current_password: password)}
   end
 
+  @impl true
   def handle_event("update_email", params, socket) do
     %{"current_password" => password, "user" => user_params} = params
     user = socket.assigns.current_user
@@ -152,6 +280,7 @@ defmodule EducatiumWeb.UserSettingsLive do
     end
   end
 
+  @impl true
   def handle_event("validate_password", params, socket) do
     %{"current_password" => password, "user" => user_params} = params
 
@@ -164,6 +293,7 @@ defmodule EducatiumWeb.UserSettingsLive do
     {:noreply, assign(socket, password_form: password_form, current_password: password)}
   end
 
+  @impl true
   def handle_event("update_password", params, socket) do
     %{"current_password" => password, "user" => user_params} = params
     user = socket.assigns.current_user
@@ -179,6 +309,25 @@ defmodule EducatiumWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  defp consume_image_data(socket, activity) do
+    consume_uploaded_entries(socket, :avatar, fn %{path: path}, entry ->
+      Accounts.update_user_avatar(activity, %{
+        "avatar" => %Plug.Upload{
+          content_type: entry.client_type,
+          filename: entry.client_name,
+          path: path
+        }
+      })
+    end)
+    |> case do
+      [{:ok, activity}] ->
+        {:ok, activity}
+
+      _errors ->
+        {:ok, activity}
     end
   end
 end
