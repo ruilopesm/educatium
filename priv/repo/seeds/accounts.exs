@@ -38,7 +38,13 @@ defmodule Educatium.Repo.Seeds.Accounts do
           university: "University of Minho",
         }
 
-        Accounts.complete_user_setup(registered, setup)
+        case Accounts.complete_user_setup(registered, setup) do
+          {:ok, _} ->
+            Accounts.update_user(registered, %{confirmed_at: NaiveDateTime.utc_now()})
+
+          {:error, changeset} ->
+            Mix.shell().error(Kernel.inspect(changeset.errors))
+        end
       end
     end
   end

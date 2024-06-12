@@ -27,7 +27,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <%= if @post.resource.user.avatar do %>
           <.avatar
             class="!size-10"
-            src={Avatar.url({@post.resource.user.avatar, @post.resource.user.avatar}, :original)}
+            src={Avatar.url({@post.resource.user.avatar, @post.resource.user}, :original)}
             fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
           />
         <% else %>
