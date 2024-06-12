@@ -3,11 +3,12 @@ defmodule Educatium.Resources.Resource do
 
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
+  alias Educatium.Resources.Directory
 
   @types ~w(book article presentation project report exam assignment solution)a
   @visibilities ~w(protected private public)a
 
-  @required_fields ~w(title description type date visibility user_id)a
+  @required_fields ~w(title description type visibility user_id)a
   @optional_fields ~w()a
 
   schema "resources" do
@@ -19,6 +20,8 @@ defmodule Educatium.Resources.Resource do
 
     belongs_to :user, User
     belongs_to :post, Post
+
+    has_one :directory, Directory
 
     timestamps(type: :utc_datetime)
   end

@@ -16,7 +16,6 @@
   <:col :let={{_id, resource}} label="Description"><%= resource.description %></:col>
   <:col :let={{_id, resource}} label="Type"><%= resource.type %></:col>
   <:col :let={{_id, resource}} label="Date"><%= resource.date %></:col>
-  <:col :let={{_id, resource}} label="Published"><%= resource.published %></:col>
   <:col :let={{_id, resource}} label="Visibility"><%= resource.visibility %></:col>
   <:action :let={{_id, resource}}>
     <div class="sr-only">
@@ -46,6 +45,7 @@
     title={@page_title}
     action={@live_action}
     resource={@resource}
+    current_user={@current_user}
     patch={~p"/"}
   />
 </.modal>
