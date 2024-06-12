@@ -82,6 +82,7 @@ defmodule EducatiumWeb.UserSettingsLive do
                     />
                   </figure>
                 </article>
+                <progress value={entry.progress} max="100" class="w-full mt-2"><%= entry.progress %>%</progress>
               </section>
             </a>
           </div>
