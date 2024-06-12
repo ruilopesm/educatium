@@ -255,23 +255,6 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
-  Updates the user avatar.
-
-  ## Examples
-
-      iex> update_user_avatar(user, %{avatar: %Plug.Upload{filename: "valid.jpg"}})
-      {:ok, %User{}}
-
-      iex> update_user_avatar(user, %{avatar: %Plug.Upload{filename: "invalid.txt"}})
-      {:error, %Ecto.Changeset{}}
-  """
-  def update_user_avatar(user, attrs) do
-    user
-    |> User.avatar_changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
   Updates the user.
 
   ## Examples
@@ -283,10 +266,42 @@ defmodule Educatium.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(user, attrs) do
+  def update_user(user, attrs, after_save \\ &{:ok, &1}) do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+    |> after_save(after_save)
+  end
+
+  @doc """
+  Updates the user avatar.
+
+  ## Examples
+
+      iex> update_user_avatar(user, %{avatar: ...})
+      {:ok, %User{}}
+
+      iex> update_user_avatar(user, %{avatar: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_avatar(user, attrs) do
+    user
+    |> User.avatar_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user avatar changes.
+
+  ## Examples
+
+      iex> change_user_avatar(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_avatar(user, attrs \\ %{}) do
+    User.avatar_changeset(user, attrs)
   end
 
   @doc """

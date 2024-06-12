@@ -157,7 +157,6 @@ defmodule Educatium.Accounts.User do
   """
   def avatar_changeset(user, attrs) do
     user
-    |> cast(attrs, [:avatar])
     |> cast_attachments(attrs, [:avatar])
   end
 

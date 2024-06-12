@@ -35,6 +35,7 @@
                 <span class="absolute -inset-1.5"></span>
                 <span class="sr-only">Open user menu</span>
                 <.avatar
+                  src={Educatium.Uploaders.Avatar.url({@current_user.avatar, @current_user}, :original)}
                   fallback={extract_initials(@current_user.first_name, @current_user.last_name)}
                   size={:sm}
                 />

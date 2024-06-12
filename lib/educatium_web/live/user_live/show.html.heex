@@ -10,6 +10,7 @@
   </div>
   <.avatar
     class="size-44"
+    src={Avatar.url({@user.avatar, @user}, :original)}
     fallback={extract_initials(@user.first_name, @user.last_name)}
     size={:xl}
   />

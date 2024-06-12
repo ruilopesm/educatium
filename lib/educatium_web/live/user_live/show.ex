@@ -3,6 +3,7 @@ defmodule EducatiumWeb.UserLive.Show do
 
   alias Educatium.Accounts
   alias Educatium.Resources
+  alias Educatium.Uploaders.Avatar
 
   @impl true
   def mount(_params, _session, socket) do

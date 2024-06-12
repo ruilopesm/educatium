@@ -3,6 +3,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   alias Educatium.Feed
   alias Educatium.Feed.Post
+  alias Educatium.Uploaders.Avatar
 
   attr :post, Post, required: true
 
@@ -25,6 +26,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       <div class="flex gap-3">
         <.avatar
           class="!size-10"
+          src={Avatar.url({@post.resource.user.avatar, @post.resource.user.avatar}, :original)}
           fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
         />
 
@@ -59,11 +61,11 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <p class="text-gray-500 text-xs font-normal leading-4"><%= @post.resource.description %></p>
       </div>
     </.link>
-    <div class="flex gap-1 absolute right-[22px] top-3 text-gray-500 items-end">
+    <div class="group hover:cursor-help flex gap-1 absolute right-[22px] top-3 text-gray-500 items-end">
       <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
-      <div class="relative group">
+      <div class="relative">
         <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
-        <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+        <div class="absolute bottom-full hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
           <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
         </div>
       </div>
