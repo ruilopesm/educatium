@@ -2,7 +2,7 @@
   <div class="items-left flex flex-col space-y-3">
     <.header size="3xl">
       <%= display_name(@user) %> <span :if={@is_current_user}>(<%= gettext("you") %>)</span>
-      <:subtitle><%= display_handler(@user.handler) %></:subtitle>
+      <:subtitle><%= display_handle(@user.handle) %></:subtitle>
     </.header>
     <%= if !@is_current_user do %>
       <.button type="submit" class="w-32"><%= gettext("Follow") %></.button>

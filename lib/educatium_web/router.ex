@@ -87,7 +87,7 @@ defmodule EducatiumWeb.Router do
         live "/settings", UserSettingsLive, :edit
         live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
-        live "/:handler", UserLive.Show, :show
+        live "/:handle", UserLive.Show, :show
       end
     end
   end

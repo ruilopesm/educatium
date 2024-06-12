@@ -8,9 +8,9 @@ defmodule Educatium.Accounts.User do
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active)a
-  @setup_fields ~w(handler first_name last_name course university role)a
+  @setup_fields ~w(handle first_name last_name course university role)a
 
-  @derive {Phoenix.Param, key: :handler}
+  @derive {Phoenix.Param, key: :handle}
 
   schema "users" do
     field :email, :string
@@ -18,7 +18,7 @@ defmodule Educatium.Accounts.User do
     field :hashed_password, :string, redact: true
 
     field :avatar, Avatar.Type
-    field :handler, :string
+    field :handle, :string
     field :first_name, :string
     field :last_name, :string
     field :course, :string
@@ -149,7 +149,7 @@ defmodule Educatium.Accounts.User do
     user
     |> cast(attrs, @required_fields ++ @setup_fields ++ @optional_fields)
     |> validate_email()
-    |> validate_handler()
+    |> validate_handle()
   end
 
   @doc """
@@ -167,19 +167,19 @@ defmodule Educatium.Accounts.User do
     user
     |> cast(attrs, @setup_fields)
     |> validate_required(@setup_fields)
-    |> validate_handler()
+    |> validate_handle()
     |> change(active: true)
   end
 
-  defp validate_handler(changeset) do
+  defp validate_handle(changeset) do
     changeset
-    |> validate_format(:handler, ~r/^[a-zA-Z0-9_.]+$/,
+    |> validate_format(:handle, ~r/^[a-zA-Z0-9_.]+$/,
       message:
         gettext("must only contain alphanumeric characters, numbers, underscores and periods")
     )
-    |> validate_length(:handler, min: 3, max: 30)
-    |> unsafe_validate_unique(:handler, Educatium.Repo)
-    |> unique_constraint(:handler)
+    |> validate_length(:handle, min: 3, max: 30)
+    |> unsafe_validate_unique(:handle, Educatium.Repo)
+    |> unique_constraint(:handle)
   end
 
   @doc """

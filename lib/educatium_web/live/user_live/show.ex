@@ -11,8 +11,8 @@ defmodule EducatiumWeb.UserLive.Show do
   end
 
   @impl true
-  def handle_params(%{"handler" => handler}, _, socket) do
-    user = Accounts.get_user_by_handler!(handler)
+  def handle_params(%{"handle" => handle}, _, socket) do
+    user = Accounts.get_user_by_handle!(handle)
     is_current_user = user.id == socket.assigns.current_user.id
 
     query = if(is_current_user, do: [], else: [where: [visibility: :public]])

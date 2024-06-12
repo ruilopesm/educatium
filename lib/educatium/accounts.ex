@@ -62,21 +62,21 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
-  Gets a single user by handler.
+  Gets a single user by handle.
 
   Raises `Ecto.NoResultsError` if the User does not exist.
 
   ## Examples
 
-      iex> get_user_by_handler!("foo")
+      iex> get_user_by_handle!("foo")
       %User{}
 
-      iex> get_user_by_handler!("unknown")
+      iex> get_user_by_handle!("unknown")
       ** (Ecto.NoResultsError)
 
   """
-  def get_user_by_handler!(handler, preloads \\ []) do
-    Repo.get_by!(User, handler: handler)
+  def get_user_by_handle!(handle, preloads \\ []) do
+    Repo.get_by!(User, handle: handle)
     |> Repo.preload(preloads)
   end
 

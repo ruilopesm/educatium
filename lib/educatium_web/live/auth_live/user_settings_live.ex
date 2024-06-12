@@ -87,7 +87,7 @@ defmodule EducatiumWeb.UserSettingsLive do
             </a>
           </div>
 
-          <.input field={@user_form[:handler]} label={gettext("Handler")} required />
+          <.input field={@user_form[:handle]} label={gettext("Handle")} required />
           <.input field={@user_form[:first_name]} label={gettext("First name")} required />
           <.input field={@user_form[:last_name]} label={gettext("Last name")} required />
           <.input field={@user_form[:course]} label={gettext("Course")} required />

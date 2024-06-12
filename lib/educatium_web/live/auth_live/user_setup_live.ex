@@ -24,9 +24,9 @@ defmodule EducatiumWeb.UserSetupLive do
       />
 
       <.input
-        field={@form[:handler]}
-        label={gettext("Handler")}
-        value={@recommended_handler}
+        field={@form[:handle]}
+        label={gettext("Handle")}
+        value={@recommended_handle}
         required
       />
 
@@ -47,13 +47,13 @@ defmodule EducatiumWeb.UserSetupLive do
   def mount(_params, _session, socket) do
     role = Atom.to_string(@default_role)
     changeset = Accounts.change_user_setup(%User{})
-    recommended_handler = build_recommended_handler(socket.assigns.current_user)
+    recommended_handle = build_recommended_handle(socket.assigns.current_user)
 
     {:ok,
      socket
      |> assign_form(changeset)
      |> assign(:role, role)
-     |> assign(:recommended_handler, recommended_handler)}
+     |> assign(:recommended_handle, recommended_handle)}
   end
 
   @impl true
@@ -88,7 +88,7 @@ defmodule EducatiumWeb.UserSetupLive do
 
   @forbidden_characters "!#$%&'*+-/=?^`{|}~"
 
-  defp build_recommended_handler(user) do
+  defp build_recommended_handle(user) do
     email_local_part =
       user.email
       |> String.split("@")

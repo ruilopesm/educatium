@@ -44,15 +44,15 @@ defmodule EducatiumWeb.Utils do
   end
 
   @doc """
-  Display the handler of a user.
+  Display the handle of a user.
 
   ## Examples
 
-     iex> display_handler("john_doe")
+     iex> display_handle("john_doe")
      "@john_doe"
   """
-  def display_handler(handler) do
-    "@#{handler}"
+  def display_handle(handle) do
+    "@#{handle}"
   end
 
   @doc """

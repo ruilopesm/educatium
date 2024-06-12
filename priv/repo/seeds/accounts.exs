@@ -31,7 +31,7 @@ defmodule Educatium.Repo.Seeds.Accounts do
         [first_name, last_name] = String.split(user, " ")
         setup = %{
           role: Enum.random(roles),
-          handler: build_recommended_handler(email),
+          handle: build_recommended_handle(email),
           first_name: first_name,
           last_name: last_name,
           course: "Software Engineering",
@@ -56,7 +56,7 @@ defmodule Educatium.Repo.Seeds.Accounts do
     |> Kernel.<>("@educatium.com")
   end
 
-  defp build_recommended_handler(email) do
+  defp build_recommended_handle(email) do
     email
     |> String.split("@")
     |> List.first()
