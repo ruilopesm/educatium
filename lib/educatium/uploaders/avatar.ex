@@ -2,7 +2,7 @@ defmodule Educatium.Uploaders.Avatar do
   @moduledoc """
   Uploader for avatar images.
   """
-  use EducatiumWeb, :uploader
+  use Educatium, :uploader
 
   alias Educatium.Accounts.User
 

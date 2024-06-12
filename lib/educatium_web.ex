@@ -105,15 +105,6 @@ defmodule EducatiumWeb do
     end
   end
 
-  def uploader do
-    quote do
-      use Waffle.Definition
-      use Waffle.Ecto.Definition
-
-      import EducatiumWeb.Gettext
-    end
-  end
-
   @doc """
   When used, dispatch to the appropriate controller/live_view/etc.
   """
