@@ -23,6 +23,26 @@ defmodule EducatiumWeb.ResourceLive.Show do
      |> assign(:directory, directory)}
   end
 
+  @impl true
+  def handle_event("load-directory", %{"dir_id" => dir_id}, socket) do
+    directory = Resources.get_directory!(dir_id, [:files, :subdirectories])
+
+    {:noreply, assign(socket, directory: directory)}
+  end
+
+  @impl true
+  def handle_event("download-resource", _, socket) do
+    IO.puts("download-resource")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("load-prev-directory", %{"dir_id" => dir_id}, socket) do
+    directory = Resources.get_directory!(dir_id, [:files, :subdirectories])
+
+    {:noreply, assign(socket, directory: directory)}
+  end
+
   defp page_title(:show), do: "Show Resource"
   defp page_title(:edit), do: "Edit Resource"
 end
