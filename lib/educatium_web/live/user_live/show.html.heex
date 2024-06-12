@@ -8,12 +8,20 @@
       <.button type="submit" class="w-32"><%= gettext("Follow") %></.button>
     <% end %>
   </div>
-  <.avatar
-    class="size-44"
-    src={Avatar.url({@user.avatar, @user}, :original)}
-    fallback={extract_initials(@user.first_name, @user.last_name)}
-    size={:xl}
-  />
+  <%= if @current_user.avatar do %>
+    <.avatar
+      class="size-44"
+      src={Avatar.url({@user.avatar, @user}, :original)}
+      fallback={extract_initials(@user.first_name, @user.last_name)}
+      size={:xl}
+    />
+  <% else %>
+    <.avatar
+      class="size-44"
+      fallback={extract_initials(@user.first_name, @user.last_name)}
+      size={:xl}
+    />
+  <% end %>
 </div>
 
 <.list>

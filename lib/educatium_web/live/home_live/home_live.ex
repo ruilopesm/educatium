@@ -5,7 +5,7 @@ defmodule EducatiumWeb.HomeLive do
   alias Educatium.Feed.Post
   alias EducatiumWeb.HomeLive.Components
 
-  @preloads Post.preloads() ++ [resource: :user]
+  @preloads Post.preloads()
 
   @impl true
   def mount(_params, _session, socket) do

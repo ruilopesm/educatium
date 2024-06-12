@@ -24,11 +24,18 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       class="block w-full px-6 py-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50"
     >
       <div class="flex gap-3">
-        <.avatar
-          class="!size-10"
-          src={Avatar.url({@post.resource.user.avatar, @post.resource.user.avatar}, :original)}
-          fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
-        />
+        <%= if @post.resource.user.avatar do %>
+          <.avatar
+            class="!size-10"
+            src={Avatar.url({@post.resource.user.avatar, @post.resource.user.avatar}, :original)}
+            fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
+          />
+        <% else %>
+          <.avatar
+            class="!size-10"
+            fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
+          />
+        <% end %>
 
         <div class="grid gap-3">
           <div class="grid gap-0.5">
