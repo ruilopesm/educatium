@@ -36,6 +36,7 @@ defmodule EducatiumWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
+
       <div>
         <.simple_form
           for={@password_form}
@@ -74,9 +75,14 @@ defmodule EducatiumWeb.UserSettingsLive do
             required
           />
           <:actions>
-            <.button phx-disable-with={gettext("Changing...")}>
-              <%= gettext("Change Password") %>
-            </.button>
+            <div>
+              <.button phx-disable-with={gettext("Changing...")}>
+                <%= gettext("Change Password") %>
+              </.button>
+              <.link href={~p"/users/reset_password"} class="text-sm font-semibold ml-2">
+                <%= gettext("Forgot your password?") %>
+              </.link>
+            </div>
           </:actions>
         </.simple_form>
       </div>

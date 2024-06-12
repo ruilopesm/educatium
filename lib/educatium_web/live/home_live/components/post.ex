@@ -55,10 +55,10 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
     <div class="flex gap-1 mt-3 absolute right-[22px] top-3 text-gray-500 items-end">
       <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
       <div class="relative group">
-          <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90"/>
-          <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-           <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
-          </div>
+        <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
+        <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+          <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
+        </div>
       </div>
     </div>
     <div class="flex gap-3 mt-6 absolute left-[22px] bottom-3">
