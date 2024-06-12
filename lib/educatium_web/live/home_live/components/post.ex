@@ -3,6 +3,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   alias Educatium.Feed
   alias Educatium.Feed.Post
+  alias Educatium.Uploaders.Avatar
 
   attr :post, Post, required: true
 
@@ -23,15 +24,29 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       class="block w-full px-6 py-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50"
     >
       <div class="flex gap-3">
-        <!-- FIXME: Should be user's avatar -->
-        <img src="https://i.pravatar.cc/300" alt="Hailey image" class="w-12 h-12 rounded-full" />
+        <%= if @post.resource.user.avatar do %>
+          <.avatar
+            class="!size-10"
+            src={Avatar.url({@post.resource.user.avatar, @post.resource.user}, :original)}
+            fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
+          />
+        <% else %>
+          <.avatar
+            class="!size-10"
+            fallback={extract_initials(@post.resource.user.first_name, @post.resource.user.last_name)}
+          />
+        <% end %>
+
         <div class="grid gap-3">
           <div class="grid gap-0.5">
             <h2 class="text-gray-900 text-sm font-medium leading-snug">
-              Rui Lopes <span class="text-gray-500">adicionou um novo recurso</span>
+              <%= display_name(@post.resource.user) %>
+              <span class="text-gray-500"><%= gettext("adicionou um novo recurso") %></span>
             </h2>
             <h3 class="text-gray-500 text-xs font-normal leading-4">
-              Estudante | Qui, 10h03m
+              <%= display_role(@current_user.role) %> | <%= relative_datetime(
+                @current_user.inserted_at
+              ) %>
             </h3>
           </div>
           <div class="gap-1 flex">
@@ -47,16 +62,17 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
           </div>
         </div>
       </div>
+
       <div class="mt-3.5 mb-7">
         <h3 class="text-gray-900 text-lg font-medium leading-snug"><%= @post.resource.title %></h3>
         <p class="text-gray-500 text-xs font-normal leading-4"><%= @post.resource.description %></p>
       </div>
     </.link>
-    <div class="flex gap-1 mt-3 absolute right-[22px] top-3 text-gray-500 items-end">
+    <div class="group hover:cursor-help flex gap-1 absolute right-[22px] top-3 text-gray-500 items-end">
       <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
-      <div class="relative group">
+      <div class="relative">
         <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
-        <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+        <div class="absolute bottom-full hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
           <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
         </div>
       </div>

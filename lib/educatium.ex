@@ -61,6 +61,15 @@ defmodule Educatium do
     end
   end
 
+  def uploader do
+    quote do
+      use Waffle.Definition
+      use Waffle.Ecto.Definition
+
+      import EducatiumWeb.Gettext
+    end
+  end
+
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end

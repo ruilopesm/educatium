@@ -23,6 +23,21 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Returns the list of resources by user.
+
+  ## Examples
+
+      iex> list_resources_by_user(123)
+      [%Resource{}, ...]
+  """
+  def list_resources_by_user(user_id, opts \\ []) do
+    Resource
+    |> where(user_id: ^user_id)
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single resource.
 
   Raises `Ecto.NoResultsError` if the Resource does not exist.

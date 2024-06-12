@@ -294,7 +294,7 @@ msgstr "Bem-vindo de volta!"
 #: lib/educatium_web/user_auth.ex:161
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
-msgstr "Tem que estar logado para aceder a esta página."
+msgstr "Deverá estar logado para aceder a esta página."
 
 #: lib/educatium_web/live/user_login_live.ex:14
 #, elixir-autogen, elixir-format

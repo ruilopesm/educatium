@@ -46,8 +46,9 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
           <.live_file_input upload={@uploads.dir} class="hidden" />
           <input id="dir" type="file" webkitdirectory={true} phx-hook="ZipUpload" />
         </div>
+
         <%= for entry <- @uploads.dir.entries do %>
-          <%= entry.progress %>%
+          <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
         <% end %>
 
         <:actions>
