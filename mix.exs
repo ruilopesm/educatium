@@ -64,6 +64,10 @@ defmodule Educatium.MixProject do
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
 
+      # uploads
+      {:waffle_ecto, "~> 0.0"},
+      {:waffle, "~> 1.1"},
+
       # telemetry
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
@@ -71,10 +75,6 @@ defmodule Educatium.MixProject do
 
       # security
       {:argon2_elixir, "~> 3.0"},
-
-      # uploads
-      {:waffle, "~> 1.1"},
-      {:waffle_ecto, "~> 0.0"},
 
       # testing
       {:floki, ">= 0.30.0", only: :test},

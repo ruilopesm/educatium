@@ -71,5 +71,10 @@ config :phoenix_live_view,
   # Enable helpful, but potentially expensive runtime checks
   enable_expensive_runtime_checks: true
 
+# Configure waffle local storage
+config :waffle,
+  storage: Waffle.Storage.Local,
+  storage_dir_prefix: "priv/waffle/private"
+
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false

@@ -75,6 +75,9 @@ config :waffle,
 
 config :educatium, EducatiumWeb.Gettext, default_locale: "pt", locales: ~w(pt en)
 
+# Config file uploads directory to `priv/uploads/temp/`
+config :educatium, Educatium.Uploaders, uploads_dir: "priv/uploads/temp/"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
