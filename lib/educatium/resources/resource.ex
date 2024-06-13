@@ -3,7 +3,7 @@ defmodule Educatium.Resources.Resource do
 
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
-  alias Educatium.Resources.Directory
+  alias Educatium.Resources.{Directory, Tag, ResourceTag}
 
   @types ~w(book article presentation project report exam assignment solution)a
   @visibilities ~w(protected private public)a
@@ -22,6 +22,8 @@ defmodule Educatium.Resources.Resource do
     belongs_to :post, Post
 
     has_one :directory, Directory
+
+    many_to_many :tags, Tag, join_through: ResourceTag
 
     timestamps(type: :utc_datetime)
   end

@@ -3,11 +3,15 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   alias Educatium.Feed
   alias Educatium.Feed.Post
+  alias Educatium.Resources
   alias Educatium.Uploaders.Avatar
 
   attr :post, Post, required: true
 
   def render(assigns) do
+    tags = Resources.list_tags_by_resource(assigns[:post].resource.id)
+    assigns = Map.put(assigns, :tags, tags)
+
     ~H"""
     <div id="wrapper" class="relative">
       <%= if @post.type == :resource do %>
@@ -50,12 +54,11 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
             </h3>
           </div>
           <div class="gap-1 flex">
-            <span class="px-2.5 py-1 bg-emerald-50 rounded-full text-center text-emerald-600 text-xs font-medium leading-4">
-              Teste
-            </span>
-            <span class="px-2.5 py-1 bg-indigo-50 rounded-full text-center text-indigo-600 text-xs font-medium leading-4">
-              EngWeb
-            </span>
+            <%= for tag <- @tags do %>
+              <span class={"px-2.5 py-1 bg-#{tag.color}-50 rounded-full text-center text-#{tag.color}-600 text-xs font-medium leading-4"}>
+                <%= tag.name %>
+              </span>
+            <% end %>
             <span class="px-2.5 py-1 bg-gray-100 rounded-full text-center text-gray-700 text-xs font-medium leading-4">
               +2
             </span>

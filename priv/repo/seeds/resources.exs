@@ -5,12 +5,15 @@ defmodule Educatium.Repo.Seeds.Resources do
   alias Educatium.Accounts.User
   alias Educatium.Repo
   alias Educatium.Resources
-  alias Educatium.Resources.Resource
+  alias Educatium.Resources.{Resource, Tag}
+
+  @types Resource.types()
 
   def run do
     case Repo.all(Resource) do
       [] ->
         seed_resources()
+        seed_resources_tags()
       _ ->
         Mix.shell().error("Found existing resources, skipping seeding.")
     end
@@ -18,14 +21,12 @@ defmodule Educatium.Repo.Seeds.Resources do
 
   def seed_resources do
     users = Repo.all(User)
-    types = Resource.types()
 
     for i <- 1..30 do
-      type = Enum.random(types)
-      str_type = stringify_type(type)
+      type = Enum.random(@types)
 
       %{
-        title: "#{str_type} #{i}",
+        title: "#{stringify_type(type)} #{i}",
         date: Faker.Date.backward(365),
         description: Faker.Lorem.paragraph(),
         type: type,
@@ -33,6 +34,16 @@ defmodule Educatium.Repo.Seeds.Resources do
         user_id: Enum.random(users).id
       }
       |> Resources.create_resource()
+    end
+  end
+
+  def seed_resources_tags do
+    resources = Repo.all(Resource)
+    tags = Repo.all(Tag)
+
+    for resource <- resources do
+      tag = Enum.random(tags)
+      Resources.create_resource_tag(resource.id, tag.id)
     end
   end
 

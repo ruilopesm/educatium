@@ -8,7 +8,7 @@ defmodule Educatium.Repo.Seeds do
   @seeds_dir "priv/repo/seeds"
 
   def run do
-    ["accounts.exs", "resources.exs"]
+    ["accounts.exs", "tags.exs", "resources.exs"]
     |> Enum.each(fn file ->
       Code.require_file(Path.join(@seeds_dir, file))
     end)

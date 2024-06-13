@@ -5,7 +5,7 @@ defmodule Educatium.Resources do
   use Educatium, :context
 
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource}
+  alias Educatium.Resources.{Directory, File, Resource, Tag, ResourceTag}
 
   @doc """
   Returns the list of resources.
@@ -124,7 +124,7 @@ defmodule Educatium.Resources do
   """
   def update_resource(%Resource{} = resource, attrs, resource_path) do
     Multi.new()
-    |> Multi.update(:resource, resource, attrs)
+    |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
       if resource_path do
         process_resource_item(resource, nil, :dir, resource_path)
@@ -166,7 +166,7 @@ defmodule Educatium.Resources do
 
   @doc """
   Creates a directory.
-    
+
   ## Examples
 
       iex> create_directory(%{field: value})
@@ -197,6 +197,66 @@ defmodule Educatium.Resources do
   def create_file(attrs) do
     %File{}
     |> File.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns the list of tags.
+
+  ## Examples
+
+      iex> list_tags()
+      [%Tag{}, ...]
+
+  """
+  def list_tags() do
+    Tag
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a tag.
+
+  ## Examples
+
+      iex> create_tag(%{field: value})
+      {:ok, %Tag{}}
+
+      iex> create_tag(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tag(attrs) do
+    %Tag{}
+    |> Tag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Lists all tags for a resource.
+  """
+  def list_tags_by_resource(resource_id) do
+    Tag
+    |> join(:inner, [t], rt in ResourceTag, on: rt.tag_id == t.id)
+    |> where([t, rt], rt.resource_id == ^resource_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a relationship between a resource and a tag.
+
+  ## Examples
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:ok, %ResourceTag{}}
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_resource_tag(resource_id, tag_id) do
+    %ResourceTag{}
+    |> ResourceTag.changeset(%{resource_id: resource_id, tag_id: tag_id})
     |> Repo.insert()
   end
 
