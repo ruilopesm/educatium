@@ -61,6 +61,11 @@ defmodule EducatiumWeb.ResourceLive.Show do
     File.url({file.file, file}, :original)
   end
 
+  defp get_dir_path(dir_id) do
+    directory = Resources.get_directory!(dir_id)
+    ~p"/directories/#{directory.id}"
+  end
+
   defp directory_n_items(directory_id) do
     directory = Resources.get_directory!(directory_id, [:files, :subdirectories])
     n_items = Enum.count(directory.files) + Enum.count(directory.subdirectories)

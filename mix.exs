@@ -86,6 +86,8 @@ defmodule Educatium.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:dotenvy, "~> 0.8.0"},
+      {:temp, "~> 0.4"},
+      {:req, "~> 0.5.0"},
       {:doctest_formatter, "~> 0.3.0", runtime: false}
     ]
   end

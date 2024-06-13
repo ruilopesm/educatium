@@ -90,6 +90,8 @@ defmodule EducatiumWeb.Router do
         live "/:handle", UserLive.Show, :show
       end
     end
+
+    get "/directories/:id", DirectoryController, :download_directory
   end
 
   scope "/", EducatiumWeb do

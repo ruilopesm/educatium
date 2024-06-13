@@ -7,6 +7,8 @@ defmodule Educatium.Resources do
   alias Educatium.Feed.Post
   alias Educatium.Resources.{Directory, File, Resource}
 
+  @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]
+
   @doc """
   Returns the list of resources.
 
@@ -238,6 +240,43 @@ defmodule Educatium.Resources do
   """
   def get_file!(id) do
     Repo.get!(File, id)
+  end
+
+  def build_zip(%Directory{} = directory) do
+    tmp_dir = Temp.path!()
+    dir = tmp_dir <> "/#{directory.name}"
+    Elixir.File.mkdir(dir)
+
+    cp_files(directory.files, dir)
+    cp_dirs(directory.subdirectories, dir)
+
+    # zip the directory
+    zip_file = "#{tmp_dir}/#{directory.name}.zip"
+    :zip.zip(~c"#{dir}", ~c"#{zip_file}")
+
+    zip_file
+  end
+
+  defp cp_files(files, dir) do
+    Enum.each(files, fn file ->
+      # TODO: download the file from waffle to the directory
+      url = "http://localhost" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}" |> IO.inspect(label: "URL")
+      # file_path = 
+      #   "#{dir}/#{file.name}"
+      #   |> to_string()
+
+      # download the file into the directory
+      Req.get(url)
+    end)
+  end
+
+  defp cp_dirs(subdirectories, parent_dir) do
+    Enum.each(subdirectories, fn dir ->
+      subdir = get_directory!(dir.id, [:files, :subdirectories])
+      new_dir = Elixir.File.mkdir("#{parent_dir}/#{dir.name}")
+      cp_files(subdir.files, new_dir)
+      cp_dirs(subdir.subdirectories, new_dir)
+    end)
   end
 
   defp process_resource_item(resource, parent_directory, :dir, path) do
