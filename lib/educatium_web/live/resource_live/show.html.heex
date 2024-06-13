@@ -69,7 +69,7 @@
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= Utils.relative_datetime(file.inserted_at) %></td>
                   <td class="relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6">
                     <.link 
-                      href={~p"/files/#{file.id}"} 
+                      href={get_file_path(file.id)} 
                       class="cursor-pointer hover:text-orange-600 hover:underline"
                     >
                       <.icon name="hero-arrow-down-tray" class="size-5 mr-4" />

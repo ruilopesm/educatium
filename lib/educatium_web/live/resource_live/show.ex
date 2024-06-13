@@ -1,9 +1,11 @@
 defmodule EducatiumWeb.ResourceLive.Show do
   use EducatiumWeb, :live_view
 
+  alias EducatiumWeb.Utils
+
   alias Educatium.Resources
   alias Educatium.Resources.{Directory, File, Resource}
-  alias EducatiumWeb.Utils
+  alias Educatium.Uploaders.File
 
   @impl true
   def mount(_params, _session, socket) do
@@ -38,21 +40,6 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply, assign(socket, directory: directory)}
   end
 
-  @impl true
-  def handle_event("download-file", %{"file_id" => file_id}, socket) do
-    # TODO: Implement download file
-    case Resources.get_file!(file_id) do
-      %File{file: file} ->
-        IO.inspect(file)
-        {:noreply, socket}
-
-      _ ->
-        {:noreply, socket}
-    end
-
-    {:noreply, socket}
-  end
-
   defp file_size(size) do
     mb =
       (size / 1024 / 1024)
@@ -68,6 +55,12 @@ defmodule EducatiumWeb.ResourceLive.Show do
       "#{mb} MB"
     end
   end
+
+  defp get_file_path(file_id) do
+    file = Resources.get_file!(file_id)
+    File.url({file.file, file}, :original)
+  end
+
 
   defp page_title(:show), do: "Show Resource"
   defp page_title(:edit), do: "Edit Resource"
