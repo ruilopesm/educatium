@@ -42,8 +42,10 @@ defmodule Educatium.Repo.Seeds.Resources do
     tags = Repo.all(Tag)
 
     for resource <- resources do
-      tag = Enum.random(tags)
-      Resources.create_resource_tag(resource.id, tag.id)
+      tags
+      |> Enum.shuffle()
+      |> Enum.take(Enum.random(2..5))
+      |> Enum.each(&Resources.create_resource_tag(resource.id, &1.id))
     end
   end
 
