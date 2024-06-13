@@ -12,7 +12,7 @@ config :educatium, EducatiumWeb.Endpoint,
   http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  debug_errors: true,
+  debug_errors: false,
   secret_key_base: "F7u6Qz6WDsA5WcLe+ho1sdnxvQzodfdxyXl19KB55xX/AN+TZXcCU0O3Dn1bX7iQ",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:educatium, ~w(--sourcemap=inline --watch)]},
