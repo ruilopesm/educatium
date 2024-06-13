@@ -289,6 +289,7 @@ defmodule Educatium.Accounts do
     user
     |> User.avatar_changeset(attrs)
     |> Repo.update()
+    |> IO.inspect(label: "AVATAR")
   end
 
   @doc """

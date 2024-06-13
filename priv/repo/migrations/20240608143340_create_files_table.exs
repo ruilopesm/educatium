@@ -7,6 +7,8 @@ defmodule Educatium.Repo.Migrations.CreateFilesTable do
 
       add :name, :string, null: false
 
+      add :size, :integer, null: false
+
       add :resource_id, references(:resources, on_delete: :delete_all, type: :binary_id),
         null: false
 

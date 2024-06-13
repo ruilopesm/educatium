@@ -222,6 +222,24 @@ defmodule Educatium.Resources do
     |> Repo.insert()
   end
 
+  @doc """
+  Gets a single file.
+
+  Raises `Ecto.NoResultsError` if the File does not exist.
+
+  ## Examples
+
+      iex> get_file!(123)
+      %File{}
+
+      iex> get_file!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_file!(id) do
+    Repo.get!(File, id)
+  end
+
   defp process_resource_item(resource, parent_directory, :dir, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
@@ -251,11 +269,13 @@ defmodule Educatium.Resources do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
     name = Path.basename(path)
+    file_stats = Elixir.File.lstat!(path)
 
     attrs = %{
       name: name,
       resource_id: resource.id,
       directory_id: parent_directory_id,
+      size: file_stats.size,
       file: %Plug.Upload{
         path: path,
         filename: name
