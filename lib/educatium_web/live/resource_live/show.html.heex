@@ -49,7 +49,7 @@
                       <%= dir.name %>
                     </div>
                   </td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">2.5 MB</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= directory_n_items(dir.id) %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= Utils.relative_datetime(dir.inserted_at) %></td>
                   <td class="relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6">
                     <div phx-click="download-directory" class="cursor-pointer hover:text-orange-600 hover:underline">

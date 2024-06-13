@@ -61,6 +61,13 @@ defmodule EducatiumWeb.ResourceLive.Show do
     File.url({file.file, file}, :original)
   end
 
+  defp directory_n_items(directory_id) do
+    directory = Resources.get_directory!(directory_id, [:files, :subdirectories])
+    n_items = Enum.count(directory.files) + Enum.count(directory.subdirectories)
+
+    if n_items == 1, do: "#{n_items} item", else: "#{n_items} items"
+  end
+
 
   defp page_title(:show), do: "Show Resource"
   defp page_title(:edit), do: "Edit Resource"
