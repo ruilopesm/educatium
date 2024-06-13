@@ -3,17 +3,23 @@
   <:subtitle>Plataforma de Gestão de Recursos Educativos</:subtitle>
 </.header>
 
-<.simple_form for={@form} id="search_resource" phx-change="search" class="mt-4">
-  <.input
-    phx-mounted={JS.focus()}
-    type="search"
-    placeholder={gettext("Pesquisar por um post...")}
-    name="post"
-    value=""
-    required
-    spellcheck="false"
-  />
-</.simple_form>
+<div class="flex flex-col lg:flex-row lg:space-x-4">
+  <.simple_form for={@form} id="search_resource" phx-change="search" class="mt-4 lg:w-[782px]">
+    <.input
+      phx-mounted={JS.focus()}
+      type="search"
+      placeholder={gettext("Pesquisar por um post...")}
+      name="post"
+      value=""
+      required
+      spellcheck="false"
+    />
+  </.simple_form>
+
+  <.button phx-click="new-post" class="mt-4">
+    <%= gettext("Create post") %>
+  </.button>
+</div>
 
 <%= if @new_posts_count > 0 do %>
   <div phx-click="show-new-posts" class="mt-6 cursor-pointer text-center text-sm text-gray-500">

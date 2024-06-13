@@ -48,6 +48,13 @@ defmodule EducatiumWeb.HomeLive do
   end
 
   @impl true
+  def handle_event("new-post", _, socket) do
+    {:noreply,
+     socket
+     |> push_navigate(to: ~p"/resources/new?post=true")}
+  end
+
+  @impl true
   def handle_info({:post_updated, post}, socket) do
     {:noreply,
      socket
