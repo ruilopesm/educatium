@@ -26,12 +26,12 @@ defmodule Educatium.Repo.Seeds.Resources do
       type = Enum.random(@types)
 
       %{
-        title: "#{stringify_type(type)} #{i}",
-        date: Faker.Date.backward(365),
-        description: Faker.Lorem.paragraph(),
-        type: type,
-        visibility: :public,
-        user_id: Enum.random(users).id
+        "title" => "#{stringify_type(type)} #{i}",
+        "date" => Faker.Date.backward(365),
+        "description" => Faker.Lorem.paragraph(),
+        "type" => type,
+        "visibility" => "public",
+        "user_id" => Enum.random(users).id
       }
       |> Resources.create_resource()
     end

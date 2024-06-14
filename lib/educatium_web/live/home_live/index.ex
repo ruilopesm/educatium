@@ -1,9 +1,11 @@
-defmodule EducatiumWeb.HomeLive do
+defmodule EducatiumWeb.HomeLive.Index do
   use EducatiumWeb, :live_view
 
   alias Educatium.Feed
   alias Educatium.Feed.Post
+
   alias EducatiumWeb.HomeLive.Components
+  alias EducatiumWeb.HomeLive.FormComponent
 
   @preloads Post.preloads()
 
@@ -15,8 +17,20 @@ defmodule EducatiumWeb.HomeLive do
      socket
      |> stream(:posts, Feed.list_posts(preloads: @preloads))
      |> assign(:form, to_form(%{}, as: "post"))
-     # TODO: Handle new post creation (PubSub-based)
      |> assign(:new_posts_count, 0)}
+  end
+
+  @impl true
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :new, _params) do
+    assign(socket, :page_title, gettext("New post"))
+  end
+
+  defp apply_action(socket, :index, _params) do
+    assign(socket, :page_title, "Home")
   end
 
   @impl true
@@ -51,7 +65,7 @@ defmodule EducatiumWeb.HomeLive do
   def handle_event("new-post", _, socket) do
     {:noreply,
      socket
-     |> push_navigate(to: ~p"/resources/new?post=true")}
+     |> push_patch(to: ~p"/posts/new")}
   end
 
   @impl true
@@ -66,5 +80,12 @@ defmodule EducatiumWeb.HomeLive do
     {:noreply,
      socket
      |> put_flash(level, msg)}
+  end
+
+  @impl true
+  def handle_info({Components.NewPost, {:saved, post}}, socket) do
+    {:noreply,
+     socket
+     |> stream_insert(:posts, post)}
   end
 end

@@ -73,7 +73,7 @@ defmodule EducatiumWeb.CoreComponents do
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40 focus:opacity-40 focus:outline-none focus:ring-2 focus:ring-zinc-300"
                   aria-label={gettext("close")}
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
@@ -302,7 +302,7 @@ defmodule EducatiumWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select tel text textarea time radio url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -416,6 +416,24 @@ defmodule EducatiumWeb.CoreComponents do
         />
         <.error :for={msg <- @errors}><%= msg %></.error>
       </div>
+    </div>
+    """
+  end
+
+  def input(%{type: "radio"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <input
+        type="radio"
+        id={@id}
+        name={@name}
+        value={@value}
+        checked={@checked}
+        class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+        {@rest}
+      />
+      <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end

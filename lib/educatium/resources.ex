@@ -58,22 +58,24 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> create_resource(%{field: value}, "/resources/resource1")
+      iex> create_resource(%{field: value}, ...)
       {:ok, %Resource{}}
 
-      iex> create_resource(%{field: bad_value}, "/resources/resource1")
+      iex> create_resource(%{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_resource(attrs, resource_path \\ nil) do
-    if attrs[:visibility] == :public do
-      create_resource_with_post(attrs, resource_path)
-    else
-      create_resource_without_post(attrs, resource_path)
-    end
+  def create_resource(attrs, path \\ nil)
+
+  def create_resource(%{"visibility" => "public"} = attrs, path) do
+    create_resource_with_post(attrs, path)
   end
 
-  defp create_resource_with_post(attrs, resource_path) do
+  def create_resource(%{"visibility" => _} = attrs, path) do
+    create_resource_without_post(attrs, path)
+  end
+
+  defp create_resource_with_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:post, fn _ ->
       %Post{}
@@ -85,8 +87,8 @@ defmodule Educatium.Resources do
       |> Ecto.Changeset.put_assoc(:post, post)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -94,15 +96,15 @@ defmodule Educatium.Resources do
     |> Repo.transaction()
   end
 
-  defp create_resource_without_post(attrs, resource_path) do
+  defp create_resource_without_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:resource, fn _ ->
       %Resource{}
       |> Resource.changeset(attrs)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -115,19 +117,19 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> update_resource(resource, %{field: new_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: new_value}, ...)
       {:ok, %Resource{}}
 
-      iex> update_resource(resource, %{field: bad_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_resource(%Resource{} = resource, attrs, resource_path) do
+  def update_resource(%Resource{} = resource, attrs, path) do
     Multi.new()
     |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end

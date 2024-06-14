@@ -32,3 +32,19 @@
     <.live_component id={id} module={Components.Post} post={post} current_user={@current_user} />
   </li>
 </ul>
+
+<.modal
+  :if={@live_action in [:new]}
+  id="post-modal"
+  show
+  on_cancel={JS.patch(~p"/posts")}
+>
+  <.live_component
+    module={FormComponent}
+    id={:new}
+    title={@page_title}
+    action={:new}
+    current_user={@current_user}
+    patch={~p"/"}
+  />
+</.modal>

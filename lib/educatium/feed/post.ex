@@ -15,9 +15,11 @@ defmodule Educatium.Feed.Post do
     field :view_count, :integer, default: 0
     field :upvote_count, :integer, default: 0
     field :downvote_count, :integer, default: 0
+
     field :type, Ecto.Enum, values: @types
 
     has_one :resource, Resource
+
     has_many :upvotes, Upvote
     has_many :downvotes, Downvote
 

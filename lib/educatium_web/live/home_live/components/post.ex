@@ -8,6 +8,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   attr :post, Post, required: true
 
+  @impl true
   def render(assigns) do
     tags = Resources.list_tags_by_resource(assigns[:post].resource.id)
     assigns = Map.put(assigns, :tags, tags)

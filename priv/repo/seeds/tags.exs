@@ -42,8 +42,8 @@ defmodule Educatium.Repo.Seeds.Tags do
   def seed_tags do
     for name <- @names do
       %{
-        name: stringify_name(name),
-        color: Enum.random(@colors)
+        "name" => stringify_name(name),
+        "color" => Enum.random(@colors)
       }
       |> Resources.create_tag()
     end

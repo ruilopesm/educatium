@@ -71,16 +71,11 @@ defmodule EducatiumWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EducatiumWeb.UserAuth, :ensure_authenticated}] do
-      live "/", HomeLive
+      get "/", Plugs.RedirectRoot, to: "/posts"
 
-      scope "/resources" do
-        live "/", ResourceLive.Index, :index
-
-        live "/new", ResourceLive.Index, :new
-        live "/:id/edit", ResourceLive.Index, :edit
-
-        live "/:id", ResourceLive.Show, :show
-        live "/:id/show/edit", ResourceLive.Show, :edit
+      scope "/posts" do
+        live "/", HomeLive.Index, :index
+        live "/new", HomeLive.Index, :new
       end
 
       scope "/users" do
