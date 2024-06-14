@@ -5,7 +5,7 @@
     <.link patch={~p"/resources/#{@resource}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit resource</.button>
     </.link>
-    <.link href={~p"/directories/#{@directory.id}"}>
+    <.link href={~p"/directories/#{@resource.directory.id}"}>
       <.button>Download</.button>
     </.link>
   </:actions>
