@@ -5,8 +5,6 @@ defmodule EducatiumWeb.Plugs.RedirectRoot do
   def init(opts), do: opts
 
   def call(conn, opts) do
-    IO.inspect(conn)
-
     if conn.request_path == "/" do
       conn
       |> Phoenix.Controller.redirect(to: opts[:to])

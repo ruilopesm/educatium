@@ -3,6 +3,7 @@ defmodule Educatium.Resources.Resource do
 
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
+  alias Educatium.Resources
   alias Educatium.Resources.{Directory, Tag, ResourceTag}
 
   @types ~w(book article presentation project report exam assignment solution)a
@@ -33,6 +34,16 @@ defmodule Educatium.Resources.Resource do
     resource
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+    |> maybe_put_tags(attrs)
+  end
+
+  defp maybe_put_tags(changeset, attrs) do
+    if attrs["tags"] do
+      tags = Resources.list_tags_by_ids(attrs["tags"])
+      Ecto.Changeset.put_assoc(changeset, :tags, tags)
+    else
+      changeset
+    end
   end
 
   def types, do: @types

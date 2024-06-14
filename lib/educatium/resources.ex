@@ -217,6 +217,20 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Returns the list of tags by ids.
+
+  ## Examples
+
+      iex> list_tags_by_ids([1, 2, 3])
+      [%Tag{}, ...]
+  """
+  def list_tags_by_ids(ids) do
+    Tag
+    |> where([t], t.id in ^ids)
+    |> Repo.all()
+  end
+
+  @doc """
   Creates a tag.
 
   ## Examples

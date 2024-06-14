@@ -39,25 +39,30 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
         phx-submit="save-resource"
         class="mt-10"
       >
-        <.input field={@resource_form[:title]} label={gettext("Title")} required />
-        <.input
-          field={@resource_form[:description]}
-          type="textarea"
-          label={gettext("Description")}
-          required
-        />
+        <.input field={@resource_form[:title]} label={gettext("Title")} />
+
+        <.input field={@resource_form[:description]} type="textarea" label={gettext("Description")} />
+
         <.input
           field={@resource_form[:type]}
           type="select"
           options={build_options_for_select(Resource.types())}
           label={gettext("Type")}
-          required
         />
+
         <.input
           field={@resource_form[:date]}
           label={gettext("Original publication date")}
           type="date"
-          required
+        />
+
+        <.input
+          name="tags"
+          label={gettext("Select one or more tags")}
+          type="multi-select"
+          target={@myself}
+          options={@tags}
+          selected={@tag_count}
         />
 
         <p :if={@status}><%= @status %></p>
@@ -86,10 +91,9 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
 
   @impl true
   def update(assigns, socket) do
-    resource_changeset = Resources.change_resource(%Resource{})
-    resource = %Resource{}
-
     type = Post.types() |> List.first() |> Atom.to_string()
+    resource = %Resource{}
+    resource_changeset = Resources.change_resource(resource)
 
     {:ok,
      socket
@@ -98,6 +102,8 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
      |> assign(:type, type)
      |> assign(:resource_form, to_form(resource_changeset))
      |> assign(:resource, resource)
+     |> assign(:tags, build_tags())
+     |> assign(:tag_count, 0)
      |> assign(files: [], status: nil, path: nil)
      |> allow_upload(:dir,
        accept: :any,
@@ -107,6 +113,20 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
        max_file_size: 100_000_000,
        progress: &handle_progress/3
      )}
+  end
+
+  @impl true
+  def handle_event("toggle-option", %{"id" => id}, socket) do
+    tags =
+      Enum.map(socket.assigns.tags, fn tag ->
+        if tag.id == id do
+          %{tag | selected: not tag.selected}
+        else
+          tag
+        end
+      end)
+
+    {:noreply, assign(socket, tags: tags, tag_count: Enum.count(tags, & &1.selected))}
   end
 
   @impl true
@@ -121,15 +141,23 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
       |> Resources.change_resource(resource_params)
       |> Map.put(:action, :validate)
 
-    IO.inspect(socket.assigns.resource, label: "resource")
-
     {:noreply, assign(socket, :resource_form, to_form(changeset))}
   end
 
   @impl true
   def handle_event("save-resource", %{"resource" => resource_params}, socket) do
+    tags =
+      List.foldl(socket.assigns.tags, [], fn tag, acc ->
+        if tag.selected do
+          [tag.id | acc]
+        else
+          acc
+        end
+      end)
+
     resource_params =
       resource_params
+      |> Map.put("tags", tags)
       |> Map.put("user_id", socket.assigns.current_user.id)
       |> Map.put("visibility", "public")
 
@@ -140,7 +168,7 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
          |> put_flash(:info, gettext("Resource created successfully."))
          |> push_patch(to: ~p"/posts")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, :resource, %Ecto.Changeset{} = changeset, _post} ->
         {:noreply, assign(socket, :resource_form, to_form(changeset))}
     end
   end
@@ -148,6 +176,17 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
   @impl true
   def handle_event("change-type", %{"type" => type}, socket) do
     {:noreply, assign(socket, :type, type)}
+  end
+
+  defp build_tags do
+    Resources.list_tags()
+    |> Enum.map(fn tag ->
+      %{
+        id: tag.id,
+        label: tag.name,
+        selected: false
+      }
+    end)
   end
 
   @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]
