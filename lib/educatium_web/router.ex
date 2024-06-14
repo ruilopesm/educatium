@@ -78,6 +78,8 @@ defmodule EducatiumWeb.Router do
         live "/new", HomeLive.Index, :new
       end
 
+      live "/resources/:id", ResourceLive.Show, :show
+
       scope "/users" do
         live "/settings", UserSettingsLive, :edit
         live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
@@ -85,6 +87,8 @@ defmodule EducatiumWeb.Router do
         live "/:handle", UserLive.Show, :show
       end
     end
+
+    get "/directories/:id", DirectoryController, :download_directory
   end
 
   scope "/", EducatiumWeb do
