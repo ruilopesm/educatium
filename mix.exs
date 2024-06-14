@@ -87,7 +87,8 @@ defmodule Educatium.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:dotenvy, "~> 0.8.0"},
       {:temp, "~> 0.4"},
-      {:req, "~> 0.5.0"},
+      {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},
+      {:zstream, "~> 0.6"},
       {:doctest_formatter, "~> 0.3.0", runtime: false}
     ]
   end

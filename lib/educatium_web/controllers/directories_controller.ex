@@ -4,12 +4,9 @@ defmodule EducatiumWeb.DirectoryController do
   alias Educatium.Resources
 
   def download_directory(conn, %{"id" => directory_id}) do
-    zip_file_path = 
-      Resources.get_directory!(directory_id, [:files, :subdirectories])
-      |> Resources.build_zip()
-      |> IO.inspect()
+    directory = Resources.get_directory!(directory_id, [:files, :subdirectories])
+    zip = Resources.build_directory_zip(directory)
 
-    conn
-    |> send_download(zip_file_path)
+    send_download(conn, {:binary, zip}, filename: directory.name <> ".zip")
   end
 end

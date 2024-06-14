@@ -40,7 +40,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply, assign(socket, directory: directory)}
   end
 
-  defp file_size(size) do
+  defp humanize_file_size(size) do
     mb =
       (size / 1024 / 1024)
       |> Float.round(2)
@@ -50,7 +50,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
         (size / 1024)
         |> Float.round(2)
 
-      "#{bytes} bytes"
+      "#{bytes} Kb"
     else
       "#{mb} MB"
     end

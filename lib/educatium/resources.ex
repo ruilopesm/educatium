@@ -242,40 +242,43 @@ defmodule Educatium.Resources do
     Repo.get!(File, id)
   end
 
-  def build_zip(%Directory{} = directory) do
-    tmp_dir = Temp.path!()
-    dir = tmp_dir <> "/#{directory.name}"
-    Elixir.File.mkdir(dir)
+  @doc """
+  Builds a zip file from a directory.
 
-    cp_files(directory.files, dir)
-    cp_dirs(directory.subdirectories, dir)
+  ## Examples
 
-    # zip the directory
-    zip_file = "#{tmp_dir}/#{directory.name}.zip"
-    :zip.zip(~c"#{dir}", ~c"#{zip_file}")
+      iex> build_directory_zip(directory)
+      [{:ok, %Zstream.Entry{}}, ...]
+  """
+  def build_directory_zip(%Directory{} = directory) do
+    file_entries = create_files_entries(directory.files, directory.name)
+    directory_entries = create_directory_entries(directory.subdirectories, directory.name)
 
-    zip_file
+    entries = file_entries ++ directory_entries
+
+    entries
+    |> Zstream.zip()
+    |> Enum.to_list()
   end
 
-  defp cp_files(files, dir) do
-    Enum.each(files, fn file ->
-      # TODO: download the file from waffle to the directory
-      url = "http://localhost" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}" |> IO.inspect(label: "URL")
-      # file_path = 
-      #   "#{dir}/#{file.name}"
-      #   |> to_string()
+  defp create_files_entries(files, dir) do
+    Enum.map(files, fn file ->
+      url = "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
+      file_path = "#{dir}/#{file.name}"
 
-      # download the file into the directory
-      Req.get(url)
+      Zstream.entry(file_path, HTTPStream.get(url))
     end)
   end
 
-  defp cp_dirs(subdirectories, parent_dir) do
-    Enum.each(subdirectories, fn dir ->
+  defp create_directory_entries(subdirectories, parent_dir) do
+    Enum.map(subdirectories, fn dir ->
       subdir = get_directory!(dir.id, [:files, :subdirectories])
       new_dir = Elixir.File.mkdir("#{parent_dir}/#{dir.name}")
-      cp_files(subdir.files, new_dir)
-      cp_dirs(subdir.subdirectories, new_dir)
+
+      file_entries = create_files_entries(subdir.files, new_dir)
+      dir_entries = create_directory_entries(subdir.subdirectories, new_dir)
+      
+      file_entries ++ dir_entries
     end)
   end
 

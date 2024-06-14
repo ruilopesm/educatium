@@ -68,7 +68,7 @@
                     <.icon name="hero-document" class="size-5 ml-4" />
                   </td>
                   <td class="whitespace-nowrap py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6"><%= file.name %></td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= file_size(file.size) %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= humanize_file_size(file.size) %></td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= Utils.relative_datetime(file.inserted_at) %></td>
                   <td class="relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6">
                     <.link 
