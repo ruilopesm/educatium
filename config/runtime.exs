@@ -17,6 +17,7 @@ import Config
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
 import Dotenvy
+
 source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
 
 if System.get_env("PHX_SERVER") do
