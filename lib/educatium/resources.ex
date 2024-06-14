@@ -44,14 +44,17 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> get_resource!(123)
+      iex> get_resource!(123, [:directory])
       %Resource{}
 
-      iex> get_resource!(456)
+      iex> get_resource!(456, [:directory])
       ** (Ecto.NoResultsError)
 
   """
-  def get_resource!(id), do: Repo.get!(Resource, id)
+  def get_resource!(id, preloads \\ []) do
+    Repo.get!(Resource, id)
+    |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a resource.
@@ -183,6 +186,25 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Gets a single directory.
+
+  Raises `Ecto.NoResultsError` if the Directory does not exist.
+
+  ## Examples
+
+      iex> get_directory!(123)
+      %Directory{}
+
+      iex> get_directory!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_directory!(id, preloads \\ []) do
+    Repo.get!(Directory, id)
+    |> Repo.preload(preloads)
+  end
+
+  @doc """
   Creates a file.
 
   ## Examples
@@ -200,6 +222,69 @@ defmodule Educatium.Resources do
     |> Repo.insert()
   end
 
+  @doc """
+  Gets a single file.
+
+  Raises `Ecto.NoResultsError` if the File does not exist.
+
+  ## Examples
+
+      iex> get_file!(123)
+      %File{}
+
+      iex> get_file!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_file!(id) do
+    Repo.get!(File, id)
+  end
+
+  @doc """
+  Builds a zip file from a directory.
+
+  ## Examples
+
+      iex> build_directory_zip(directory)
+      [{:ok, %Zstream.Entry{}}, ...]
+  """
+  def build_directory_zip(%Directory{} = directory) do
+    dir_path = "/#{directory.name}"
+    file_entries = create_file_entries(directory.files, dir_path)
+    directory_entries = create_directory_entries(directory.subdirectories, dir_path)
+
+    entries = file_entries ++ directory_entries
+
+    entries
+    |> Zstream.zip()
+    |> Enum.to_list()
+  end
+
+  defp create_file_entries(files, dir) do
+    Enum.map(files, fn file ->
+      # FIXME: Get the host from the config
+      url =
+        "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
+
+      file_path = dir <> "/#{file.name}"
+
+      Zstream.entry(file_path, HTTPStream.get(url))
+    end)
+  end
+
+  defp create_directory_entries(subdirectories, parent_dir) do
+    Enum.map(subdirectories, fn dir ->
+      dir = get_directory!(dir.id, [:files, :subdirectories])
+      new_dir = "#{parent_dir}/#{dir.name}"
+
+      file_entries = create_file_entries(dir.files, new_dir)
+      dir_entries = create_directory_entries(dir.subdirectories, new_dir)
+
+      file_entries ++ dir_entries
+    end)
+    |> Enum.concat()
+  end
+
   defp process_resource_item(resource, parent_directory, :dir, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
@@ -207,7 +292,7 @@ defmodule Educatium.Resources do
     attrs = %{
       name: Path.basename(path),
       resource_id: resource.id,
-      parent_directory_id: parent_directory_id
+      directory_id: parent_directory_id
     }
 
     with {:ok, directory} <- create_directory(attrs) do
@@ -229,11 +314,13 @@ defmodule Educatium.Resources do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
     name = Path.basename(path)
+    file_stats = Elixir.File.lstat!(path)
 
     attrs = %{
       name: name,
       resource_id: resource.id,
       directory_id: parent_directory_id,
+      size: file_stats.size,
       file: %Plug.Upload{
         path: path,
         filename: name
