@@ -264,7 +264,9 @@ defmodule Educatium.Resources do
   defp create_files_entries(files, dir) do
     Enum.map(files, fn file ->
       # FIXME: Get the host from the config
-      url = "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
+      url =
+        "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
+
       file_path = "#{dir}/#{file.name}"
 
       Zstream.entry(file_path, HTTPStream.get(url))
@@ -278,7 +280,7 @@ defmodule Educatium.Resources do
 
       file_entries = create_files_entries(subdir.files, new_dir)
       dir_entries = create_directory_entries(subdir.subdirectories, new_dir)
-      
+
       file_entries ++ dir_entries
     end)
   end

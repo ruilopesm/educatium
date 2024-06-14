@@ -48,8 +48,8 @@ defmodule EducatiumWeb.ResourceLive.Show do
   defp build_directory_path(directory_id) do
     directory = Resources.get_directory!(directory_id) |> IO.inspect()
 
-    if directory.directory_id == nil do 
-      "/#{directory.name}" 
+    if directory.directory_id == nil do
+      "/#{directory.name}"
     else
       build_directory_path(directory.directory_id) <> "/#{directory.name}"
     end
@@ -61,7 +61,6 @@ defmodule EducatiumWeb.ResourceLive.Show do
 
     if n_items == 1, do: "#{n_items} item", else: "#{n_items} items"
   end
-
 
   defp page_title(:show), do: "Show Resource"
   defp page_title(:edit), do: "Edit Resource"
