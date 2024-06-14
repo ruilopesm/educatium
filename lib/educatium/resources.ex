@@ -263,6 +263,7 @@ defmodule Educatium.Resources do
 
   defp create_files_entries(files, dir) do
     Enum.map(files, fn file ->
+      # FIXME: Get the host from the config
       url = "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
       file_path = "#{dir}/#{file.name}"
 

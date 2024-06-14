@@ -68,6 +68,11 @@ defmodule Educatium.MixProject do
       {:waffle_ecto, "~> 0.0"},
       {:waffle, "~> 1.1"},
 
+      # files
+      {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},
+      {:zstream, "~> 0.6"},
+      {:size, "~> 0.1.0"},
+
       # telemetry
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
@@ -87,8 +92,6 @@ defmodule Educatium.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:dotenvy, "~> 0.8.0"},
       {:temp, "~> 0.4"},
-      {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},
-      {:zstream, "~> 0.6"},
       {:doctest_formatter, "~> 0.3.0", runtime: false}
     ]
   end

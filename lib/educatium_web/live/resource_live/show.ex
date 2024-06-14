@@ -40,22 +40,6 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply, assign(socket, directory: directory)}
   end
 
-  defp humanize_file_size(size) do
-    mb =
-      (size / 1024 / 1024)
-      |> Float.round(2)
-
-    if mb < 0.1 do
-      bytes =
-        (size / 1024)
-        |> Float.round(2)
-
-      "#{bytes} Kb"
-    else
-      "#{mb} MB"
-    end
-  end
-
   defp get_file_path(file_id) do
     file = Resources.get_file!(file_id)
     File.url({file.file, file}, :original)
