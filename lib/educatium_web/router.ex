@@ -46,7 +46,9 @@ defmodule EducatiumWeb.Router do
     get "/", HelloController, :hello
 
     pipe_through EducatiumWeb.Plugs.EnsureAPIKey
+
     post "/test", HelloController, :test
+    post "/user", HelloController, :user
   end
 
   ## Authentication routes

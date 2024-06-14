@@ -13,4 +13,11 @@ defmodule EducatiumWeb.HelloController do
     conn
     |> json(%{validate: "API key is valid!"})
   end
+
+  def user(conn, _params) do
+    user = conn.assigns.current_user
+
+    conn
+    |> json(%{first_name: user.first_name, last_name: user.last_name})
+  end
 end

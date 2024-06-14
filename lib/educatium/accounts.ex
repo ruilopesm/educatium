@@ -265,10 +265,8 @@ defmodule Educatium.Accounts do
   """
   def generate_api_key(user) do
     api_key = :crypto.strong_rand_bytes(32) |> Base.encode64()
-
     User.changeset(user, %{api_key: api_key})
     |> Repo.update()
-
     api_key
   end
 
@@ -287,6 +285,24 @@ defmodule Educatium.Accounts do
     User
     |> where([u], u.api_key == ^api_key)
     |> Repo.exists?()
+  end
+
+  @doc """
+  Gets the user by api key.
+
+  ## Examples
+
+      iex> get_user_by_api_key("123")
+      %User{}
+
+      iex> get_user_by_api_key("456")
+      nil
+
+  """
+  def get_user_by_api_key(api_key) do
+    User
+    |> where([u], u.api_key == ^api_key)
+    |> Repo.one()
   end
 
   @doc """
