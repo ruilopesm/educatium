@@ -45,9 +45,14 @@ defmodule EducatiumWeb.ResourceLive.Show do
     File.url({file.file, file}, :original)
   end
 
-  defp get_dir_path(dir_id) do
-    directory = Resources.get_directory!(dir_id)
-    ~p"/directories/#{directory.id}"
+  defp build_directory_path(directory_id) do
+    directory = Resources.get_directory!(directory_id) |> IO.inspect()
+
+    if directory.directory_id == nil do 
+      "/#{directory.name}" 
+    else
+      build_directory_path(directory.directory_id) <> "/#{directory.name}"
+    end
   end
 
   defp directory_n_items(directory_id) do
