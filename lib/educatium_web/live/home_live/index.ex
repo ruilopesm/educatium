@@ -76,16 +76,17 @@ defmodule EducatiumWeb.HomeLive.Index do
   end
 
   @impl true
+  def handle_info({:post_created, post}, socket) do
+    {:noreply,
+     socket
+     |> stream_insert(:posts, post)
+     |> update(:new_posts_count, &(&1 + 1))}
+  end
+
+  @impl true
   def handle_info({Components.Post, {level, msg}}, socket) do
     {:noreply,
      socket
      |> put_flash(level, msg)}
-  end
-
-  @impl true
-  def handle_info({Components.NewPost, {:saved, post}}, socket) do
-    {:noreply,
-     socket
-     |> stream_insert(:posts, post)}
   end
 end

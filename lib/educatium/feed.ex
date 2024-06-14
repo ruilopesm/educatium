@@ -77,24 +77,6 @@ defmodule Educatium.Feed do
   end
 
   @doc """
-  Creates a post.
-
-  ## Examples
-
-      iex> create_post(%{field: value})
-      {:ok, %Post{}}
-
-      iex> create_post(%{field: bad_value})
-      {:error, ...}
-
-  """
-  def create_post(attrs) do
-    %Post{}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
   Updates a post.
 
   ## Examples

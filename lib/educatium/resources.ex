@@ -94,6 +94,14 @@ defmodule Educatium.Resources do
       end
     end)
     |> Repo.transaction()
+    |> case do
+      {:ok, %{resource: resource, post: post}} ->
+        broadcast({1, post}, :post_created)
+        {:ok, resource}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   defp create_resource_without_post(attrs, path) do
@@ -317,5 +325,12 @@ defmodule Educatium.Resources do
     }
 
     create_file(attrs)
+  end
+
+  @topic "posts"
+
+  defp broadcast({1, post}, event) do
+    Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
+    {:ok, post}
   end
 end
