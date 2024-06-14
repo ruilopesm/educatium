@@ -251,8 +251,9 @@ defmodule Educatium.Resources do
       [{:ok, %Zstream.Entry{}}, ...]
   """
   def build_directory_zip(%Directory{} = directory) do
-    file_entries = create_files_entries(directory.files, directory.name)
-    directory_entries = create_directory_entries(directory.subdirectories, directory.name)
+    dir_path = "/#{directory.name}"
+    file_entries = create_file_entries(directory.files, dir_path)
+    directory_entries = create_directory_entries(directory.subdirectories, dir_path)
 
     entries = file_entries ++ directory_entries
 
@@ -261,13 +262,13 @@ defmodule Educatium.Resources do
     |> Enum.to_list()
   end
 
-  defp create_files_entries(files, dir) do
+  defp create_file_entries(files, dir) do
     Enum.map(files, fn file ->
       # FIXME: Get the host from the config
       url =
         "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
 
-      file_path = "#{dir}/#{file.name}"
+      file_path = dir <> "/#{file.name}"
 
       Zstream.entry(file_path, HTTPStream.get(url))
     end)
@@ -275,14 +276,15 @@ defmodule Educatium.Resources do
 
   defp create_directory_entries(subdirectories, parent_dir) do
     Enum.map(subdirectories, fn dir ->
-      subdir = get_directory!(dir.id, [:files, :subdirectories])
-      new_dir = Elixir.File.mkdir("#{parent_dir}/#{dir.name}")
+      dir = get_directory!(dir.id, [:files, :subdirectories])
+      new_dir = "#{parent_dir}/#{dir.name}"
 
-      file_entries = create_files_entries(subdir.files, new_dir)
-      dir_entries = create_directory_entries(subdir.subdirectories, new_dir)
+      file_entries = create_file_entries(dir.files, new_dir)
+      dir_entries = create_directory_entries(dir.subdirectories, new_dir)
 
       file_entries ++ dir_entries
     end)
+    |> Enum.concat()
   end
 
   defp process_resource_item(resource, parent_directory, :dir, path) do

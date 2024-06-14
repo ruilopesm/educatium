@@ -46,7 +46,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
   end
 
   defp build_directory_path(directory_id) do
-    directory = Resources.get_directory!(directory_id) |> IO.inspect()
+    directory = Resources.get_directory!(directory_id)
 
     if directory.directory_id == nil do
       "/#{directory.name}"
