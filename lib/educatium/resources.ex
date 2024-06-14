@@ -7,8 +7,6 @@ defmodule Educatium.Resources do
   alias Educatium.Feed.Post
   alias Educatium.Resources.{Directory, File, Resource}
 
-  @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]
-
   @doc """
   Returns the list of resources.
 
