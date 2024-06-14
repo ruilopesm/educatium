@@ -16,15 +16,14 @@ import Config
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
+import Dotenvy
+source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
+
 if System.get_env("PHX_SERVER") do
   config :educatium, EducatiumWeb.Endpoint, server: true
 end
 
 if config_env() in [:dev, :test] do
-  import Dotenvy
-
-  source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
-
   config :educatium, Educatium.Repo,
     username: env!("DB_USERNAME", :string, "postgres"),
     password: env!("DB_PASSWORD", :string, "postgres"),
