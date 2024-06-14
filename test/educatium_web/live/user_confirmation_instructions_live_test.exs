@@ -1,8 +1,8 @@
 defmodule EducatiumWeb.UserConfirmationInstructionsLiveTest do
   use EducatiumWeb.ConnCase, async: true
 
-  import Phoenix.LiveViewTest
   import Educatium.AccountsFixtures
+  import Phoenix.LiveViewTest
 
   alias Educatium.Accounts
   alias Educatium.Repo

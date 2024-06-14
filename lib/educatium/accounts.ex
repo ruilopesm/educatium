@@ -4,7 +4,7 @@ defmodule Educatium.Accounts do
   """
   use Educatium, :context
 
-  alias Educatium.Accounts.{User, UserToken, UserNotifier}
+  alias Educatium.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 

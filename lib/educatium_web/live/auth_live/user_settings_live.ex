@@ -82,7 +82,7 @@ defmodule EducatiumWeb.UserSettingsLive do
                     />
                   </figure>
                 </article>
-                <progress value={entry.progress} max="100" class="w-full mt-2">
+                <progress value={entry.progress} max="100" class="mt-2 w-full">
                   <%= entry.progress %>%
                 </progress>
               </section>
@@ -168,7 +168,7 @@ defmodule EducatiumWeb.UserSettingsLive do
               <.button phx-disable-with={gettext("Changing...")}>
                 <%= gettext("Change Password") %>
               </.button>
-              <.link href={~p"/users/reset_password"} class="text-sm font-semibold ml-2">
+              <.link href={~p"/users/reset_password"} class="ml-2 text-sm font-semibold">
                 <%= gettext("Forgot your password?") %>
               </.link>
             </div>

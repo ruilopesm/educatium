@@ -8,7 +8,7 @@ defmodule EducatiumWeb.UserLoginLive do
         <%= gettext("Log in to account") %>
         <:subtitle>
           <%= gettext("Don't have an account?") %>
-          <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/users/register"} class="text-brand font-semibold hover:underline">
             <%= gettext("Sign up") %>
           </.link>
           <%= gettext("for an account now.") %>
@@ -37,7 +37,7 @@ defmodule EducatiumWeb.UserLoginLive do
         </:actions>
       </.simple_form>
 
-      <div class="flex justify-center mt-4">
+      <div class="mt-4 flex justify-center">
         <.oauth type={:google} login_uri={~p"/auth/google"} />
       </div>
     </div>

@@ -4,9 +4,9 @@ defmodule Educatium.ResourcesTest do
   alias Educatium.Resources
 
   describe "resources" do
-    alias Educatium.Resources.Resource
-
     import Educatium.ResourcesFixtures
+
+    alias Educatium.Resources.Resource
 
     @invalid_attrs %{
       type: nil,

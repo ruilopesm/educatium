@@ -16,6 +16,7 @@ defmodule EducatiumWeb.CoreComponents do
   """
   use Phoenix.Component
 
+  alias Phoenix.HTML
   alias Phoenix.LiveView.JS
 
   import EducatiumWeb.Gettext
@@ -121,7 +122,7 @@ defmodule EducatiumWeb.CoreComponents do
       @class
     ]}>
       <%= if @src do %>
-        <img src={@src} class="rounded-full size-full" />
+        <img src={@src} class="size-full rounded-full" />
       <% else %>
         <%= @fallback %>
       <% end %>
@@ -319,7 +320,7 @@ defmodule EducatiumWeb.CoreComponents do
 
   slot :inner_block
 
-  def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+  def input(%{field: %HTML.FormField{} = field} = assigns) do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
@@ -331,7 +332,7 @@ defmodule EducatiumWeb.CoreComponents do
   def input(%{type: "checkbox"} = assigns) do
     assigns =
       assign_new(assigns, :checked, fn ->
-        Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
+        HTML.Form.normalize_value("checkbox", assigns[:value])
       end)
 
     ~H"""
@@ -398,7 +399,7 @@ defmodule EducatiumWeb.CoreComponents do
     <div phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+        <div class="start-0 ps-3 pointer-events-none absolute inset-y-0 flex items-center">
           <.icon name="hero-magnifying-glass-solid" class="h-4 w-4 text-zinc-500" />
         </div>
         <input
@@ -533,9 +534,9 @@ defmodule EducatiumWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+        <thead class="text-left text-sm leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only"><%= gettext("Actions") %></span>
             </th>
@@ -650,9 +651,9 @@ defmodule EducatiumWeb.CoreComponents do
     ~H"""
     <.link
       href={@login_uri}
-      class="px-4 py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
+      class="flex gap-2 rounded-lg border border-slate-200 px-4 py-2 text-slate-700 transition duration-150 hover:border-slate-400 hover:text-slate-900 hover:shadow dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-slate-300"
     >
-      <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" />
+      <img class="h-6 w-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" />
       <span class="text-black">Login with Google</span>
     </.link>
     """
