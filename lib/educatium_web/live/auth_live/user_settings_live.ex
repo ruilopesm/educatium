@@ -42,6 +42,15 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Password") %>
             </button>
           </li>
+          <li class="me-2">
+            <button
+              @click="option = 'dev'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'dev' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Dev") %>
+            </button>
+          </li>
         </ul>
       </div>
 
@@ -172,6 +181,9 @@ defmodule EducatiumWeb.UserSettingsLive do
             </div>
           </:actions>
         </.simple_form>
+      </div>
+      <div x-show="option === 'dev'">
+        <.input type="switch" name="API Key"/>
       </div>
     </div>
     """
@@ -310,6 +322,12 @@ defmodule EducatiumWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
     end
+  end
+
+  @impl true
+  def handle_event("toggle-switch", params, socket) do
+    user = socket.assigns.current_user
+    {:noreply, socket}
   end
 
   defp consume_image_data(socket, activity) do
