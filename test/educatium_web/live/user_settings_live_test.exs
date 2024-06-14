@@ -1,9 +1,10 @@
 defmodule EducatiumWeb.UserSettingsLiveTest do
   use EducatiumWeb.ConnCase, async: true
 
-  alias Educatium.Accounts
-  import Phoenix.LiveViewTest
   import Educatium.AccountsFixtures
+  import Phoenix.LiveViewTest
+
+  alias Educatium.Accounts
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do

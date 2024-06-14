@@ -2,9 +2,9 @@ defmodule Educatium.Repo.Seeds.Accounts do
   @moduledoc """
   Seeds the database with everything related to accounts.
   """
-  alias Educatium.Repo
   alias Educatium.Accounts
   alias Educatium.Accounts.User
+  alias Educatium.Repo
 
   def run do
     case Repo.all(User) do

@@ -21,7 +21,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
     ~H"""
     <.link
       href={~p"/resources/#{@post.resource.id}"}
-      class="block w-full px-6 py-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50"
+      class="block w-full rounded-lg border border-gray-200 bg-white px-6 py-4 shadow hover:bg-gray-50"
     >
       <div class="flex gap-3">
         <%= if @post.resource.user.avatar do %>
@@ -39,24 +39,24 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
         <div class="grid gap-3">
           <div class="grid gap-0.5">
-            <h2 class="text-gray-900 text-sm font-medium leading-snug">
+            <h2 class="text-sm font-medium leading-snug text-gray-900">
               <%= display_name(@post.resource.user) %>
               <span class="text-gray-500"><%= gettext("adicionou um novo recurso") %></span>
             </h2>
-            <h3 class="text-gray-500 text-xs font-normal leading-4">
+            <h3 class="text-xs font-normal leading-4 text-gray-500">
               <%= display_role(@current_user.role) %> | <%= relative_datetime(
                 @current_user.inserted_at
               ) %>
             </h3>
           </div>
-          <div class="gap-1 flex">
-            <span class="px-2.5 py-1 bg-emerald-50 rounded-full text-center text-emerald-600 text-xs font-medium leading-4">
+          <div class="flex gap-1">
+            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-emerald-600">
               Teste
             </span>
-            <span class="px-2.5 py-1 bg-indigo-50 rounded-full text-center text-indigo-600 text-xs font-medium leading-4">
+            <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-indigo-600">
               EngWeb
             </span>
-            <span class="px-2.5 py-1 bg-gray-100 rounded-full text-center text-gray-700 text-xs font-medium leading-4">
+            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
               +2
             </span>
           </div>
@@ -64,20 +64,20 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       </div>
 
       <div class="mt-3.5 mb-7">
-        <h3 class="text-gray-900 text-lg font-medium leading-snug"><%= @post.resource.title %></h3>
-        <p class="text-gray-500 text-xs font-normal leading-4"><%= @post.resource.description %></p>
+        <h3 class="text-lg font-medium leading-snug text-gray-900"><%= @post.resource.title %></h3>
+        <p class="text-xs font-normal leading-4 text-gray-500"><%= @post.resource.description %></p>
       </div>
     </.link>
-    <div class="group hover:cursor-help flex gap-1 absolute right-[22px] top-3 text-gray-500 items-end">
+    <div class="group right-[22px] absolute top-3 flex items-end gap-1 text-gray-500 hover:cursor-help">
       <p class="text-xs font-normal leading-4"><%= @post.view_count %></p>
       <div class="relative">
         <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
-        <div class="absolute bottom-full hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+        <div class="absolute bottom-full hidden whitespace-nowrap rounded bg-gray-700 px-2 py-1 text-xs text-white group-hover:block">
           <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
         </div>
       </div>
     </div>
-    <div class="flex gap-3 mt-6 absolute left-[22px] bottom-3">
+    <div class="left-[22px] absolute bottom-3 mt-6 flex gap-3">
       <button
         phx-click="upvote"
         phx-target={@myself}
@@ -104,7 +104,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
       <.link
         href={~p"/resources/#{@post.resource.id}"}
-        class="flex gap-1 items-center text-gray-600 text-xs font-medium leading-4 hover:text-gray-800"
+        class="flex items-center gap-1 text-xs font-medium leading-4 text-gray-600 hover:text-gray-800"
       >
         <.icon name="hero-chat-bubble-oval-left" class="size-5" />
         <span>7</span>

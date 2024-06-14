@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Post, Upvote, Downvote}
+  alias Educatium.Feed.{Downvote, Post, Upvote}
   alias Educatium.Resources.Resource
 
   @doc """

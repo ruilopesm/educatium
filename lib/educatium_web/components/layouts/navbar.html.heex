@@ -17,7 +17,7 @@
           >
             <span class="absolute -inset-1.5"></span>
             <span class="sr-only">View notifications</span>
-            <.icon name="hero-bell" /> 
+            <.icon name="hero-bell" />
           </button>
           <!-- Profile dropdown -->
           <div x-data="{ open: false }" class="relative ml-3">
@@ -36,7 +36,12 @@
                 <span class="sr-only">Open user menu</span>
                 <%= if @current_user.avatar do %>
                   <.avatar
-                    src={Educatium.Uploaders.Avatar.url({@current_user.avatar, @current_user}, :original)}
+                    src={
+                      Educatium.Uploaders.Avatar.url(
+                        {@current_user.avatar, @current_user},
+                        :original
+                      )
+                    }
                     fallback={extract_initials(@current_user.first_name, @current_user.last_name)}
                     size={:sm}
                   />

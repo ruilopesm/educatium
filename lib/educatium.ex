@@ -25,8 +25,8 @@ defmodule Educatium do
     quote do
       import Ecto.Query, warn: false
 
-      alias Educatium.Repo
       alias Ecto.Multi
+      alias Educatium.Repo
 
       def apply_filters(query, opts) do
         Enum.reduce(opts, query, fn
