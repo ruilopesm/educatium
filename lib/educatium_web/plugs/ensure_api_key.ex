@@ -1,5 +1,9 @@
 defmodule EducatiumWeb.Plugs.EnsureAPIKey do
-  @moduledoc false
+  @moduledoc """
+  A plug that ensures the presence of a valid API key in the request.
+  """
+  @behaviour Plug
+
   import Plug.Conn
 
   alias Educatium.Accounts
@@ -8,29 +12,24 @@ defmodule EducatiumWeb.Plugs.EnsureAPIKey do
 
   def init(opts), do: opts
 
-  def call(%{body_params: params} = conn, _opts) do
-    if Map.has_key?(params, "api_key") do
-      validate_api_key(conn, params["api_key"])
-    else
+  def call(%{body_params: params} = conn, _opts) when is_map_key(params, "api_key") do
+    if is_binary(params["api_key"]) and Accounts.is_valid_api_key?(params["api_key"]) do
       conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(:unauthorized, build_body(@message))
-      |> halt()
+    else
+      unauthorized(conn)
     end
   end
 
-  defp validate_api_key(conn, api_key) do
-    if Accounts.is_valid_api_key?(api_key) do
-      conn
-    else
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(:unauthorized, build_body(@message))
-      |> halt()
-    end
+  def call(conn, _opts), do: unauthorized(conn)
+
+  defp unauthorized(conn) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(:unauthorized, build_body!(@message))
+    |> halt()
   end
 
-  defp build_body(message) do
+  defp build_body!(message) do
     Jason.encode!(%{
       errors: %{
         detail: message

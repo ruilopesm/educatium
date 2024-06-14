@@ -4,6 +4,7 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   If the user is not confirmed, it redirects them to the confirmation setup page.
   If the user is not active, it redirects them to the setup page.
   """
+  @behaviour Plug
 
   import EducatiumWeb.Gettext
 
