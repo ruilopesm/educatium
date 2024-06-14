@@ -1,10 +1,15 @@
 defmodule Educatium.MixProject do
   use Mix.Project
 
+  @app :educatium
+  @name "Educatium"
+  @version "0.1.0"
+
   def project do
     [
-      app: :educatium,
-      version: "0.1.0",
+      app: @app,
+      name: @name,
+      version: @version,
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,

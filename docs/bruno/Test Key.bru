@@ -1,0 +1,17 @@
+meta {
+  name: Test Key
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/test
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "api_key": 123
+  }
+}

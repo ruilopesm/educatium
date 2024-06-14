@@ -16,6 +16,10 @@ defmodule EducatiumWeb.Router do
     plug :fetch_current_user
   end
 
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -33,6 +37,16 @@ defmodule EducatiumWeb.Router do
       live_dashboard "/dashboard", metrics: EducatiumWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  ## API routes
+
+  scope "/api", EducatiumWeb do
+    pipe_through :api
+    get "/", HelloController, :hello
+
+    pipe_through EducatiumWeb.Plugs.EnsureAPIKey
+    post "/test", HelloController, :test
   end
 
   ## Authentication routes

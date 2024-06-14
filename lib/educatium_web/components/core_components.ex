@@ -308,7 +308,7 @@ defmodule EducatiumWeb.CoreComponents do
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
 
   attr :errors, :list, default: []
-  attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
+  attr :checked, :boolean, doc: "the checked flag for checkbox or switch inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
@@ -423,8 +423,14 @@ defmodule EducatiumWeb.CoreComponents do
   def input(%{type: "switch"} = assigns) do
     ~H"""
     <label class="inline-flex items-center mb-5 cursor-pointer">
-      <input type="checkbox" value="" class="sr-only peer" phx-click={JS.push("toggle-switch")}>
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all peer-checked:bg-blue-600"></div>
+      <input
+        type="checkbox"
+        checked={@checked}
+        class="sr-only peer"
+        phx-click={JS.push("toggle-switch")}
+      />
+      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all peer-checked:bg-brand">
+      </div>
       <span class="ms-3 text-sm font-medium text-gray-900"><%= @name %></span>
     </label>
     """

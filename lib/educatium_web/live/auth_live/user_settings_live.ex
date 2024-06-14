@@ -12,7 +12,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       <:subtitle><%= gettext("Manage your account email address and password settings") %></:subtitle>
     </.header>
 
-    <div x-data="{ option: 'details' }">
+    <div x-data="{ option: 'dev' }">
       <div class="mt-7 mb-10 flex justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500">
         <ul class="-mb-px flex flex-wrap">
           <li class="me-2">
@@ -91,7 +91,9 @@ defmodule EducatiumWeb.UserSettingsLive do
                     />
                   </figure>
                 </article>
-                <progress value={entry.progress} max="100" class="w-full mt-2"><%= entry.progress %>%</progress>
+                <progress value={entry.progress} max="100" class="w-full mt-2">
+                  <%= entry.progress %>%
+                </progress>
               </section>
             </a>
           </div>
@@ -183,7 +185,16 @@ defmodule EducatiumWeb.UserSettingsLive do
         </.simple_form>
       </div>
       <div x-show="option === 'dev'">
-        <.input type="switch" name="API Key"/>
+        <div class="flex flex-col space-y-2">
+          <.input type="switch" name={gettext("Toggle API Key")} checked={!is_nil(@api_key)} />
+
+          <%= if !is_nil(@api_key) do %>
+            <.input name="key" label={gettext("Key")} type="text" value={@api_key} readonly />
+            <.button phx-click="regenerate-key">
+              <%= gettext("Regenerate Key") %>
+            </.button>
+          <% end %>
+        </div>
       </div>
     </div>
     """
@@ -219,6 +230,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
+      |> assign(:api_key, user.api_key)
       |> allow_upload(:avatar, accept: Avatar.extensions_whitelist(), max_entries: 1)
 
     {:ok, socket}
@@ -326,8 +338,19 @@ defmodule EducatiumWeb.UserSettingsLive do
 
   @impl true
   def handle_event("toggle-switch", params, socket) do
-    user = socket.assigns.current_user
-    {:noreply, socket}
+    if Map.has_key?(params, "value") do
+      api_key = Accounts.generate_api_key(socket.assigns.current_user)
+      {:noreply, assign(socket, api_key: api_key)}
+    else
+      Accounts.delete_api_key(socket.assigns.current_user)
+      {:noreply, assign(socket, api_key: nil)}
+    end
+  end
+
+  @impl true
+  def handle_event("regenerate-key", _params, socket) do
+    api_key = Accounts.generate_api_key(socket.assigns.current_user)
+    {:noreply, assign(socket, api_key: api_key)}
   end
 
   defp consume_image_data(socket, activity) do

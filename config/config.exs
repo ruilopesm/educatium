@@ -17,6 +17,7 @@ config :educatium, EducatiumWeb.Endpoint,
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [html: EducatiumWeb.ErrorHTML, json: EducatiumWeb.ErrorJSON],
+    accepts: ~w(html json),
     layout: false
   ],
   pubsub_server: Educatium.PubSub,

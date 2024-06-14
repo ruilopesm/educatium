@@ -255,6 +255,41 @@ defmodule Educatium.Accounts do
   end
 
   @doc """
+  Generates an api key for the user.
+
+  ## Examples
+
+      iex> generate_api_key(user)
+      "..."
+
+  """
+  def generate_api_key(user) do
+    api_key = :crypto.strong_rand_bytes(32) |> Base.encode64()
+
+    User.changeset(user, %{api_key: api_key})
+    |> Repo.update()
+
+    api_key
+  end
+
+  @doc """
+  Deletes the api key for the user.
+  """
+  def delete_api_key(user) do
+    User.changeset(user, %{api_key: nil})
+    |> Repo.update()
+  end
+
+  @doc """
+  Validates if a given api key is valid.
+  """
+  def is_valid_api_key?(api_key) do
+    User
+    |> where([u], u.api_key == ^api_key)
+    |> Repo.exists?()
+  end
+
+  @doc """
   Updates the user.
 
   ## Examples

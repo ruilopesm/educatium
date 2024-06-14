@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "educatium",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

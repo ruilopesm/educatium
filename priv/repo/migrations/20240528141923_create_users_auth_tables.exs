@@ -9,6 +9,8 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
 
+      add :api_key, :citext
+
       add :avatar, :string
       add :handle, :citext
       add :first_name, :string
@@ -26,6 +28,7 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
 
     create unique_index(:users, [:email])
     create index(:users, [:handle])
+    create unique_index(:users, [:api_key])
 
     create table(:users_tokens, primary_key: false) do
       add :id, :binary_id, primary_key: true

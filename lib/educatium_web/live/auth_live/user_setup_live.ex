@@ -23,12 +23,7 @@ defmodule EducatiumWeb.UserSetupLive do
         label={gettext("Select the type of account you want to create")}
       />
 
-      <.input
-        field={@form[:handle]}
-        label={gettext("Handle")}
-        value={@recommended_handle}
-        required
-      />
+      <.input field={@form[:handle]} label={gettext("Handle")} value={@recommended_handle} required />
 
       <.input field={@form[:first_name]} label={gettext("First name")} required />
       <.input field={@form[:last_name]} label={gettext("Last name")} required />
