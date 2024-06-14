@@ -34,7 +34,9 @@ if config_env() in [:dev, :test] do
     stacktrace: true,
     show_sensitive_data_on_connection_error: true,
     pool_size: 10
+end
 
+if config_env() in [:dev, :stg, :prod] do
   config :ueberauth, Ueberauth.Strategy.Google.OAuth,
     client_id: env!("GOOGLE_CLIENT_ID"),
     client_secret: env!("GOOGLE_CLIENT_SECRET")
