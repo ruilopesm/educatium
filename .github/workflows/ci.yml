@@ -1,4 +1,4 @@
-name: Build, Format and Lint
+name: Build App
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  all:
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,8 +25,3 @@ jobs:
           elixir-version: ${{ matrix.elixir }}
           build-flags: --all-warnings --warnings-as-errors
 
-      - name: 🎨 Check code formating
-        run: mix format --check-formatted
-
-      - name: 🔍 Lint the code
-        run: mix credo --all --strict

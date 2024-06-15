@@ -31,7 +31,8 @@ defmodule EducatiumWeb.UserLoginLiveTest do
 
       {:ok, lv, _html} = live(conn, ~p"/users/log_in")
 
-      form = form(lv, "#login_form", user: %{email: user.email, password: password, remember_me: true})
+      form =
+        form(lv, "#login_form", user: %{email: user.email, password: password, remember_me: true})
 
       conn = submit_form(form, conn)
 
@@ -43,7 +44,10 @@ defmodule EducatiumWeb.UserLoginLiveTest do
     } do
       {:ok, lv, _html} = live(conn, ~p"/users/log_in")
 
-      form = form(lv, "#login_form", user: %{email: "test@email.com", password: "123456", remember_me: true})
+      form =
+        form(lv, "#login_form",
+          user: %{email: "test@email.com", password: "123456", remember_me: true}
+        )
 
       conn = submit_form(form, conn)
 
