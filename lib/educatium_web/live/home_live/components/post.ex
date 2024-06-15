@@ -46,7 +46,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
           <div class="grid gap-0.5">
             <h2 class="text-sm font-medium leading-snug text-gray-900">
               <%= display_name(@post.resource.user) %>
-              <span class="text-gray-500"><%= gettext("adicionou um novo recurso") %></span>
+              <span class="text-gray-500"><%= gettext("added a new resource") %></span>
             </h2>
             <h3 class="text-xs font-normal leading-4 text-gray-500">
               <%= display_atom(@current_user.role) %> | <%= relative_datetime(
