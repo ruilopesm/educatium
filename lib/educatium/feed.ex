@@ -21,6 +21,7 @@ defmodule Educatium.Feed do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
     |> where([_, r], r.visibility == :public)
+    |> order_by(desc: :inserted_at)
     |> apply_filters(opts)
     |> Repo.all()
   end
