@@ -5,7 +5,7 @@ defmodule Educatium.Resources do
   use Educatium, :context
 
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource, Tag, ResourceTag}
+  alias Educatium.Resources.{Directory, File, Resource, ResourceTag, Tag}
 
   @doc """
   Returns the list of resources.
@@ -241,7 +241,7 @@ defmodule Educatium.Resources do
       [%Tag{}, ...]
 
   """
-  def list_tags() do
+  def list_tags do
     Tag
     |> Repo.all()
   end

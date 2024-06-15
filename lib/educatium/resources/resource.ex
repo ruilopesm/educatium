@@ -4,7 +4,7 @@ defmodule Educatium.Resources.Resource do
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
   alias Educatium.Resources
-  alias Educatium.Resources.{Directory, Tag, ResourceTag}
+  alias Educatium.Resources.{Directory, ResourceTag, Tag}
 
   @types ~w(book article presentation project report exam assignment solution)a
   @visibilities ~w(protected private public)a
