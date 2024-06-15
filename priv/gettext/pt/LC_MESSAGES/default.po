@@ -529,7 +529,7 @@ msgstr "A comprimir ficheiros..."
 #: lib/educatium_web/live/home_live/index.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Create post"
-msgstr "Criar post"
+msgstr "Nova publicação"
 
 #: lib/educatium_web/live/home_live/form_component.ex:85
 #, elixir-autogen, elixir-format, fuzzy
