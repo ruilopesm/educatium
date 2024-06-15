@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Downvote, Post, Upvote}
+  alias Educatium.Feed.{Comment, Downvote, Post, Upvote}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -248,6 +248,24 @@ defmodule Educatium.Feed do
     updated_post = get_post!(post.id, Post.preloads())
     broadcast({1, updated_post}, :post_updated)
     updated_post
+  end
+
+  @doc """
+  Creates a comment for a post.
+
+  ## Examples
+
+      iex> create_comment(attrs)
+      {:ok, %Comment{}}
+
+      iex> create_comment(attrs)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(attrs) do
+    %Comment{}
+    |> Comment.changeset(attrs)
+    |> Repo.insert()
   end
 
   defp convert_downvote_to_upvote(post, user) do

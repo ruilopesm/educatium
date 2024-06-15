@@ -76,6 +76,7 @@ defmodule EducatiumWeb.Router do
       scope "/posts" do
         live "/", HomeLive.Index, :index
         live "/new", HomeLive.Index, :new
+        live "/:id/comments", HomeLive.Index, :comments
       end
 
       live "/resources/:id", ResourceLive.Show, :show
