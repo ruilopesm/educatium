@@ -392,7 +392,7 @@ defmodule EducatiumWeb.CoreComponents do
         >
           <span class="font-sm block truncate pl-1 text-sm">
             <%= if @selected != 0 do %>
-              <%= gettext("%{count} selected", count: @selected) %>
+              <%= ngettext("%{count} selected", "%{count} selected", @selected) %>
             <% else %>
               <%= gettext("None selected") %>
             <% end %>
