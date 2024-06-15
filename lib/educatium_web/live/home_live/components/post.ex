@@ -168,38 +168,51 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
   def handle_event("bookmark", _, socket) do
     user = socket.assigns.current_user
     post = socket.assigns.post
+    resource = post.resource
 
     if current_user_bookmarked?(post, user) do
-      updated_post = Feed.delete_bookmark!(post, user)
-      {:noreply, assign(socket, post: updated_post)}
+      IO.puts("delete_bookmark")
+      delete_bookmark(socket, resource, user)
     else
-      updated_post = Feed.bookmark_post!(post, user)
-      {:noreply, assign(socket, post: updated_post)}
+      IO.puts("bookmark_post")
+      bookmark_post(socket, resource, user)
     end
+  end
+
+  defp delete_bookmark(socket, resource, user) do
+    Resources.delete_bookmark!(resource, user)
+    updated_post = Feed.get_post!(socket.assigns.post.id) |> Feed.preload_post()
+    {:noreply, assign(socket, post: updated_post)}
+  end
+
+  defp bookmark_post(socket, resource, user) do
+    Resources.bookmark_resource!(resource, user)
+    updated_post = Feed.get_post!(socket.assigns.post.id) |> Feed.preload_post()
+    {:noreply, assign(socket, post: updated_post)}
   end
 
   defp upvote_post(socket, post, user) do
     if current_user_upvoted?(post, user) do
-      updated_post = Feed.delete_upvote!(post, user)
+      updated_post = Feed.delete_upvote!(post, user) |> Feed.preload_post()
       {:noreply, assign(socket, post: updated_post)}
     else
-      updated_post = Feed.upvote_post!(post, user)
+      updated_post = Feed.upvote_post!(post, user) |> Feed.preload_post()
       {:noreply, assign(socket, post: updated_post)}
     end
   end
 
   defp downvote_post(socket, post, user) do
     if current_user_downvoted?(post, user) do
-      updated_post = Feed.delete_downvote!(post, user)
+      updated_post = Feed.delete_downvote!(post, user) |> Feed.preload_post()
       {:noreply, assign(socket, post: updated_post)}
     else
-      updated_post = Feed.downvote_post!(post, user)
+      updated_post = Feed.downvote_post!(post, user) |> Feed.preload_post()
       {:noreply, assign(socket, post: updated_post)}
     end
   end
 
   defp invert_vote(socket, post, user, type: type) when type in [:upvote, :downvote] do
-    updated_post = Feed.invert_vote!(post, user, type: type)
+    updated_post = Feed.invert_vote!(post, user, type: type) |> Feed.preload_post()
     {:noreply, assign(socket, post: updated_post)}
   end
 
@@ -214,7 +227,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
   end
 
   defp current_user_bookmarked?(post, user) do
-    post.bookmarks
+    post.resource.bookmarks
     |> Enum.any?(&(&1.user_id == user.id))
   end
 end

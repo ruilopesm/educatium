@@ -5,7 +5,7 @@ defmodule Educatium.Resources do
   use Educatium, :context
 
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource, ResourceTag, Tag}
+  alias Educatium.Resources.{Bookmark, Directory, File, Resource, ResourceTag, Tag}
 
   @doc """
   Returns the list of resources.
@@ -423,5 +423,66 @@ defmodule Educatium.Resources do
   defp broadcast({1, post}, event) do
     Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
     {:ok, post}
+  end
+
+  @doc """
+  Gets a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> get_bookmark(resource, user)
+      %Bookmark{}
+
+  """
+  def get_bookmark(resource, user) do
+    Bookmark
+    |> where([b], b.resource_id == ^resource.id and b.user_id == ^user.id)
+    |> Repo.one()
+  end
+
+  @doc """
+  Creates a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> bookmark_resource(resource, user)
+      %Resource{}
+    
+  """
+  def bookmark_resource!(resource, user) do
+    %Bookmark{}
+    |> Bookmark.changeset(%{resource_id: resource.id, user_id: user.id})
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Deletes a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> delete_bookmark(resource, user)
+      {:ok, %Resource{}}
+
+      iex> delete_bookmark(resource, user)
+      {:error, %Ecto.Changeset{}}
+  """
+  def delete_bookmark!(resource, user) do
+    get_bookmark(resource, user)
+    |> Repo.delete()
+  end
+
+  @doc """
+  Lists the bookmarks for the given user.
+
+  ## Examples
+
+      iex> list_user_bookmarks(user)
+      [%Bookmark{}, ...]
+
+  """
+  def list_user_bookmarks(user) do
+    Bookmark
+    |> where([b], b.user_id == ^user.id)
+    |> Repo.all()
   end
 end
