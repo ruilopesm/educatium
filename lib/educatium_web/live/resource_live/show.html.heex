@@ -2,7 +2,7 @@
   <%= @resource.title %>
   <:subtitle>This is a resource record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/resources/#{@resource}/show/edit"} phx-click={JS.push_focus()}>
+    <.link phx-click={JS.push_focus()}>
       <.button>Edit resource</.button>
     </.link>
     <.link href={~p"/directories/#{@resource.directory.id}"}>
