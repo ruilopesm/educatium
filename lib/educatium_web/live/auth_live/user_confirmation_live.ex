@@ -17,7 +17,7 @@ defmodule EducatiumWeb.UserConfirmationLive do
         </:actions>
       </.simple_form>
 
-      <p class="text-center mt-4">
+      <p class="mt-4 text-center">
         <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
         | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
       </p>

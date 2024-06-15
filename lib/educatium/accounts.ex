@@ -4,7 +4,7 @@ defmodule Educatium.Accounts do
   """
   use Educatium, :context
 
-  alias Educatium.Accounts.{User, UserToken, UserNotifier}
+  alias Educatium.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 
@@ -265,8 +265,10 @@ defmodule Educatium.Accounts do
   """
   def generate_api_key(user) do
     api_key = :crypto.strong_rand_bytes(32) |> Base.encode64()
+
     User.changeset(user, %{api_key: api_key})
     |> Repo.update()
+
     api_key
   end
 

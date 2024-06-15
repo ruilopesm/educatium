@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Post, Upvote, Downvote}
+  alias Educatium.Feed.{Comment, Downvote, Post, Upvote}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -26,17 +26,35 @@ defmodule Educatium.Feed do
   end
 
   @doc """
-  Returns the list of resources that match the given query.
+  Returns the list of posts that match the given query.
 
   ## Examples
 
       iex> search_posts("elixir")
       [%Post{}, ...]
+
   """
   def search_posts(query, opts \\ []) do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
     |> where([_, r], ilike(r.title, ^"%#{query}%"))
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of posts filtered by a given resource type.
+
+  ## Examples
+
+      iex> filter_posts(filter, opts)
+      [%Post{}, ...]
+
+  """
+  def filter_posts(filter, opts \\ []) do
+    Post
+    |> join(:left, [p], r in Resource, on: r.post_id == p.id)
+    |> where([_, r], r.type == ^filter)
     |> apply_filters(opts)
     |> Repo.all()
   end
@@ -74,24 +92,6 @@ defmodule Educatium.Feed do
     post
     |> Post.changeset(%{view_count: post.view_count + 1})
     |> Repo.update()
-  end
-
-  @doc """
-  Creates a post.
-
-  ## Examples
-
-      iex> create_post(%{field: value})
-      {:ok, %Post{}}
-
-      iex> create_post(%{field: bad_value})
-      {:error, ...}
-
-  """
-  def create_post(attrs) do
-    %Post{}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
   end
 
   @doc """
@@ -266,6 +266,24 @@ defmodule Educatium.Feed do
     updated_post = get_post!(post.id, Post.preloads())
     broadcast({1, updated_post}, :post_updated)
     updated_post
+  end
+
+  @doc """
+  Creates a comment for a post.
+
+  ## Examples
+
+      iex> create_comment(attrs)
+      {:ok, %Comment{}}
+
+      iex> create_comment(attrs)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(attrs) do
+    %Comment{}
+    |> Comment.changeset(attrs)
+    |> Repo.insert()
   end
 
   defp convert_downvote_to_upvote(post, user) do

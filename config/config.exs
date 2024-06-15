@@ -7,9 +7,17 @@
 # General application configuration
 import Config
 
-config :educatium,
-  ecto_repos: [Educatium.Repo],
-  generators: [timestamp_type: :utc_datetime, binary_id: true]
+# Configures the mailer
+#
+# By default it uses the "Local" adapter which stores the emails
+# locally. You can see the emails in your browser, at "/dev/mailbox".
+#
+# For production it's recommended to configure a different adapter
+# at the `config/runtime.exs`.
+config :educatium, Educatium.Mailer, adapter: Swoosh.Adapters.Local
+
+# Config file uploads directory to `priv/uploads/temp/`
+config :educatium, Educatium.Uploaders, uploads_dir: "priv/uploads/temp/"
 
 # Configures the endpoint
 config :educatium, EducatiumWeb.Endpoint,
@@ -23,24 +31,28 @@ config :educatium, EducatiumWeb.Endpoint,
   pubsub_server: Educatium.PubSub,
   live_view: [signing_salt: "IIxbPjLW"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-config :educatium, Educatium.Mailer, adapter: Swoosh.Adapters.Local
+config :educatium, EducatiumWeb.Gettext, default_locale: "pt", locales: ~w(pt en)
+
+config :educatium,
+  ecto_repos: [Educatium.Repo],
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
   educatium: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    args: ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
+
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Configure tailwind (the version is required)
 config :tailwind,
@@ -54,14 +66,6 @@ config :tailwind,
     cd: Path.expand("../assets", __DIR__)
   ]
 
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
-
-# Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
-
 # Configure Ueberauth OAuth
 config :ueberauth, Ueberauth,
   providers: [
@@ -69,16 +73,11 @@ config :ueberauth, Ueberauth,
   ]
 
 # Configure uploads
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
 config :waffle,
   storage: Waffle.Storage.Local,
   storage_dir_prefix: "priv",
   asset_host: {:system, "ASSET_HOST"}
 
-config :educatium, EducatiumWeb.Gettext, default_locale: "pt", locales: ~w(pt en)
-
-# Config file uploads directory to `priv/uploads/temp/`
-config :educatium, Educatium.Uploaders, uploads_dir: "priv/uploads/temp/"
-
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

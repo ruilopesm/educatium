@@ -1,8 +1,8 @@
 defmodule EducatiumWeb.ResourceLiveTest do
   use EducatiumWeb.ConnCase
 
-  import Phoenix.LiveViewTest
   import Educatium.ResourcesFixtures
+  import Phoenix.LiveViewTest
 
   @create_attrs %{
     type: :book,

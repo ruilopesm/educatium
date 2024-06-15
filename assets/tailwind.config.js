@@ -21,6 +21,7 @@ module.exports = {
   safelist: [
     {
       pattern: /text-(lg|xl|2xl|3xl)/,
+      pattern: /(text|bg)-(gray|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|600)/,
     }
   ],
   plugins: [

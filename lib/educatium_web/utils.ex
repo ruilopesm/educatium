@@ -130,4 +130,18 @@ defmodule EducatiumWeb.Utils do
   def full_name(%{first_name: first_name, last_name: last_name}) do
     "#{first_name} #{last_name}"
   end
+
+  @doc """
+  Capitalize an atom.
+
+  ## Examples
+
+      iex> capitalize_atom(:student)
+      "Student"
+  """
+  def capitalize_atom(atom) do
+    atom
+    |> Atom.to_string()
+    |> String.capitalize()
+  end
 end

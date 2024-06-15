@@ -1,4 +1,4 @@
-defmodule Educatium.Repo.Migrations.CreateResources do
+defmodule Educatium.Repo.Migrations.CreateResourcesTable do
   use Ecto.Migration
 
   def change do

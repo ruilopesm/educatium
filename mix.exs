@@ -58,12 +58,7 @@ defmodule Educatium.MixProject do
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:tailwind_formatter, "~> 0.3.7", only: [:dev, :test], runtime: false},
       {:heroicons,
-       github: "tailwindlabs/heroicons",
-       tag: "v2.1.1",
-       sparse: "optimized",
-       app: false,
-       compile: false,
-       depth: 1},
+       github: "tailwindlabs/heroicons", tag: "v2.1.1", sparse: "optimized", app: false, compile: false, depth: 1},
 
       # mailer
       {:swoosh, "~> 1.5"},
@@ -72,6 +67,11 @@ defmodule Educatium.MixProject do
       # uploads
       {:waffle_ecto, "~> 0.0"},
       {:waffle, "~> 1.1"},
+
+      # files
+      {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},
+      {:zstream, "~> 0.6"},
+      {:size, "~> 0.1.0"},
 
       # telemetry
       {:telemetry_metrics, "~> 1.0"},
@@ -91,6 +91,9 @@ defmodule Educatium.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:dotenvy, "~> 0.8.0"},
+      {:temp, "~> 0.4"},
+      {:credo, "~> 1.7.6", only: [:dev, :test], runtime: false},
+      {:styler, "~> 0.11.9", only: [:dev, :test], runtime: false},
       {:doctest_formatter, "~> 0.3.0", runtime: false}
     ]
   end
@@ -114,7 +117,8 @@ defmodule Educatium.MixProject do
         "tailwind educatium --minify",
         "esbuild educatium --minify",
         "phx.digest"
-      ]
+      ],
+      lint: ["credo -C default"]
     ]
   end
 end

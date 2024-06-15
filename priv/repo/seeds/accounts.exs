@@ -2,9 +2,9 @@ defmodule Educatium.Repo.Seeds.Accounts do
   @moduledoc """
   Seeds the database with everything related to accounts.
   """
-  alias Educatium.Repo
   alias Educatium.Accounts
   alias Educatium.Accounts.User
+  alias Educatium.Repo
 
   def run do
     case Repo.all(User) do
@@ -30,12 +30,12 @@ defmodule Educatium.Repo.Seeds.Accounts do
       with {:ok, %User{} = registered} <- Accounts.register_user(attrs) do
         [first_name, last_name] = String.split(user, " ")
         setup = %{
-          role: Enum.random(roles),
-          handle: build_recommended_handle(email),
-          first_name: first_name,
-          last_name: last_name,
-          course: "Software Engineering",
-          university: "University of Minho",
+          "role" => Enum.random(roles),
+          "handle" => build_recommended_handle(email),
+          "first_name" => first_name,
+          "last_name" => last_name,
+          "course" => "Software Engineering",
+          "university" => "University of Minho",
         }
 
         case Accounts.complete_user_setup(registered, setup) do

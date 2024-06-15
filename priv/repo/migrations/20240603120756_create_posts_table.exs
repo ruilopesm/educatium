@@ -1,12 +1,15 @@
-defmodule Educatium.Repo.Migrations.CreatePosts do
+defmodule Educatium.Repo.Migrations.CreatePostsTable do
   use Ecto.Migration
 
   def change do
     create table(:posts, primary_key: false) do
-      add :view_count, :integer, default: 0
       add :id, :binary_id, primary_key: true
+
+      add :view_count, :integer, default: 0
       add :upvote_count, :integer, default: 0
       add :downvote_count, :integer, default: 0
+      add :comment_count, :integer, default: 0
+
       add :type, :string, null: false
 
       timestamps(type: :utc_datetime)

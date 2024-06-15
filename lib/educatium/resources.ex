@@ -5,7 +5,7 @@ defmodule Educatium.Resources do
   use Educatium, :context
 
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource}
+  alias Educatium.Resources.{Directory, File, Resource, ResourceTag, Tag}
 
   @doc """
   Returns the list of resources.
@@ -56,36 +56,41 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> get_resource!(123)
+      iex> get_resource!(123, [:directory])
       %Resource{}
 
-      iex> get_resource!(456)
+      iex> get_resource!(456, [:directory])
       ** (Ecto.NoResultsError)
 
   """
-  def get_resource!(id), do: Repo.get!(Resource, id)
+  def get_resource!(id, preloads \\ []) do
+    Repo.get!(Resource, id)
+    |> Repo.preload(preloads)
+  end
 
   @doc """
   Creates a resource.
 
   ## Examples
 
-      iex> create_resource(%{field: value}, "/resources/resource1")
+      iex> create_resource(%{field: value}, ...)
       {:ok, %Resource{}}
 
-      iex> create_resource(%{field: bad_value}, "/resources/resource1")
+      iex> create_resource(%{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_resource(attrs, resource_path \\ nil) do
-    if attrs[:visibility] == :public do
-      create_resource_with_post(attrs, resource_path)
-    else
-      create_resource_without_post(attrs, resource_path)
-    end
+  def create_resource(attrs, path \\ nil)
+
+  def create_resource(%{"visibility" => "public"} = attrs, path) do
+    create_resource_with_post(attrs, path)
   end
 
-  defp create_resource_with_post(attrs, resource_path) do
+  def create_resource(%{"visibility" => _} = attrs, path) do
+    create_resource_without_post(attrs, path)
+  end
+
+  defp create_resource_with_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:post, fn _ ->
       %Post{}
@@ -97,24 +102,32 @@ defmodule Educatium.Resources do
       |> Ecto.Changeset.put_assoc(:post, post)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
     end)
     |> Repo.transaction()
+    |> case do
+      {:ok, %{resource: resource, post: post}} ->
+        broadcast({1, post}, :post_created)
+        {:ok, resource}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
-  defp create_resource_without_post(attrs, resource_path) do
+  defp create_resource_without_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:resource, fn _ ->
       %Resource{}
       |> Resource.changeset(attrs)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -127,19 +140,19 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> update_resource(resource, %{field: new_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: new_value}, ...)
       {:ok, %Resource{}}
 
-      iex> update_resource(resource, %{field: bad_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_resource(%Resource{} = resource, attrs, resource_path) do
+  def update_resource(%Resource{} = resource, attrs, path) do
     Multi.new()
-    |> Multi.update(:resource, resource, attrs)
+    |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -195,6 +208,25 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Gets a single directory.
+
+  Raises `Ecto.NoResultsError` if the Directory does not exist.
+
+  ## Examples
+
+      iex> get_directory!(123)
+      %Directory{}
+
+      iex> get_directory!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_directory!(id, preloads \\ []) do
+    Repo.get!(Directory, id)
+    |> Repo.preload(preloads)
+  end
+
+  @doc """
   Creates a file.
 
   ## Examples
@@ -212,6 +244,143 @@ defmodule Educatium.Resources do
     |> Repo.insert()
   end
 
+  @doc """
+  Returns the list of tags.
+
+  ## Examples
+
+      iex> list_tags()
+      [%Tag{}, ...]
+
+  """
+  def list_tags do
+    Tag
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of tags by ids.
+
+  ## Examples
+
+      iex> list_tags_by_ids([1, 2, 3])
+      [%Tag{}, ...]
+  """
+  def list_tags_by_ids(ids) do
+    Tag
+    |> where([t], t.id in ^ids)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a tag.
+
+  ## Examples
+
+      iex> create_tag(%{field: value})
+      {:ok, %Tag{}}
+
+      iex> create_tag(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tag(attrs) do
+    %Tag{}
+    |> Tag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Lists all tags for a resource.
+  """
+  def list_tags_by_resource(resource_id) do
+    Tag
+    |> join(:inner, [t], rt in ResourceTag, on: rt.tag_id == t.id)
+    |> where([t, rt], rt.resource_id == ^resource_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a relationship between a resource and a tag.
+
+  ## Examples
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:ok, %ResourceTag{}}
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_resource_tag(resource_id, tag_id) do
+    %ResourceTag{}
+    |> ResourceTag.changeset(%{resource_id: resource_id, tag_id: tag_id})
+    |> Repo.insert()
+  end
+
+  @doc """
+  Gets a single file.
+
+  Raises `Ecto.NoResultsError` if the File does not exist.
+
+  ## Examples
+
+      iex> get_file!(123)
+      %File{}
+
+      iex> get_file!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_file!(id) do
+    Repo.get!(File, id)
+  end
+
+  @doc """
+  Builds a zip file from a directory.
+
+  ## Examples
+
+      iex> build_directory_zip(directory)
+      [{:ok, %Zstream.Entry{}}, ...]
+  """
+  def build_directory_zip(%Directory{} = directory) do
+    dir_path = "/#{directory.name}"
+    file_entries = create_file_entries(directory.files, dir_path)
+    directory_entries = create_directory_entries(directory.subdirectories, dir_path)
+
+    entries = file_entries ++ directory_entries
+
+    entries
+    |> Zstream.zip()
+    |> Enum.to_list()
+  end
+
+  defp create_file_entries(files, dir) do
+    Enum.map(files, fn file ->
+      # FIXME: Get the host from the config
+      url =
+        "http://localhost:4000" <> "#{Educatium.Uploaders.File.url({file.file, file}, :original)}"
+
+      file_path = dir <> "/#{file.name}"
+
+      Zstream.entry(file_path, HTTPStream.get(url))
+    end)
+  end
+
+  defp create_directory_entries(subdirectories, parent_dir) do
+    Enum.map(subdirectories, fn dir ->
+      dir = get_directory!(dir.id, [:files, :subdirectories])
+      new_dir = "#{parent_dir}/#{dir.name}"
+
+      file_entries = create_file_entries(dir.files, new_dir)
+      dir_entries = create_directory_entries(dir.subdirectories, new_dir)
+
+      file_entries ++ dir_entries
+    end)
+    |> Enum.concat()
+  end
+
   defp process_resource_item(resource, parent_directory, :dir, path) do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
@@ -219,21 +388,25 @@ defmodule Educatium.Resources do
     attrs = %{
       name: Path.basename(path),
       resource_id: resource.id,
-      parent_directory_id: parent_directory_id
+      directory_id: parent_directory_id
     }
 
-    with {:ok, directory} <- create_directory(attrs) do
-      for item <- Elixir.File.ls!(path) do
-        # Full path to item
-        item_path = Path.join(path, item)
-        item_type = if Elixir.File.dir?(item_path), do: :dir, else: :file
-        process_resource_item(resource, directory, item_type, item_path)
-      end
+    case create_directory(attrs) do
+      {:ok, directory} ->
+        for item <- Elixir.File.ls!(path) do
+          # Full path to item
+          item_path = Path.join(path, item)
+          item_type = if Elixir.File.dir?(item_path), do: :dir, else: :file
+          process_resource_item(resource, directory, item_type, item_path)
+        end
 
-      {:ok, directory}
-    else
-      {:error, error} -> {:error, error}
-      _ -> {:error, :failed_to_create_directory}
+        {:ok, directory}
+
+      {:error, error} ->
+        {:error, error}
+
+      _ ->
+        {:error, :failed_to_create_directory}
     end
   end
 
@@ -241,11 +414,13 @@ defmodule Educatium.Resources do
     parent_directory_id = if parent_directory == nil, do: nil, else: parent_directory.id
     path = Path.expand(path)
     name = Path.basename(path)
+    file_stats = Elixir.File.lstat!(path)
 
     attrs = %{
       name: name,
       resource_id: resource.id,
       directory_id: parent_directory_id,
+      size: file_stats.size,
       file: %Plug.Upload{
         path: path,
         filename: name
@@ -253,5 +428,12 @@ defmodule Educatium.Resources do
     }
 
     create_file(attrs)
+  end
+
+  @topic "posts"
+
+  defp broadcast({1, post}, event) do
+    Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
+    {:ok, post}
   end
 end

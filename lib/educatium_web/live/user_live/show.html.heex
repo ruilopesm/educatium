@@ -30,7 +30,9 @@
   <:item title={gettext("Role")}><%= display_role(@user.role) %></:item>
 </.list>
 
-<div class="mt-5 mb-6 flex justify-end md:mb-8">
+<hr class="mt-10 mb-2" />
+
+<div class="mb-6 flex justify-end md:mb-8">
   <.link href={~p"/resources/new"}>
     <.button><%= gettext("Create resource") %></.button>
   </.link>

@@ -14,6 +14,7 @@ defmodule EducatiumWeb.Plugs.EnsureAPIKey do
 
   def call(conn, _opts) do
     api_key = get_req_header(conn, "authorization")
+
     if length(api_key) > 0 && hd(api_key) && Accounts.is_valid_api_key?(hd(api_key)) do
       user = Accounts.get_user_by_api_key(hd(api_key))
       assign(conn, :current_user, user)

@@ -2,16 +2,18 @@ defmodule Educatium.Resources.File do
   use Educatium, :schema
 
   alias Educatium.Resources.{Directory, Resource}
+  alias Educatium.Uploaders
 
-  @required_fields ~w(name resource_id directory_id)a
+  @required_fields ~w(name resource_id directory_id size)a
   @optional_fields ~w()a
 
   schema "files" do
     field :name, :string
-    field :file, Educatium.Uploaders.File.Type
+    field :file, Uploaders.File.Type
+    field :size, :integer
 
-    belongs_to :resource, Resource, foreign_key: :resource_id
-    belongs_to :directory, Directory, foreign_key: :directory_id
+    belongs_to :resource, Resource
+    belongs_to :directory, Directory
 
     timestamps(type: :utc_datetime)
   end
