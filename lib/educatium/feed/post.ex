@@ -2,7 +2,7 @@ defmodule Educatium.Feed.Post do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
-  alias Educatium.Feed.{Upvote, Downvote}
+  alias Educatium.Feed.{Downvote, Upvote}
 
   @preloads ~w(resource upvotes downvotes)a
 

@@ -16,14 +16,15 @@ import Config
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
+import Dotenvy
+
+source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
+
 if System.get_env("PHX_SERVER") do
   config :educatium, EducatiumWeb.Endpoint, server: true
 end
 
 if config_env() in [:dev, :test] do
-  import Dotenvy
-  source([".env", ".env.#{config_env()}", ".env.#{config_env()}.local"])
-
   config :educatium, Educatium.Repo,
     username: env!("DB_USERNAME", :string, "postgres"),
     password: env!("DB_PASSWORD", :string, "postgres"),
@@ -33,7 +34,9 @@ if config_env() in [:dev, :test] do
     stacktrace: true,
     show_sensitive_data_on_connection_error: true,
     pool_size: 10
+end
 
+if config_env() in [:dev, :stg, :prod] do
   config :ueberauth, Ueberauth.Strategy.Google.OAuth,
     client_id: env!("GOOGLE_CLIENT_ID"),
     client_secret: env!("GOOGLE_CLIENT_SECRET")
@@ -49,6 +52,16 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
+  secret_key_base =
+    System.get_env("SECRET_KEY_BASE") ||
+      raise """
+      environment variable SECRET_KEY_BASE is missing.
+      You can generate one by calling: mix phx.gen.secret
+      """
+
+  host = System.get_env("PHX_HOST") || "example.com"
+  port = String.to_integer(System.get_env("PORT") || "4000")
+
   config :educatium, Educatium.Repo,
     # ssl: true,
     url: database_url,
@@ -60,18 +73,6 @@ if config_env() == :prod do
   # want to use a different value for prod and you most likely don't want
   # to check this value into version control, so we use an environment
   # variable instead.
-  secret_key_base =
-    System.get_env("SECRET_KEY_BASE") ||
-      raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
-
-  host = System.get_env("PHX_HOST") || "example.com"
-  port = String.to_integer(System.get_env("PORT") || "4000")
-
-  config :educatium, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
-
   config :educatium, EducatiumWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
@@ -83,6 +84,8 @@ if config_env() == :prod do
       port: port
     ],
     secret_key_base: secret_key_base
+
+  config :educatium, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   # ## SSL Support
   #

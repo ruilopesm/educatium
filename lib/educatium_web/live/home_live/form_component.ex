@@ -70,7 +70,7 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
           <.label for="dir"><%= gettext("Upload a directory to join your resource") %></.label>
           <.live_file_input upload={@uploads.dir} class="hidden" />
           <input
-            class="mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 p-2 border border-zinc-300"
+            class="mt-2 block w-full rounded-lg border border-zinc-300 p-2 text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6"
             id="dir"
             type="file"
             webkitdirectory

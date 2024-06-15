@@ -379,18 +379,22 @@ defmodule Educatium.Resources do
       directory_id: parent_directory_id
     }
 
-    with {:ok, directory} <- create_directory(attrs) do
-      for item <- Elixir.File.ls!(path) do
-        # Full path to item
-        item_path = Path.join(path, item)
-        item_type = if Elixir.File.dir?(item_path), do: :dir, else: :file
-        process_resource_item(resource, directory, item_type, item_path)
-      end
+    case create_directory(attrs) do
+      {:ok, directory} ->
+        for item <- Elixir.File.ls!(path) do
+          # Full path to item
+          item_path = Path.join(path, item)
+          item_type = if Elixir.File.dir?(item_path), do: :dir, else: :file
+          process_resource_item(resource, directory, item_type, item_path)
+        end
 
-      {:ok, directory}
-    else
-      {:error, error} -> {:error, error}
-      _ -> {:error, :failed_to_create_directory}
+        {:ok, directory}
+
+      {:error, error} ->
+        {:error, error}
+
+      _ ->
+        {:error, :failed_to_create_directory}
     end
   end
 

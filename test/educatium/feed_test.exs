@@ -4,9 +4,9 @@ defmodule Educatium.FeedTest do
   alias Educatium.Feed
 
   describe "posts" do
-    alias Educatium.Feed.Post
-
     import Educatium.FeedFixtures
+
+    alias Educatium.Feed.Post
 
     @invalid_attrs %{type: nil}
 

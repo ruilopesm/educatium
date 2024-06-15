@@ -4,7 +4,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
   alias EducatiumWeb.Utils
 
   alias Educatium.Resources
-  alias Educatium.Resources.{Directory, File, Resource}
+  alias Educatium.Resources.File
   alias Educatium.Uploaders.File
 
   @impl true

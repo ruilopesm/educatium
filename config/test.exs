@@ -8,6 +8,8 @@ config :argon2_elixir, t_cost: 1, m_cost: 8
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
+config :educatium, Educatium.Mailer, adapter: Swoosh.Adapters.Test
+
 config :educatium, Educatium.Repo,
   username: "postgres",
   password: "postgres",
@@ -24,17 +26,16 @@ config :educatium, EducatiumWeb.Endpoint,
   server: false
 
 # In test we don't send emails.
-config :educatium, Educatium.Mailer, adapter: Swoosh.Adapters.Test
-
-# Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false
-
-# Print only warnings and errors during test
 config :logger, level: :warning
-
-# Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
 config :phoenix_live_view,
-  # Enable helpful, but potentially expensive runtime checks
+  # Disable swoosh api client as it is only required for production adapters.
   enable_expensive_runtime_checks: true
+
+config :swoosh, :api_client, false
+
+# Print only warnings and errors during test
+
+# Initialize plugs at runtime for faster test compilation
+# Enable helpful, but potentially expensive runtime checks

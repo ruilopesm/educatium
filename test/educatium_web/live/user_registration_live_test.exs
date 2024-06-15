@@ -1,8 +1,8 @@
 defmodule EducatiumWeb.UserRegistrationLiveTest do
   use EducatiumWeb.ConnCase, async: true
 
-  import Phoenix.LiveViewTest
   import Educatium.AccountsFixtures
+  import Phoenix.LiveViewTest
 
   describe "Registration page" do
     test "renders registration page", %{conn: conn} do

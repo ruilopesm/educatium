@@ -1,8 +1,8 @@
 defmodule EducatiumWeb.UserResetPasswordLiveTest do
   use EducatiumWeb.ConnCase, async: true
 
-  import Phoenix.LiveViewTest
   import Educatium.AccountsFixtures
+  import Phoenix.LiveViewTest
 
   alias Educatium.Accounts
 
@@ -39,9 +39,7 @@ defmodule EducatiumWeb.UserResetPasswordLiveTest do
       result =
         lv
         |> element("#reset_password_form")
-        |> render_change(
-          user: %{"password" => "secret12", "password_confirmation" => "secret123456"}
-        )
+        |> render_change(user: %{"password" => "secret12", "password_confirmation" => "secret123456"})
 
       assert result =~ "should be at least 12 character"
       assert result =~ "does not match password"
