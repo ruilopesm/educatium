@@ -12,16 +12,15 @@ defmodule EducatiumWeb.Plugs.EnsureAPIKey do
 
   def init(opts), do: opts
 
-  def call(%{body_params: params} = conn, _opts) when is_map_key(params, "api_key") do
-    if is_binary(params["api_key"]) and Accounts.is_valid_api_key?(params["api_key"]) do
-      user = Accounts.get_user_by_api_key(params["api_key"])
+  def call(conn, _opts) do
+    api_key = get_req_header(conn, "authorization")
+    if length(api_key) > 0 && hd(api_key) && Accounts.is_valid_api_key?(hd(api_key)) do
+      user = Accounts.get_user_by_api_key(hd(api_key))
       assign(conn, :current_user, user)
     else
       unauthorized(conn)
     end
   end
-
-  def call(conn, _opts), do: unauthorized(conn)
 
   defp unauthorized(conn) do
     conn

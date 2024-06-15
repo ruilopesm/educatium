@@ -47,9 +47,9 @@ defmodule EducatiumWeb.Router do
 
     pipe_through EducatiumWeb.Plugs.EnsureAPIKey
 
-    post "/test", HelloController, :test
-    post "/user", HelloController, :user
-    post "/resource", ResourceController, :get_resource
+    get "/test", HelloController, :test
+    get "/user", HelloController, :user
+    get "/resource", ResourceController, :get_resource
   end
 
   ## Authentication routes
