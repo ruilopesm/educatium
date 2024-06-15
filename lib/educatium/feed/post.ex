@@ -2,9 +2,9 @@ defmodule Educatium.Feed.Post do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
-  alias Educatium.Feed.{Comment, Downvote, Upvote}
+  alias Educatium.Feed.{Bookmark, Comment, Downvote, Upvote}
 
-  @preloads ~w(resource upvotes downvotes comments)a
+  @preloads ~w(resource upvotes downvotes comments bookmarks)a
 
   @types ~w(resource)a
 
@@ -24,6 +24,7 @@ defmodule Educatium.Feed.Post do
     has_many :upvotes, Upvote
     has_many :downvotes, Downvote
     has_many :comments, Comment
+    has_many :bookmarks, Bookmark
 
     timestamps(type: :utc_datetime)
   end

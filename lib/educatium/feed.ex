@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Comment, Downvote, Post, Upvote}
+  alias Educatium.Feed.{Bookmark, Comment, Downvote, Post, Upvote}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -301,6 +301,71 @@ defmodule Educatium.Feed do
       })
     )
     |> Repo.transaction()
+  end
+
+  @doc """
+  Gets a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> get_bookmark(post, user)
+      %Bookmark{}
+
+  """
+  def get_bookmark(post, user) do
+    Bookmark
+    |> where([b], b.post_id == ^post.id and b.user_id == ^user.id)
+    |> Repo.one()
+  end
+
+  @doc """
+  Creates a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> create_bookmark(post, user)
+      %Post{}
+    
+  """
+  def bookmark_post!(post, user) do
+    %Bookmark{}
+    |> Bookmark.changeset(%{post_id: post.id, user_id: user.id})
+    |> Repo.insert!()
+
+    get_post!(post.id, Post.preloads())
+  end
+
+  @doc """
+  Deletes a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> delete_bookmark(post, user)
+      %Post{}
+  """
+  def delete_bookmark!(post, user) do
+    bookmark = get_bookmark(post, user)
+
+    Multi.new()
+    |> Multi.delete(:bookmark, bookmark)
+    |> Repo.transaction()
+
+    get_post!(post.id, Post.preloads())
+  end
+
+  @doc """
+  Lists the bookmarks for the given user.
+
+  ## Examples
+
+      iex> list_user_bookmarks(user)
+      [%Bookmark{}, ...]
+
+  """
+  def list_user_bookmarks(user) do
+    Bookmark
+    |> where([b], b.user_id == ^user.id)
+    |> Repo.all()
   end
 
   @topic "posts"

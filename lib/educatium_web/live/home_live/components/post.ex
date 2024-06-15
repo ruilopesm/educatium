@@ -117,6 +117,20 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <.icon name="hero-chat-bubble-oval-left" class="size-5" />
         <span><%= @post.comment_count %></span>
       </button>
+
+    </div>
+    <div class="right-[22px] absolute bottom-3 mt-6 flex gap-3">
+      <button
+        phx-click="bookmark"
+        phx-target={@myself}
+        class="flex items-center gap-1 text-xs font-medium leading-4 text-gray-600 hover:text-amber-800"
+      >
+        <%= if current_user_bookmarked?(@post, @current_user) do %>
+          <.icon name="hero-bookmark-solid" class="size-5 text-black" />
+        <% else %>
+          <.icon name="hero-bookmark" class="size-5" />
+        <% end %>
+      </button>
     </div>
     """
   end
@@ -148,6 +162,20 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
   @impl true
   def handle_event("show-comments", _, socket) do
     {:noreply, socket |> push_redirect(to: ~p"/posts/#{socket.assigns.post.id}/comments")}
+  end
+
+  @impl true
+  def handle_event("bookmark", _, socket) do
+    user = socket.assigns.current_user
+    post = socket.assigns.post
+
+    if current_user_bookmarked?(post, user) do
+      updated_post = Feed.delete_bookmark!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
+    else
+      updated_post = Feed.bookmark_post!(post, user)
+      {:noreply, assign(socket, post: updated_post)}
+    end
   end
 
   defp upvote_post(socket, post, user) do
@@ -182,6 +210,11 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
 
   defp current_user_downvoted?(post, user) do
     post.downvotes
+    |> Enum.any?(&(&1.user_id == user.id))
+  end
+
+  defp current_user_bookmarked?(post, user) do
+    post.bookmarks
     |> Enum.any?(&(&1.user_id == user.id))
   end
 end
