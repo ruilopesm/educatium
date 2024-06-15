@@ -12,7 +12,7 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
     <div x-data="{ open: false }" class="relative inline-block text-left">
       <button
         type="button"
-        class="h-[28px] flex items-center rounded-full border border-gray-400 bg-zinc-100 px-4 py-1.5 text-sm text-gray-800 focus:border-gray-500"
+        class="h-[28px] flex items-center rounded-full border border-gray-400 bg-zinc-50 px-4 py-1.5 text-sm text-gray-800 focus:border-gray-500"
         aria-expanded="false"
         aria-haspopup="true"
         @click="open = !open"
