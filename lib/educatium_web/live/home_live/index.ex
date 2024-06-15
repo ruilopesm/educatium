@@ -33,6 +33,16 @@ defmodule EducatiumWeb.HomeLive.Index do
     assign(socket, :page_title, "Home")
   end
 
+  defp apply_action(socket, :comments, %{"id" => id}) do
+    post = Feed.get_post!(id, @preloads)
+    comment_form = to_form(%{}, as: "comment")
+
+    socket
+    |> assign(:page_title, gettext("Comments"))
+    |> assign(:post, post)
+    |> assign(:comment_form, comment_form)
+  end
+
   @impl true
   def handle_event("search", %{"post" => ""}, socket) do
     {:noreply,
@@ -81,6 +91,14 @@ defmodule EducatiumWeb.HomeLive.Index do
      socket
      |> stream_insert(:posts, post)
      |> update(:new_posts_count, &(&1 + 1))}
+  end
+
+  @impl true
+  def handle_info({:comment_created, msg}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:info, msg)
+     |> push_patch(to: ~p"/posts")}
   end
 
   @impl true

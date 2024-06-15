@@ -106,13 +106,14 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <span><%= @post.downvote_count %></span>
       </button>
 
-      <.link
-        href={~p"/resources/#{@post.resource.id}"}
-        class="flex items-center gap-1 text-xs font-medium leading-4 text-gray-600 hover:text-gray-800"
+      <button
+        phx-click="show-comments"
+        phx-target={@myself}
+        class="flex items-center gap-1 text-xs font-medium leading-4 text-gray-600 hover:text-amber-800"
       >
         <.icon name="hero-chat-bubble-oval-left" class="size-5" />
-        <span>7</span>
-      </.link>
+        <span><%= @post.comment_count %></span>
+      </button>
     </div>
     """
   end
@@ -139,6 +140,11 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
     else
       downvote_post(socket, post, user)
     end
+  end
+
+  @impl true
+  def handle_event("show-comments", _, socket) do
+    {:noreply, socket |> push_redirect(to: ~p"/posts/#{socket.assigns.post.id}/comments")}
   end
 
   defp upvote_post(socket, post, user) do

@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  style:
+  all:
     runs-on: ubuntu-latest
 
     strategy:

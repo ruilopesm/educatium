@@ -45,6 +45,24 @@
     title={@page_title}
     action={:new}
     current_user={@current_user}
-    patch={~p"/"}
+    patch={~p"/posts"}
+  />
+</.modal>
+
+<.modal
+  :if={@live_action in [:comments]}
+  id="comments-modal"
+  show
+  on_cancel={JS.patch(~p"/posts")}
+>
+  <.live_component
+    module={Components.Comments}
+    id={:comments}
+    title={@page_title}
+    post={@post}
+    comment_form={@comment_form}
+    action={nil}
+    current_user={@current_user}
+    patch={~p"/posts"}
   />
 </.modal>
