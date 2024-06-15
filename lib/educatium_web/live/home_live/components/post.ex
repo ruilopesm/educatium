@@ -49,7 +49,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
               <span class="text-gray-500"><%= gettext("adicionou um novo recurso") %></span>
             </h2>
             <h3 class="text-xs font-normal leading-4 text-gray-500">
-              <%= display_role(@current_user.role) %> | <%= relative_datetime(
+              <%= display_atom(@current_user.role) %> | <%= relative_datetime(
                 @current_user.inserted_at
               ) %>
             </h3>

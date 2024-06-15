@@ -32,15 +32,15 @@ defmodule EducatiumWeb.Utils do
   end
 
   @doc """
-  Display the role of a user.
+  Stringify an atom and capitalize it.
 
   ## Examples
 
-     iex> display_role(:student)
+     iex> display_atom(:student)
      "Student"
   """
-  def display_role(role) do
-    String.capitalize(Atom.to_string(role))
+  def display_atom(atom) do
+    String.capitalize(Atom.to_string(atom))
   end
 
   @doc """
@@ -115,7 +115,7 @@ defmodule EducatiumWeb.Utils do
 
   """
   def relative_datetime(datetime) do
-    Relative.lformat!(datetime, "{relative}", Gettext.get_locale())
+    Relative.lformat!(datetime, "{relative}", Gettext.get_locale(EducatiumWeb.Gettext))
   end
 
   @doc """
