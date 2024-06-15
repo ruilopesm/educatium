@@ -3,6 +3,7 @@ defmodule EducatiumWeb.HomeLive.Components.Comments do
   use EducatiumWeb, :live_component
 
   alias Educatium.Feed
+  alias Educatium.Uploaders.Avatar
 
   @impl true
   def render(assigns) do
@@ -22,15 +23,17 @@ defmodule EducatiumWeb.HomeLive.Components.Comments do
           <article class="rounded-lg bg-white text-sm">
             <footer class="mb-2 flex items-center justify-between">
               <div class="flex items-center">
-                <p class="mr-3 inline-flex items-center text-sm font-semibold text-gray-900">
-                  <img
-                    class="mr-2 h-6 w-6 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                    alt="Michael Gough"
-                  />Michael Gough
+                <p class="mr-2 inline-flex items-center text-sm font-semibold text-gray-900">
+                  <.avatar
+                    class="mr-2"
+                    size={:sm}
+                    src={Avatar.url({comment.user.avatar, comment.user}, :original)}
+                    fallback={extract_initials(comment.user.first_name, comment.user.last_name)}
+                  />
+                  <%= display_name(comment.user) %>
                 </p>
                 <p class="text-sm text-gray-600">
-                  <time pubdate datetime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time>
+                  <%= relative_datetime(comment.inserted_at) %>
                 </p>
               </div>
               <button
@@ -79,8 +82,6 @@ defmodule EducatiumWeb.HomeLive.Components.Comments do
           <hr :if={index != @post.comment_count - 1} class="border-zinc-150 my-4" />
         <% end %>
       </ul>
-
-      <% IO.inspect @action %>
 
       <.modal
         :if={@action}
