@@ -17,7 +17,15 @@ defmodule EducatiumWeb.ResourceJSON do
 
   defp data(%Resource{} = resource) do
     %{
-      id: resource.id
+      id: resource.id,
+      title: resource.title,
+      description: resource.description,
+      type: resource.type,
+      created_at: resource.inserted_at,
+      date: resource.date,
+      visibility: resource.visibility,
+      user_id: resource.user_id,
+      post_id: resource.post_id
     }
   end
 end

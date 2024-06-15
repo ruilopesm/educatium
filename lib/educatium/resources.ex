@@ -22,6 +22,18 @@ defmodule Educatium.Resources do
     |> Repo.all()
   end
 
+  def list_resources_which_user_can_see(user_id, opts \\ []) do
+    # if owner id is user id, can see private posts, otherwise only public posts
+    Resource
+    |> where([r], r.user_id == ^user_id or r.visibility == :public)
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  def can_see_resource(user_id, resource) do
+    resource.user_id == user_id or resource.visibility == :public
+  end
+
   @doc """
   Returns the list of resources by user.
 
@@ -166,7 +178,7 @@ defmodule Educatium.Resources do
 
   @doc """
   Creates a directory.
-    
+
   ## Examples
 
       iex> create_directory(%{field: value})
