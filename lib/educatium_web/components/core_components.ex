@@ -74,7 +74,7 @@ defmodule EducatiumWeb.CoreComponents do
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40 focus:opacity-40 focus:outline-none focus:ring-2 focus:ring-zinc-300"
                   aria-label={gettext("close")}
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
@@ -303,7 +303,7 @@ defmodule EducatiumWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select multi-select tel text textarea time radio url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -311,12 +311,19 @@ defmodule EducatiumWeb.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
-  attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+
+  attr :options, :list,
+    doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2 or to multi-select inputs"
+
+  attr :selected, :integer,
+    default: 0,
+    doc: "the number of selected options for multi-select inputs"
+
+  attr :target, :any, default: nil, doc: "the target for multi-select inputs to push events to"
 
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
-                multiple pattern placeholder readonly required rows size step)
+                pattern placeholder readonly required rows size step)
 
   slot :inner_block
 
@@ -324,7 +331,7 @@ defmodule EducatiumWeb.CoreComponents do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
     |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
-    |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
+    |> assign_new(:name, fn -> field.name || assigns.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
   end
@@ -363,12 +370,82 @@ defmodule EducatiumWeb.CoreComponents do
         id={@id}
         name={@name}
         class="mt-2 block w-full rounded-md border border-gray-300 bg-white focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
         {@rest}
       >
         <option :if={@prompt} value=""><%= @prompt %></option>
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "multi-select"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <div class="relative mt-2">
+        <button
+          type="button"
+          class="relative w-full cursor-default rounded-md bg-white p-2.5 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-zinc-400 sm:text-sm sm:leading-6"
+          phx-click={JS.toggle(to: "#dropdown")}
+        >
+          <span class="font-sm block truncate pl-1 text-sm">
+            <%= if @selected != 0 do %>
+              <%= gettext("%{count} selected", count: @selected) %>
+            <% else %>
+              <%= gettext("None selected") %>
+            <% end %>
+          </span>
+
+          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <svg
+              class="size-5 text-gray-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+
+        <ul
+          id="dropdown"
+          phx-click-away={JS.hide(to: "#dropdown")}
+          class="absolute z-10 max-h-60 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-gray-300 focus:ring-2"
+          role="listbox"
+          style="display: none"
+        >
+          <li
+            :for={option <- @options}
+            class="p-1"
+            role="option"
+            phx-target={@target}
+            phx-click={JS.push("toggle-option", value: %{id: option.id})}
+          >
+            <div class="group flex select-none items-center justify-between rounded-md p-0.5 px-2 text-gray-900 hover:bg-blue-500 hover:text-white">
+              <span class="text-sm"><%= option.label %></span>
+              <span class={[
+                !option.selected && "hidden",
+                "block inset-y-0 right-0 flex-row pr-4 text-black group-hover:text-white"
+              ]}>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -417,6 +494,24 @@ defmodule EducatiumWeb.CoreComponents do
         />
         <.error :for={msg <- @errors}><%= msg %></.error>
       </div>
+    </div>
+    """
+  end
+
+  def input(%{type: "radio"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name}>
+      <.label for={@id}><%= @label %></.label>
+      <input
+        type="radio"
+        id={@id}
+        name={@name}
+        value={@value}
+        checked={@checked}
+        class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+        {@rest}
+      />
+      <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end

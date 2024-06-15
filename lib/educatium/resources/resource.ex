@@ -3,7 +3,8 @@ defmodule Educatium.Resources.Resource do
 
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
-  alias Educatium.Resources.Directory
+  alias Educatium.Resources
+  alias Educatium.Resources.{Directory, ResourceTag, Tag}
 
   @types ~w(book article presentation project report exam assignment solution)a
   @visibilities ~w(protected private public)a
@@ -23,6 +24,8 @@ defmodule Educatium.Resources.Resource do
 
     has_one :directory, Directory
 
+    many_to_many :tags, Tag, join_through: ResourceTag
+
     timestamps(type: :utc_datetime)
   end
 
@@ -31,6 +34,16 @@ defmodule Educatium.Resources.Resource do
     resource
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+    |> maybe_put_tags(attrs)
+  end
+
+  defp maybe_put_tags(changeset, attrs) do
+    if attrs["tags"] do
+      tags = Resources.list_tags_by_ids(attrs["tags"])
+      Ecto.Changeset.put_assoc(changeset, :tags, tags)
+    else
+      changeset
+    end
   end
 
   def types, do: @types

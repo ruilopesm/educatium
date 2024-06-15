@@ -4,9 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title>
-      <%= assigns[:page_title] || "Educatium" %>
-    </.live_title>
+    <.live_title>Internal Server Error</.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
@@ -16,7 +14,7 @@
       <div class="text-center">
         <p class="text-base font-semibold text-brand">500</p>
         <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          <%= gettext("Server error") %>
+          Internal Server Error
         </h1>
         <p class="mt-6 text-base leading-7 text-gray-600">
           <%= gettext("Sorry, something went wrong.") %>

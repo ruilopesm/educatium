@@ -5,7 +5,7 @@ defmodule Educatium.Resources do
   use Educatium, :context
 
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource}
+  alias Educatium.Resources.{Directory, File, Resource, ResourceTag, Tag}
 
   @doc """
   Returns the list of resources.
@@ -61,22 +61,24 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> create_resource(%{field: value}, "/resources/resource1")
+      iex> create_resource(%{field: value}, ...)
       {:ok, %Resource{}}
 
-      iex> create_resource(%{field: bad_value}, "/resources/resource1")
+      iex> create_resource(%{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_resource(attrs, resource_path \\ nil) do
-    if attrs[:visibility] == :public do
-      create_resource_with_post(attrs, resource_path)
-    else
-      create_resource_without_post(attrs, resource_path)
-    end
+  def create_resource(attrs, path \\ nil)
+
+  def create_resource(%{"visibility" => "public"} = attrs, path) do
+    create_resource_with_post(attrs, path)
   end
 
-  defp create_resource_with_post(attrs, resource_path) do
+  def create_resource(%{"visibility" => _} = attrs, path) do
+    create_resource_without_post(attrs, path)
+  end
+
+  defp create_resource_with_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:post, fn _ ->
       %Post{}
@@ -88,24 +90,32 @@ defmodule Educatium.Resources do
       |> Ecto.Changeset.put_assoc(:post, post)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
     end)
     |> Repo.transaction()
+    |> case do
+      {:ok, %{resource: resource, post: post}} ->
+        broadcast({1, post}, :post_created)
+        {:ok, resource}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
-  defp create_resource_without_post(attrs, resource_path) do
+  defp create_resource_without_post(attrs, path) do
     Multi.new()
     |> Multi.insert(:resource, fn _ ->
       %Resource{}
       |> Resource.changeset(attrs)
     end)
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -118,19 +128,19 @@ defmodule Educatium.Resources do
 
   ## Examples
 
-      iex> update_resource(resource, %{field: new_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: new_value}, ...)
       {:ok, %Resource{}}
 
-      iex> update_resource(resource, %{field: bad_value}, "/resources/resource1")
+      iex> update_resource(resource, %{field: bad_value}, ...)
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_resource(%Resource{} = resource, attrs, resource_path) do
+  def update_resource(%Resource{} = resource, attrs, path) do
     Multi.new()
-    |> Multi.update(:resource, resource, attrs)
+    |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
-      if resource_path do
-        process_resource_item(resource, nil, :dir, resource_path)
+      if path do
+        process_resource_item(resource, nil, :dir, path)
       else
         {:ok, :no_files}
       end
@@ -219,6 +229,80 @@ defmodule Educatium.Resources do
   def create_file(attrs) do
     %File{}
     |> File.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns the list of tags.
+
+  ## Examples
+
+      iex> list_tags()
+      [%Tag{}, ...]
+
+  """
+  def list_tags do
+    Tag
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of tags by ids.
+
+  ## Examples
+
+      iex> list_tags_by_ids([1, 2, 3])
+      [%Tag{}, ...]
+  """
+  def list_tags_by_ids(ids) do
+    Tag
+    |> where([t], t.id in ^ids)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a tag.
+
+  ## Examples
+
+      iex> create_tag(%{field: value})
+      {:ok, %Tag{}}
+
+      iex> create_tag(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tag(attrs) do
+    %Tag{}
+    |> Tag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Lists all tags for a resource.
+  """
+  def list_tags_by_resource(resource_id) do
+    Tag
+    |> join(:inner, [t], rt in ResourceTag, on: rt.tag_id == t.id)
+    |> where([t, rt], rt.resource_id == ^resource_id)
+    |> Repo.all()
+  end
+
+  @doc """
+  Creates a relationship between a resource and a tag.
+
+  ## Examples
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:ok, %ResourceTag{}}
+
+      iex> create_resource_tag(resource_id, tag_id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_resource_tag(resource_id, tag_id) do
+    %ResourceTag{}
+    |> ResourceTag.changeset(%{resource_id: resource_id, tag_id: tag_id})
     |> Repo.insert()
   end
 
@@ -332,5 +416,12 @@ defmodule Educatium.Resources do
     }
 
     create_file(attrs)
+  end
+
+  @topic "posts"
+
+  defp broadcast({1, post}, event) do
+    Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
+    {:ok, post}
   end
 end

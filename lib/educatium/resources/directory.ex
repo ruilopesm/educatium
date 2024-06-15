@@ -5,6 +5,7 @@ defmodule Educatium.Resources.Directory do
 
   @required_fields ~w(name resource_id)a
   @optional_fields ~w(directory_id)a
+
   schema "directories" do
     field :name, :string
 

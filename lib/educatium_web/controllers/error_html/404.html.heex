@@ -4,9 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title>
-      <%= assigns[:page_title] || "Educatium" %>
-    </.live_title>
+    <.live_title>Not Found</.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
@@ -19,7 +17,7 @@
           <%= gettext("Page not found") %>
         </h1>
         <p class="mt-6 text-base leading-7 text-gray-600">
-          <%= gettext("Sorry, we couldn’t find the page you’re looking for.") %>
+          <%= gettext("Sorry, we couldn't find the page you're looking for.") %>
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6">
           <a

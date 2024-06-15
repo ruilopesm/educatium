@@ -1,4 +1,4 @@
-defmodule Educatium.Repo.Migrations.CreateUpvotes do
+defmodule Educatium.Repo.Migrations.CreateUpvotesTable do
   use Ecto.Migration
 
   def change do
