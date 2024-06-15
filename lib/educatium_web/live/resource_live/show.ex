@@ -13,6 +13,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     resource = Resources.get_resource!(id, [:directory, :user])
+    tags = Resources.list_tags_by_resource(resource.id)
 
     directory =
       if resource.directory,
@@ -22,6 +23,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply,
      socket
      |> assign(:resource, resource)
+     |> assign(:tags, tags)
      |> assign(:directory, directory)}
   end
 
