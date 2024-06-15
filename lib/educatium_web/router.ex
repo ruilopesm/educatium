@@ -49,6 +49,7 @@ defmodule EducatiumWeb.Router do
 
     post "/test", HelloController, :test
     post "/user", HelloController, :user
+    post "/resource", ResourceController, :get_resource
   end
 
   ## Authentication routes
