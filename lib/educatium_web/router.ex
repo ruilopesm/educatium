@@ -46,10 +46,10 @@ defmodule EducatiumWeb.Router do
     get "/", HelloController, :hello
 
     pipe_through EducatiumWeb.Plugs.EnsureAPIKey
-
     get "/test", HelloController, :test
     get "/user", UserController, :user
-    get "/resources/:id", ResourceController, :get_resource
+
+    resources "/resources", ResourceController, except: [:new, :edit]
   end
 
   ## Authentication routes

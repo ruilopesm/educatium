@@ -1,35 +1,35 @@
 defmodule EducatiumWeb.ResourceController do
   use EducatiumWeb, :controller
 
-  def get_resource(conn, %{"id" => id} = _params) do
-    # Fix when invalid is is provided and when resource does not exist
-    with resource <- Educatium.Resources.get_resource!(id) do
+  alias Educatium.Resources
+  alias Educatium.Resources.Resource
+
+  action_fallback EducatiumWeb.FallbackController
+
+  def index(conn, _params) do
+    resources = Resources.list_resources()
+    render(conn, :index, resources: resources)
+  end
+
+  def create(conn, %{"resource" => resource_params}) do
+    with {:ok, %Resource{} = resource} <- Resources.create_resource(resource_params) do
       conn
-      |> json(%{
-        id: resource.id,
-        title: resource.title,
-        description: resource.description,
-        type: resource.type,
-        created_at: resource.inserted_at,
-        date: resource.date,
-        visibility: resource.visibility,
-        user_id: resource.user_id,
-        post_id: resource.post_id
-      })
-    else
-      :error ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{error: "Resource not found"})
+      |> put_status(:created)
+      |> put_resp_header("location", ~p"/api/resources/#{resource}")
+      |> render(:show, resource: resource)
     end
   end
 
-  def get_resource(conn, _params) do
-    conn
-    |> put_status(:bad_request)
-    |> json(%{error: "Invalid request"})
+  def show(conn, %{"id" => id}) do
+    resource = Resources.get_resource!(id)
+    render(conn, :show, resource: resource)
   end
 
-  def get_resources(_conn, _params) do
-  end
+  # def update(conn, %{"id" => id, "resource" => resource_params}) do
+  #   resource = Resources.get_resource!(id)
+
+  #   with {:ok, %Resource{} = resource} <- Resources.update_resource(resource, resource_params) do
+  #     render(conn, :show, resource: resource)
+  #   end
+  # end
 end
