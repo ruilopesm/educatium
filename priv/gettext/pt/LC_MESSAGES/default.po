@@ -717,7 +717,7 @@ msgstr "Atualizar recurso"
 
 #: lib/educatium_web/live/home_live/components/post.ex:87
 #, elixir-autogen, elixir-format
-msgid "view-count"
-msgid_plural "%{count} view"
-msgstr[0] "%{count} visualização"
-msgstr[1] "%{count} visualizações"
+msgid "%{count} view"
+msgid_plural "%{count} views"
+msgstr[0] ""
+msgstr[1] ""

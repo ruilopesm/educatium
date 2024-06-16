@@ -3,3 +3,6 @@ msgstr ""
 
 msgid "Teacher"
 msgstr ""
+
+msgid "Admin"
+msgstr ""

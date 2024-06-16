@@ -16,3 +16,6 @@ msgstr "Estudante"
 
 msgid "Teacher"
 msgstr "Docente"
+
+msgid "Admin"
+msgstr "Administrador"

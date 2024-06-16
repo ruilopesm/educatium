@@ -49,8 +49,8 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
               <span class="text-gray-500"><%= gettext("added a new resource") %></span>
             </h2>
             <h3 class="text-xs font-normal leading-4 text-gray-500">
-              <%= display_atom(@current_user.role) %> | <%= relative_datetime(
-                @current_user.inserted_at
+              <%= display_atom(@post.resource.user.role) %> | <%= relative_datetime(
+                @post.resource.inserted_at
               ) %>
             </h3>
           </div>

@@ -17,20 +17,21 @@ defmodule Educatium.Repo.Seeds.Accounts do
 
   def seed_users do
     users = gather_users()
-    roles = User.roles()
 
-    for user <- users do
-      email = build_email(user)
+    for [name, role] <- users do
+      email = build_email(name)
 
       attrs = %{
         email: email,
         password: "password1234",
       }
 
+
       with {:ok, %User{} = registered} <- Accounts.register_user(attrs) do
-        [first_name, last_name] = String.split(user, " ")
+        [first_name, last_name] = String.split(name, " ")
+
         setup = %{
-          "role" => Enum.random(roles),
+          "role" => role,
           "handle" => build_recommended_handle(email),
           "first_name" => first_name,
           "last_name" => last_name,
@@ -50,15 +51,18 @@ defmodule Educatium.Repo.Seeds.Accounts do
   end
 
   defp gather_users do
-    "priv/fake/users.txt"
+    "priv/fake/users.csv"
     |> File.read!()
     |> String.split("\n")
+    |> Enum.map(&String.split(&1, ","))
   end
 
   defp build_email(user) do
     user
     |> String.downcase()
     |> String.replace(~r/\s*/, "") # Remove all whitespaces
+    |> String.normalize(:nfd)
+    |> String.replace(~r/[^a-z0-9]/, "") # Remove all non-alphanumeric characters
     |> Kernel.<>("@educatium.com")
   end
 
