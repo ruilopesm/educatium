@@ -20,7 +20,7 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
         @keydown.escape="open = false"
       >
         <span><%= @title %></span>
-        <span class="sr-only">Open dropdown</span>
+        <span class="sr-only"><%= gettext("Open dropdown") %></span>
         <span class="px-1 text-gray-400"><%= @current.label %></span>
         <.icon
           name="hero-chevron-down"
