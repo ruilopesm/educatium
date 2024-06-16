@@ -19,3 +19,33 @@ msgstr "Docente"
 
 msgid "Admin"
 msgstr "Administrador"
+
+msgid "Public"
+msgstr "Público"
+
+msgid "Private"
+msgstr "Privado"
+
+msgid "Book"
+msgstr "Livro"
+
+msgid "Article"
+msgstr "Artigo"
+
+msgid "Presentation"
+msgstr "Apresentação"
+
+msgid "Project"
+msgstr "Projeto"
+
+msgid "Report"
+msgstr "Relatório"
+
+msgid "Exam"
+msgstr "Exame"
+
+msgid "Assignment"
+msgstr "Enunciado"
+
+msgid "Solution"
+msgstr "Solução"

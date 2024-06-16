@@ -111,6 +111,10 @@ defmodule EducatiumWeb.Router do
       live "/", PostLive.Index, :index
       live "/:id/edit", PostLive.Index, :edit
     end
+
+    scope "/resources" do
+      live "/", ResourceLive.Index, :index
+    end
   end
 
   scope "/", EducatiumWeb do

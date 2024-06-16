@@ -146,5 +146,6 @@ defmodule EducatiumWeb.Utils do
     atom
     |> Atom.to_string()
     |> String.capitalize()
+    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
   end
 end

@@ -16,18 +16,17 @@ defmodule EducatiumWeb.UserLive.Show do
     is_current_user = user.id == socket.assigns.current_user.id
 
     query = if(is_current_user, do: [], else: [where: [visibility: :public]])
-    resources = Resources.list_resources_by_user(user.id, query)
 
     resources =
-      Enum.map(resources, fn resource ->
+      Resources.list_resources_by_user(user.id, query)
+      |> Enum.map(fn resource ->
         tags = Resources.list_tags_by_resource(resource.id)
         Map.put(resource, :tags, tags)
       end)
 
-    bookmarked = build_bookmarked_resources(user, is_current_user)
-
     bookmarked =
-      Enum.map(bookmarked, fn resource ->
+      build_bookmarked_resources(user, is_current_user)
+      |> Enum.map(fn resource ->
         tags = Resources.list_tags_by_resource(resource.id)
         Map.put(resource, :tags, tags)
       end)

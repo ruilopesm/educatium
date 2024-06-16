@@ -15,7 +15,9 @@
   <:col :let={{_id, user}} label={gettext("Handle")}><%= user.handle %></:col>
   <:col :let={{_id, user}} label={gettext("Email")}><%= user.email %></:col>
   <:col :let={{_id, user}} label={gettext("Name")}><%= display_name(user) %></:col>
-  <:col :let={{_id, user}} label={gettext("Education")}><%= user.course %>, <%= user.university %></:col>
+  <:col :let={{_id, user}} label={gettext("Education")}>
+    <%= user.course %>, <%= user.university %>
+  </:col>
   <:col :let={{_id, user}} label={gettext("Role")}><%= display_atom(user.role) %></:col>
   <:action :let={{_id, user}}>
     <.link patch={~p"/admin/users/#{user}/edit"}><%= gettext("Edit") %></.link>

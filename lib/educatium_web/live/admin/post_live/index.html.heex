@@ -10,7 +10,11 @@
 <.table
   id="posts"
   rows={@streams.posts}
-  row_click={fn {_id, post} -> if post.type == :resource, do: JS.navigate(~p"/resources/#{post.resource.id}") end}
+  row_click={
+    fn {_id, post} ->
+      if post.type == :resource, do: JS.navigate(~p"/resources/#{post.resource.id}")
+    end
+  }
 >
   <:col :let={{_id, post}} label={gettext("Type")}><%= display_atom(post.type) %></:col>
   <:col :let={{_id, post}} label={gettext("Views")}><%= post.view_count %></:col>
@@ -22,7 +26,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="post-modal" show on_cancel={JS.patch(~p"/admin/posts")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="post-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/posts")}
+>
   <.live_component
     module={EducatiumWeb.Admin.PostLive.FormComponent}
     id={@post.id || :new}
