@@ -84,7 +84,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       <div class="relative">
         <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
         <div class="absolute bottom-full hidden whitespace-nowrap rounded bg-gray-700 px-2 py-1 text-xs text-white group-hover:block">
-          <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
+          <%= ngettext("%{count} view", "%{count} views", @post.view_count) %>
         </div>
       </div>
     </div>

@@ -300,7 +300,7 @@ msgid "Course"
 msgstr ""
 
 #: lib/educatium_web/live/user_live/show.html.heex:37
-#: lib/educatium_web/live/user_live/show.html.heex:201
+#: lib/educatium_web/live/user_live/show.html.heex:213
 #, elixir-autogen, elixir-format
 msgid "Create resource"
 msgstr ""
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Follow"
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:193
+#: lib/educatium_web/live/user_live/show.html.heex:205
 #, elixir-autogen, elixir-format
 msgid "Get started by creating a new resource"
 msgstr ""
@@ -364,14 +364,14 @@ msgstr ""
 msgid "Logging in..."
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:94
-#: lib/educatium_web/live/user_live/show.html.heex:131
-#: lib/educatium_web/live/user_live/show.html.heex:166
+#: lib/educatium_web/live/user_live/show.html.heex:98
+#: lib/educatium_web/live/user_live/show.html.heex:139
+#: lib/educatium_web/live/user_live/show.html.heex:178
 #, elixir-autogen, elixir-format
 msgid "More details"
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:190
+#: lib/educatium_web/live/user_live/show.html.heex:202
 #, elixir-autogen, elixir-format
 msgid "No resources"
 msgstr ""
@@ -648,12 +648,12 @@ msgstr ""
 msgid "Search for a post..."
 msgstr ""
 
-#: lib/educatium_web/live/home_live/components/post.ex:182
+#: lib/educatium_web/live/home_live/components/post.ex:186
 #, elixir-autogen, elixir-format
 msgid "Bookmark from resource has been removed"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/components/post.ex:192
+#: lib/educatium_web/live/home_live/components/post.ex:196
 #, elixir-autogen, elixir-format
 msgid "Bookmark has been added to resource. Check your bookmarks under your profile!"
 msgstr ""
@@ -663,7 +663,7 @@ msgstr ""
 msgid "Bookmarked"
 msgstr ""
 
-#: lib/educatium_web/live/resource_live/show.html.heex:44
+#: lib/educatium_web/live/resource_live/show.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "Date (of the resource itself)"
 msgstr ""
@@ -705,7 +705,7 @@ msgstr[1] ""
 msgid "Tags"
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:195
+#: lib/educatium_web/live/user_live/show.html.heex:207
 #, elixir-autogen, elixir-format
 msgid "This user has not published any resources yet"
 msgstr ""
@@ -714,3 +714,10 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Update resource"
 msgstr ""
+
+#: lib/educatium_web/live/home_live/components/post.ex:87
+#, elixir-autogen, elixir-format
+msgid "view-count"
+msgid_plural "%{count} view"
+msgstr[0] ""
+msgstr[1] ""

@@ -15,7 +15,7 @@ defmodule EducatiumWeb.Utils do
   def build_options_for_select(roles) do
     Enum.map(roles, fn role ->
       str = Atom.to_string(role)
-      {String.capitalize(str), str}
+      {Gettext.dgettext(EducatiumWeb.Gettext, "enums", String.capitalize(str)), str}
     end)
   end
 
@@ -40,7 +40,10 @@ defmodule EducatiumWeb.Utils do
      "Student"
   """
   def display_atom(atom) do
-    String.capitalize(Atom.to_string(atom))
+    atom
+    |> Atom.to_string()
+    |> String.capitalize()
+    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
   end
 
   @doc """
