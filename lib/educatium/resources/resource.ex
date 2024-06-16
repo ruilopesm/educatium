@@ -4,7 +4,7 @@ defmodule Educatium.Resources.Resource do
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
   alias Educatium.Resources
-  alias Educatium.Resources.{Directory, ResourceTag, Tag}
+  alias Educatium.Resources.{Bookmark, Directory, ResourceTag, Tag}
 
   @types ~w(book article presentation project report exam assignment solution)a
   @visibilities ~w(protected private public)a
@@ -24,7 +24,9 @@ defmodule Educatium.Resources.Resource do
 
     has_one :directory, Directory
 
-    many_to_many :tags, Tag, on_replace: :delete, join_through: ResourceTag
+    has_many :bookmarks, Bookmark
+
+    many_to_many :tags, Tag, join_through: ResourceTag
 
     timestamps(type: :utc_datetime)
   end
