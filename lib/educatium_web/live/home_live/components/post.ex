@@ -55,15 +55,19 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
             </h3>
           </div>
           <div class="flex gap-1">
-            <%= for tag <- Enum.take(@tags, 3) do %>
+            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-600">
+              <%= capitalize_atom(@post.resource.type) %>
+            </span>
+
+            <%= for tag <- Enum.take(@tags, 2) do %>
               <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
                 <%= tag.name %>
               </span>
             <% end %>
 
-            <%= if length(@tags) > 3 do %>
+            <%= if length(@tags) > 2 do %>
               <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
-                +<%= length(@tags) - 3 %>
+                +<%= length(@tags) - 2 %>
               </span>
             <% end %>
           </div>
@@ -80,7 +84,7 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
       <div class="relative">
         <.icon name="hero-bars-3-bottom-right" class="size-4 rotate-90" />
         <div class="absolute bottom-full hidden whitespace-nowrap rounded bg-gray-700 px-2 py-1 text-xs text-white group-hover:block">
-          <%= dngettext("view-count", "%{count} view", "%{count} views", @post.view_count) %>
+          <%= ngettext("%{count} view", "%{count} views", @post.view_count) %>
         </div>
       </div>
     </div>
@@ -168,51 +172,55 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
   def handle_event("bookmark", _, socket) do
     user = socket.assigns.current_user
     post = socket.assigns.post
-    resource = post.resource
 
     if current_user_bookmarked?(post, user) do
-      IO.puts("delete_bookmark")
-      delete_bookmark(socket, resource, user)
+      delete_bookmark(socket, post.resource, user)
     else
-      IO.puts("bookmark_post")
-      bookmark_post(socket, resource, user)
+      bookmark_post(socket, post.resource, user)
     end
   end
 
   defp delete_bookmark(socket, resource, user) do
     Resources.delete_bookmark!(resource, user)
-    updated_post = Feed.get_post!(socket.assigns.post.id) |> Feed.preload_post()
+    updated_post = Feed.get_post!(socket.assigns.post.id, Post.preloads())
+    notify_parent({:info, gettext("Bookmark from resource has been removed")})
     {:noreply, assign(socket, post: updated_post)}
   end
 
   defp bookmark_post(socket, resource, user) do
     Resources.bookmark_resource!(resource, user)
-    updated_post = Feed.get_post!(socket.assigns.post.id) |> Feed.preload_post()
+    updated_post = Feed.get_post!(socket.assigns.post.id, Post.preloads())
+
+    notify_parent(
+      {:info,
+       gettext("Bookmark has been added to resource. Check your bookmarks under your profile!")}
+    )
+
     {:noreply, assign(socket, post: updated_post)}
   end
 
   defp upvote_post(socket, post, user) do
     if current_user_upvoted?(post, user) do
-      updated_post = Feed.delete_upvote!(post, user) |> Feed.preload_post()
+      updated_post = Feed.delete_upvote!(post, user)
       {:noreply, assign(socket, post: updated_post)}
     else
-      updated_post = Feed.upvote_post!(post, user) |> Feed.preload_post()
+      updated_post = Feed.upvote_post!(post, user)
       {:noreply, assign(socket, post: updated_post)}
     end
   end
 
   defp downvote_post(socket, post, user) do
     if current_user_downvoted?(post, user) do
-      updated_post = Feed.delete_downvote!(post, user) |> Feed.preload_post()
+      updated_post = Feed.delete_downvote!(post, user)
       {:noreply, assign(socket, post: updated_post)}
     else
-      updated_post = Feed.downvote_post!(post, user) |> Feed.preload_post()
+      updated_post = Feed.downvote_post!(post, user)
       {:noreply, assign(socket, post: updated_post)}
     end
   end
 
   defp invert_vote(socket, post, user, type: type) when type in [:upvote, :downvote] do
-    updated_post = Feed.invert_vote!(post, user, type: type) |> Feed.preload_post()
+    updated_post = Feed.invert_vote!(post, user, type: type)
     {:noreply, assign(socket, post: updated_post)}
   end
 

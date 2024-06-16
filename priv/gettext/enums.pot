@@ -1,0 +1,5 @@
+msgid "Student"
+msgstr ""
+
+msgid "Teacher"
+msgstr ""

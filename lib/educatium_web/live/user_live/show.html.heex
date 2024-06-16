@@ -38,37 +38,149 @@
   </.link>
 </div>
 
-<ul class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-  <li
-    :for={resource <- @resources}
-    class="max-h-72 max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow"
-  >
-    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
-      <%= resource.title %>
-    </h5>
-    <div class="flex gap-1">
-      <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-emerald-600">
-        Teste
-      </span>
-      <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-center text-xs font-medium leading-4 text-indigo-600">
-        EngWeb
-      </span>
-      <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
-        +2
-      </span>
+<%= if @is_current_user do %>
+  <div x-data="{ option: 'mine' }">
+    <div class="mb-10 flex justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500">
+      <ul class="-mb-px flex flex-wrap">
+        <li class="me-2">
+          <button
+            @click="option = 'mine'"
+            class="inline-block rounded-t-lg border-b-2 p-4"
+            x-bind:class="option == 'mine' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+          >
+            <%= gettext("Mine") %>
+          </button>
+        </li>
+        <li class="me-2">
+          <button
+            @click="option = 'bookmarked'"
+            class="inline-block rounded-t-lg border-b-2 p-4"
+            x-bind:class="option == 'bookmarked' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+          >
+            <%= gettext("Bookmarked") %>
+          </button>
+        </li>
+      </ul>
     </div>
-    <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
-      <%= slice_string(resource.description, 120) %>
-    </p>
-    <.link
-      href={~p"/resources/#{resource}"}
-      class="text-brand inline-flex items-center font-medium hover:underline"
+
+    <ul x-show="option == 'mine'" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <li
+        :for={resource <- @resources}
+        class="max-h-72 max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow"
+      >
+        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+          <%= resource.title %>
+        </h5>
+        <div class="flex gap-1">
+          <span class="bg-gray-100 text-gray-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4">
+            <%= capitalize_atom(resource.type) %>
+          </span>
+
+          <%= for tag <- Enum.take(resource.tags, 2) do %>
+            <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
+              <%= tag.name %>
+            </span>
+          <% end %>
+
+          <%= if length(resource.tags) > 2 do %>
+            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
+              +<%= length(resource.tags) - 2 %>
+            </span>
+          <% end %>
+        </div>
+        <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
+          <%= slice_string(resource.description, 120) %>
+        </p>
+        <.link
+          href={~p"/resources/#{resource}"}
+          class="text-brand inline-flex items-center font-medium hover:underline"
+        >
+          <%= gettext("More details") %>
+          <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
+        </.link>
+      </li>
+    </ul>
+
+    <ul
+      x-show="option == 'bookmarked'"
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
     >
-      <%= gettext("More details") %>
-      <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
-    </.link>
-  </li>
-</ul>
+      <li
+        :for={resource <- @bookmarked}
+        class="max-h-72 max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow"
+      >
+        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+          <%= resource.title %>
+        </h5>
+        <div class="flex gap-1">
+          <span class="bg-gray-100 text-gray-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4">
+            <%= capitalize_atom(resource.type) %>
+          </span>
+
+          <%= for tag <- Enum.take(resource.tags, 2) do %>
+            <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
+              <%= tag.name %>
+            </span>
+          <% end %>
+
+          <%= if length(resource.tags) > 2 do %>
+            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
+              +<%= length(resource.tags) - 2 %>
+            </span>
+          <% end %>
+        </div>
+        <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
+          <%= slice_string(resource.description, 120) %>
+        </p>
+        <.link
+          href={~p"/resources/#{resource}"}
+          class="text-brand inline-flex items-center font-medium hover:underline"
+        >
+          <%= gettext("More details") %>
+          <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
+        </.link>
+      </li>
+    </ul>
+  </div>
+<% else %>
+  <ul x-show="option == 'mine'" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <li
+      :for={resource <- @resources}
+      class="max-h-72 max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow"
+    >
+      <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">
+        <%= resource.title %>
+      </h5>
+      <div class="flex gap-1">
+        <span class="bg-gray-100 text-gray-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4">
+          <%= capitalize_atom(resource.type) %>
+        </span>
+
+        <%= for tag <- Enum.take(resource.tags, 2) do %>
+          <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
+            <%= tag.name %>
+          </span>
+        <% end %>
+
+        <%= if length(resource.tags) > 2 do %>
+          <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
+            +<%= length(resource.tags) - 2 %>
+          </span>
+        <% end %>
+      </div>
+      <p class="mt-2 mb-3 font-normal text-gray-500 dark:text-gray-400">
+        <%= slice_string(resource.description, 120) %>
+      </p>
+      <.link
+        href={~p"/resources/#{resource}"}
+        class="text-brand inline-flex items-center font-medium hover:underline"
+      >
+        <%= gettext("More details") %>
+        <.icon name="hero-arrow-top-right-on-square" class="ms-2.5 size-4" />
+      </.link>
+    </li>
+  </ul>
+<% end %>
 
 <%= if length(@resources) == 0 do %>
   <div class="text-center">
@@ -92,7 +204,7 @@
       <%= if @is_current_user do %>
         <%= gettext("Get started by creating a new resource") %>
       <% else %>
-        <%= gettext("This user has not created any resources yet") %>
+        <%= gettext("This user has not published any resources yet") %>
       <% end %>
     </p>
 

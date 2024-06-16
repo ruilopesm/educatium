@@ -8,7 +8,7 @@
         Educatium
       </p>
     </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+    <div class="flex items-center gap-4 font-semibold leading-6">
       <%= if @current_user && @current_user.active do %>
         <div class="flex sm:ml-6 sm:items-center">
           <button
@@ -69,7 +69,7 @@
             >
               <.link
                 href={~p"/users/#{@current_user}"}
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-0"
@@ -78,7 +78,7 @@
               </.link>
               <.link
                 href={~p"/users/settings"}
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-1"
@@ -88,7 +88,7 @@
               <.link
                 method="delete"
                 href={~p"/users/log_out"}
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-2"

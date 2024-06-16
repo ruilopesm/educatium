@@ -45,7 +45,10 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
             phx-click="entry-changed"
             phx-value-name={@name}
             phx-value-entry={entry.value}
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class={[
+              "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer",
+              entry.value == @current.value && "bg-gray-100 text-gray-900"
+            ]}
             role="menuitem"
             tabindex="-1"
           >
