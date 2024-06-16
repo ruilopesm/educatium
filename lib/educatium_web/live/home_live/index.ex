@@ -38,9 +38,7 @@ defmodule EducatiumWeb.HomeLive.Index do
     assign(socket, :page_title, gettext("New post"))
   end
 
-  defp apply_action(socket, :index, _params) do
-    assign(socket, :page_title, "Home")
-  end
+  defp apply_action(socket, :index, _params), do: socket
 
   defp apply_action(socket, :comments, %{"id" => id}) do
     post = Feed.get_post!(id, @preloads)
