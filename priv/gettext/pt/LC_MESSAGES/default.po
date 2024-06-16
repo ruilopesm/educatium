@@ -300,7 +300,7 @@ msgid "Course"
 msgstr "Curso"
 
 #: lib/educatium_web/live/user_live/show.html.heex:37
-#: lib/educatium_web/live/user_live/show.html.heex:101
+#: lib/educatium_web/live/user_live/show.html.heex:201
 #, elixir-autogen, elixir-format
 msgid "Create resource"
 msgstr "Criar recurso"
@@ -326,7 +326,7 @@ msgstr "Primeiro nome"
 msgid "Follow"
 msgstr "Seguir"
 
-#: lib/educatium_web/live/user_live/show.html.heex:93
+#: lib/educatium_web/live/user_live/show.html.heex:193
 #, elixir-autogen, elixir-format
 msgid "Get started by creating a new resource"
 msgstr "Começa a criar um novo recurso"
@@ -364,12 +364,14 @@ msgstr "Sair"
 msgid "Logging in..."
 msgstr "A entrar..."
 
-#: lib/educatium_web/live/user_live/show.html.heex:67
+#: lib/educatium_web/live/user_live/show.html.heex:94
+#: lib/educatium_web/live/user_live/show.html.heex:131
+#: lib/educatium_web/live/user_live/show.html.heex:166
 #, elixir-autogen, elixir-format
 msgid "More details"
 msgstr "Mais detalhes"
 
-#: lib/educatium_web/live/user_live/show.html.heex:90
+#: lib/educatium_web/live/user_live/show.html.heex:190
 #, elixir-autogen, elixir-format
 msgid "No resources"
 msgstr "Sem recursos"
@@ -437,11 +439,6 @@ msgstr "Algo correu mal!"
 msgid "There was an error updating your details."
 msgstr "Ocorreu um erro ao atualizar os teus detalhes."
 
-#: lib/educatium_web/live/user_live/show.html.heex:95
-#, elixir-autogen, elixir-format
-msgid "This user has not created any resources yet"
-msgstr "Este utilizador ainda não criou nenhum recurso"
-
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "To finish your account registration please provide some additional information"
@@ -459,6 +456,7 @@ msgid "Update details"
 msgstr "Atualizar detalhes"
 
 #: lib/educatium_web/live/auth_live/user_settings_live.ex:98
+#: lib/educatium_web/live/resource_live/form_component.ex:47
 #, elixir-autogen, elixir-format
 msgid "Updating..."
 msgstr "A atualizar..."
@@ -483,7 +481,7 @@ msgstr "tipo de ficheiro inválido"
 msgid "you"
 msgstr "tu"
 
-#: lib/educatium/accounts/user.ex:178
+#: lib/educatium/accounts/user.ex:177
 #, elixir-autogen, elixir-format, fuzzy
 msgid "must only contain alphanumeric characters, underscores and periods"
 msgstr "só pode conter caracteres alfanuméricos, underscores e pontos"
@@ -537,6 +535,8 @@ msgid "Creating..."
 msgstr "A criar conta..."
 
 #: lib/educatium_web/live/home_live/form_component.ex:44
+#: lib/educatium_web/live/resource_live/form_component.ex:26
+#: lib/educatium_web/live/resource_live/show.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr "Descrição"
@@ -583,6 +583,7 @@ msgid "Oldest"
 msgstr "Mais antigo"
 
 #: lib/educatium_web/live/home_live/form_component.ex:55
+#: lib/educatium_web/live/resource_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Original publication date"
 msgstr "Data de publicação original"
@@ -593,16 +594,10 @@ msgid "Resource created successfully."
 msgstr "Recurso criado com sucesso."
 
 #: lib/educatium_web/live/home_live/form_component.ex:61
+#: lib/educatium_web/live/resource_live/form_component.ex:39
 #, elixir-autogen, elixir-format
 msgid "Select one or more tags"
 msgstr "Seleciona uma ou mais tags"
-
-#: lib/educatium_web/live/home_live/components/comments.ex:14
-#, elixir-autogen, elixir-format
-msgid "Showing a total of %{count} comment"
-msgid_plural "Showing a total of %{count} comments"
-msgstr[0] "A mostrar um total de %{count} comentário"
-msgstr[1] "A mostrar um total de %{count} comentários"
 
 #: lib/educatium_web/controllers/error_html/404.html.heex:20
 #, elixir-autogen, elixir-format, fuzzy
@@ -616,11 +611,14 @@ msgid "Sort by"
 msgstr "Ordenar por"
 
 #: lib/educatium_web/live/home_live/form_component.ex:42
+#: lib/educatium_web/live/resource_live/form_component.ex:24
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "Título"
 
 #: lib/educatium_web/live/home_live/form_component.ex:50
+#: lib/educatium_web/live/resource_live/form_component.ex:32
+#: lib/educatium_web/live/resource_live/show.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr "Tipo"
@@ -648,4 +646,71 @@ msgstr "Utiliza este formulário para criar uma publicação para o feed princip
 #: lib/educatium_web/live/home_live/index.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Search for a post..."
-msgstr "Procurar por um post..."
+msgstr "Procurar por uma publicação..."
+
+#: lib/educatium_web/live/home_live/components/post.ex:182
+#, elixir-autogen, elixir-format
+msgid "Bookmark from resource has been removed"
+msgstr "Recurso deixou de ser marcado como guardado"
+
+#: lib/educatium_web/live/home_live/components/post.ex:192
+#, elixir-autogen, elixir-format
+msgid "Bookmark has been added to resource. Check your bookmarks under your profile!"
+msgstr "Recurso foi marcado como guardado. Confere os recursos guardados no teu perfil!"
+
+#: lib/educatium_web/live/user_live/show.html.heex:60
+#, elixir-autogen, elixir-format
+msgid "Bookmarked"
+msgstr "Guardados"
+
+#: lib/educatium_web/live/resource_live/show.html.heex:44
+#, elixir-autogen, elixir-format
+msgid "Date (of the resource itself)"
+msgstr "Data (do recurso em si)"
+
+#: lib/educatium_web/live/resource_live/show.ex:42
+#, elixir-autogen, elixir-format
+msgid "Editing Resource"
+msgstr "Editar recurso"
+
+#: lib/educatium_web/live/user_live/show.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Mine"
+msgstr "Meus"
+
+#: lib/educatium_web/live/resource_live/show.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Published by %{first_name} %{last_name}"
+msgstr "Publicado por %{first_name} %{last_name}"
+
+#: lib/educatium_web/live/resource_live/form_component.ex:112
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Resource updated successfully!"
+msgstr "Recurso criado com sucesso."
+
+#: lib/educatium_web/live/resource_live/show.ex:41
+#, elixir-autogen, elixir-format
+msgid "Showing Resource"
+msgstr "A mostrar recurso"
+
+#: lib/educatium_web/live/home_live/components/comments.ex:14
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Showing a total of %{count} comment"
+msgid_plural "Showing a total of %{count} comments"
+msgstr[0] "A mostrar um total de %{count} comentário"
+msgstr[1] "A mostrar um total de %{count} comentários"
+
+#: lib/educatium_web/live/resource_live/show.html.heex:29
+#, elixir-autogen, elixir-format
+msgid "Tags"
+msgstr "Tags"
+
+#: lib/educatium_web/live/user_live/show.html.heex:195
+#, elixir-autogen, elixir-format, fuzzy
+msgid "This user has not published any resources yet"
+msgstr "Este utilizador ainda não criou nenhum recurso"
+
+#: lib/educatium_web/live/resource_live/form_component.ex:48
+#, elixir-autogen, elixir-format
+msgid "Update resource"
+msgstr "Atualizar recurso"

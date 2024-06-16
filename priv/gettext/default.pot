@@ -300,7 +300,7 @@ msgid "Course"
 msgstr ""
 
 #: lib/educatium_web/live/user_live/show.html.heex:37
-#: lib/educatium_web/live/user_live/show.html.heex:101
+#: lib/educatium_web/live/user_live/show.html.heex:201
 #, elixir-autogen, elixir-format
 msgid "Create resource"
 msgstr ""
@@ -326,7 +326,7 @@ msgstr ""
 msgid "Follow"
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:93
+#: lib/educatium_web/live/user_live/show.html.heex:193
 #, elixir-autogen, elixir-format
 msgid "Get started by creating a new resource"
 msgstr ""
@@ -364,12 +364,14 @@ msgstr ""
 msgid "Logging in..."
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:67
+#: lib/educatium_web/live/user_live/show.html.heex:94
+#: lib/educatium_web/live/user_live/show.html.heex:131
+#: lib/educatium_web/live/user_live/show.html.heex:166
 #, elixir-autogen, elixir-format
 msgid "More details"
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:90
+#: lib/educatium_web/live/user_live/show.html.heex:190
 #, elixir-autogen, elixir-format
 msgid "No resources"
 msgstr ""
@@ -437,11 +439,6 @@ msgstr ""
 msgid "There was an error updating your details."
 msgstr ""
 
-#: lib/educatium_web/live/user_live/show.html.heex:95
-#, elixir-autogen, elixir-format
-msgid "This user has not created any resources yet"
-msgstr ""
-
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "To finish your account registration please provide some additional information"
@@ -459,6 +456,7 @@ msgid "Update details"
 msgstr ""
 
 #: lib/educatium_web/live/auth_live/user_settings_live.ex:98
+#: lib/educatium_web/live/resource_live/form_component.ex:47
 #, elixir-autogen, elixir-format
 msgid "Updating..."
 msgstr ""
@@ -483,7 +481,7 @@ msgstr ""
 msgid "you"
 msgstr ""
 
-#: lib/educatium/accounts/user.ex:178
+#: lib/educatium/accounts/user.ex:177
 #, elixir-autogen, elixir-format
 msgid "must only contain alphanumeric characters, underscores and periods"
 msgstr ""
@@ -537,6 +535,8 @@ msgid "Creating..."
 msgstr ""
 
 #: lib/educatium_web/live/home_live/form_component.ex:44
+#: lib/educatium_web/live/resource_live/form_component.ex:26
+#: lib/educatium_web/live/resource_live/show.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr ""
@@ -583,6 +583,7 @@ msgid "Oldest"
 msgstr ""
 
 #: lib/educatium_web/live/home_live/form_component.ex:55
+#: lib/educatium_web/live/resource_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Original publication date"
 msgstr ""
@@ -593,16 +594,10 @@ msgid "Resource created successfully."
 msgstr ""
 
 #: lib/educatium_web/live/home_live/form_component.ex:61
+#: lib/educatium_web/live/resource_live/form_component.ex:39
 #, elixir-autogen, elixir-format
 msgid "Select one or more tags"
 msgstr ""
-
-#: lib/educatium_web/live/home_live/components/comments.ex:14
-#, elixir-autogen, elixir-format
-msgid "Showing a total of %{count} comments"
-msgid_plural "Showing a total of %{count} comments"
-msgstr[0] ""
-msgstr[1] ""
 
 #: lib/educatium_web/controllers/error_html/404.html.heex:20
 #, elixir-autogen, elixir-format
@@ -616,11 +611,14 @@ msgid "Sort by"
 msgstr ""
 
 #: lib/educatium_web/live/home_live/form_component.ex:42
+#: lib/educatium_web/live/resource_live/form_component.ex:24
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
 
 #: lib/educatium_web/live/home_live/form_component.ex:50
+#: lib/educatium_web/live/resource_live/form_component.ex:32
+#: lib/educatium_web/live/resource_live/show.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr ""
@@ -648,4 +646,71 @@ msgstr ""
 #: lib/educatium_web/live/home_live/index.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Search for a post..."
+msgstr ""
+
+#: lib/educatium_web/live/home_live/components/post.ex:182
+#, elixir-autogen, elixir-format
+msgid "Bookmark from resource has been removed"
+msgstr ""
+
+#: lib/educatium_web/live/home_live/components/post.ex:192
+#, elixir-autogen, elixir-format
+msgid "Bookmark has been added to resource. Check your bookmarks under your profile!"
+msgstr ""
+
+#: lib/educatium_web/live/user_live/show.html.heex:60
+#, elixir-autogen, elixir-format
+msgid "Bookmarked"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/show.html.heex:44
+#, elixir-autogen, elixir-format
+msgid "Date (of the resource itself)"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/show.ex:42
+#, elixir-autogen, elixir-format
+msgid "Editing Resource"
+msgstr ""
+
+#: lib/educatium_web/live/user_live/show.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Mine"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/show.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "Published by %{first_name} %{last_name}"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/form_component.ex:112
+#, elixir-autogen, elixir-format
+msgid "Resource updated successfully!"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/show.ex:41
+#, elixir-autogen, elixir-format
+msgid "Showing Resource"
+msgstr ""
+
+#: lib/educatium_web/live/home_live/components/comments.ex:14
+#, elixir-autogen, elixir-format
+msgid "Showing a total of %{count} comment"
+msgid_plural "Showing a total of %{count} comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/educatium_web/live/resource_live/show.html.heex:29
+#, elixir-autogen, elixir-format
+msgid "Tags"
+msgstr ""
+
+#: lib/educatium_web/live/user_live/show.html.heex:195
+#, elixir-autogen, elixir-format
+msgid "This user has not published any resources yet"
+msgstr ""
+
+#: lib/educatium_web/live/resource_live/form_component.ex:48
+#, elixir-autogen, elixir-format
+msgid "Update resource"
 msgstr ""
