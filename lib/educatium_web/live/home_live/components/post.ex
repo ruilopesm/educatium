@@ -55,15 +55,19 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
             </h3>
           </div>
           <div class="flex gap-1">
-            <%= for tag <- Enum.take(@tags, 3) do %>
+            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-600">
+              <%= capitalize_atom(@post.resource.type) %>
+            </span>
+
+            <%= for tag <- Enum.take(@tags, 2) do %>
               <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
                 <%= tag.name %>
               </span>
             <% end %>
 
-            <%= if length(@tags) > 3 do %>
+            <%= if length(@tags) > 2 do %>
               <span class="rounded-full bg-gray-100 px-2.5 py-1 text-center text-xs font-medium leading-4 text-gray-700">
-                +<%= length(@tags) - 3 %>
+                +<%= length(@tags) - 2 %>
               </span>
             <% end %>
           </div>
