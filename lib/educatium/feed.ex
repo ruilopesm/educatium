@@ -142,19 +142,6 @@ defmodule Educatium.Feed do
   end
 
   @doc """
-  Preloads the necessary associations for a post.
-
-  ## Examples
-
-      iex> preload_post(post)
-      %Post{}
-  """
-  def preload_post(post) do
-    preloads = Post.preloads()
-    Repo.preload(post, preloads)
-  end
-
-  @doc """
   Gets a post's upvote.
 
   ## Examples

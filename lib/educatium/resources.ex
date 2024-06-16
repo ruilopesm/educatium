@@ -29,11 +29,28 @@ defmodule Educatium.Resources do
 
       iex> list_resources_by_user(123)
       [%Resource{}, ...]
+
   """
   def list_resources_by_user(user_id, opts \\ []) do
     Resource
     |> where(user_id: ^user_id)
     |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of resources bookmarked by user.
+
+  ## Examples
+
+      iex> list_bookmarked_resources_by_user(123)
+      [%Resource{}, ...]
+
+  """
+  def list_bookmarked_resources_by_user(user_id) do
+    Resource
+    |> join(:inner, [r], b in Bookmark, on: b.resource_id == r.id)
+    |> where([r, b], b.user_id == ^user_id)
     |> Repo.all()
   end
 
@@ -447,7 +464,7 @@ defmodule Educatium.Resources do
 
       iex> bookmark_resource(resource, user)
       %Resource{}
-    
+
   """
   def bookmark_resource!(resource, user) do
     %Bookmark{}
