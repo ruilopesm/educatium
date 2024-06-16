@@ -27,7 +27,7 @@
 <.list>
   <:item title={gettext("Email")}><%= @user.email %></:item>
   <:item title={gettext("Education")}><%= @user.course %>, <%= @user.university %></:item>
-  <:item title={gettext("Role")}><%= display_role(@user.role) %></:item>
+  <:item title={gettext("Role")}><%= display_atom(@user.role) %></:item>
 </.list>
 
 <hr class="mt-10 mb-2" />
