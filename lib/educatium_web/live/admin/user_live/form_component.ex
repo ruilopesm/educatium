@@ -19,8 +19,10 @@ defmodule EducatiumWeb.Admin.UserLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        class="mt-10"
       >
         <.input field={@form[:handle]} label={gettext("Handle")} />
+        <.input field={@form[:email]} label={gettext("Email")} />
         <.input field={@form[:first_name]} label={gettext("First name")} />
         <.input field={@form[:last_name]} label={gettext("Last name")} />
         <.input field={@form[:course]} label={gettext("Course")} />

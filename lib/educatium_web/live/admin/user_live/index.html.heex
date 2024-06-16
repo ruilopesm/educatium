@@ -2,7 +2,7 @@
   <%= gettext("Listing Users") %>
   <:actions>
     <.link patch={~p"/admin/users/new"}>
-      <.button><%= gettext("New User") %></.button>
+      <.button><%= gettext("Create User") %></.button>
     </.link>
   </:actions>
 </.header>
@@ -13,12 +13,12 @@
   row_click={fn {_id, user} -> JS.navigate(~p"/users/#{user}") end}
 >
   <:col :let={{_id, user}} label={gettext("Handle")}><%= user.handle %></:col>
+  <:col :let={{_id, user}} label={gettext("Email")}><%= user.email %></:col>
   <:col :let={{_id, user}} label={gettext("First name")}><%= user.first_name %></:col>
   <:col :let={{_id, user}} label={gettext("Last name")}><%= user.last_name %></:col>
   <:col :let={{_id, user}} label={gettext("Course")}><%= user.course %></:col>
   <:col :let={{_id, user}} label={gettext("University")}><%= user.university %></:col>
-  <:col :let={{_id, user}} label={gettext("Role")}><%= user.role %></:col>
-  <:col :let={{_id, user}} label={gettext("Active")}><%= user.active %></:col>
+  <:col :let={{_id, user}} label={gettext("Role")}><%= display_atom(user.role) %></:col>
   <:action :let={{_id, user}}>
     <div class="sr-only">
       <.link navigate={~p"/users/#{user}"}><%= gettext("Show") %></.link>
