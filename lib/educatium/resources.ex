@@ -135,7 +135,7 @@ defmodule Educatium.Resources do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_resource(%Resource{} = resource, attrs, path) do
+  def update_resource(%Resource{} = resource, attrs, path \\ nil) do
     Multi.new()
     |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->

@@ -11,7 +11,7 @@ defmodule EducatiumWeb.HomeLive.Components.Comments do
     <div>
       <.header>
         <%= @title %>
-          <:subtitle><%= gettext("Showing a total of %{count} comments", count: @post.comment_count) %></:subtitle>
+          <:subtitle><%= ngettext("Showing a total of %{count} comment", "Showing a total of %{count} comments", @post.comment_count, count: @post.comment_count) %></:subtitle>
       </.header>
 
       <.button phx-click="comment" phx-target={@myself} class="mt-2 h-10">

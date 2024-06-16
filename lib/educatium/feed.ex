@@ -21,23 +21,40 @@ defmodule Educatium.Feed do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
     |> where([_, r], r.visibility == :public)
-    |> order_by(desc: :inserted_at)
     |> apply_filters(opts)
     |> Repo.all()
   end
 
   @doc """
-  Returns the list of resources that match the given query.
+  Returns the list of posts that match the given query.
 
   ## Examples
 
       iex> search_posts("elixir")
       [%Post{}, ...]
+
   """
   def search_posts(query, opts \\ []) do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
     |> where([_, r], ilike(r.title, ^"%#{query}%"))
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of posts filtered by a given resource type.
+
+  ## Examples
+
+      iex> filter_posts(filter, opts)
+      [%Post{}, ...]
+
+  """
+  def filter_posts(filter, opts \\ []) do
+    Post
+    |> join(:left, [p], r in Resource, on: r.post_id == p.id)
+    |> where([_, r], r.type == ^filter)
     |> apply_filters(opts)
     |> Repo.all()
   end

@@ -79,7 +79,10 @@ defmodule EducatiumWeb.Router do
         live "/:id/comments", HomeLive.Index, :comments
       end
 
-      live "/resources/:id", ResourceLive.Show, :show
+      scope "/resources" do
+        live "/:id", ResourceLive.Show, :show
+        live "/:id/show/edit", ResourceLive.Show, :edit
+      end
 
       scope "/users" do
         live "/settings", UserSettingsLive, :edit

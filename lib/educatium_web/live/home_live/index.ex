@@ -3,9 +3,11 @@ defmodule EducatiumWeb.HomeLive.Index do
 
   alias Educatium.Feed
   alias Educatium.Feed.Post
-
+  alias Educatium.Resources.Resource
   alias EducatiumWeb.HomeLive.Components
   alias EducatiumWeb.HomeLive.FormComponent
+
+  import EducatiumWeb.HomeLive.Components.Dropdown
 
   @preloads Post.preloads()
 
@@ -13,11 +15,18 @@ defmodule EducatiumWeb.HomeLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket), do: Feed.subscribe()
 
+    filters = build_filters()
+    sorts = build_sorts()
+
     {:ok,
      socket
      |> stream(:posts, Feed.list_posts(preloads: @preloads))
      |> assign(:form, to_form(%{}, as: "post"))
-     |> assign(:new_posts_count, 0)}
+     |> assign(:new_posts_count, 0)
+     |> assign(:filters, filters)
+     |> assign(:current_filter, Enum.at(filters, 0))
+     |> assign(:sorts, sorts)
+     |> assign(:current_sort, Enum.at(sorts, 0))}
   end
 
   @impl true
@@ -47,14 +56,20 @@ defmodule EducatiumWeb.HomeLive.Index do
   def handle_event("search", %{"post" => ""}, socket) do
     {:noreply,
      socket
-     |> stream(:posts, Feed.list_posts(preloads: @preloads), reset: true)}
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )}
   end
 
   @impl true
   def handle_event("search", %{"post" => post}, socket) do
     {:noreply,
      socket
-     |> stream(:posts, Feed.search_posts(post, preloads: @preloads), reset: true)}
+     |> stream(
+       :posts,
+       Feed.search_posts(post, preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )}
   end
 
   @impl true
@@ -62,7 +77,9 @@ defmodule EducatiumWeb.HomeLive.Index do
     {:noreply,
      socket
      |> assign(:new_posts_count, 0)
-     |> stream(:posts, Feed.list_posts(preloads: @preloads), reset: true)}
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )}
   end
 
   @impl true
@@ -76,6 +93,63 @@ defmodule EducatiumWeb.HomeLive.Index do
     {:noreply,
      socket
      |> push_patch(to: ~p"/posts/new")}
+  end
+
+  @impl true
+  def handle_event("entry-changed", %{"entry" => entry, "name" => name}, socket) do
+    entry = String.to_existing_atom(entry)
+
+    case name do
+      "filter" -> handle_filter_change(entry, socket)
+      "sort" -> handle_sort_change(entry, socket)
+    end
+  end
+
+  defp handle_filter_change(:nothing, socket) do
+    {:noreply,
+     socket
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )
+     |> assign(:current_filter, Enum.at(socket.assigns.filters, 0))}
+  end
+
+  defp handle_filter_change(filter, socket) do
+    {:noreply,
+     socket
+     |> stream(
+       :posts,
+       Feed.filter_posts(filter, preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )
+     |> assign(:current_filter, find_by_value(socket.assigns.filters, filter))}
+  end
+
+  defp handle_sort_change(:newest, socket) do
+    {:noreply,
+     socket
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :inserted_at]),
+       reset: true
+     )
+     |> assign(:current_sort, Enum.at(socket.assigns.sorts, 0))}
+  end
+
+  defp handle_sort_change(:oldest, socket) do
+    {:noreply,
+     socket
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [asc: :inserted_at]),
+       reset: true
+     )
+     |> assign(:current_sort, Enum.at(socket.assigns.sorts, 1))}
+  end
+
+  defp handle_sort_change(:most_viewed, socket) do
+    {:noreply,
+     socket
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :view_count]),
+       reset: true
+     )
+     |> assign(:current_sort, Enum.at(socket.assigns.sorts, 2))}
   end
 
   @impl true
@@ -106,5 +180,27 @@ defmodule EducatiumWeb.HomeLive.Index do
     {:noreply,
      socket
      |> put_flash(level, msg)}
+  end
+
+  defp build_filters do
+    types = Resource.types()
+
+    [%{label: gettext("Nothing"), value: :nothing}] ++
+      Enum.map(types, fn type ->
+        %{label: capitalize_atom(type), value: type}
+      end)
+  end
+
+  defp build_sorts do
+    [
+      %{label: gettext("Newest"), value: :newest},
+      %{label: gettext("Oldest"), value: :oldest},
+      %{label: gettext("Most viewed"), value: :most_viewed}
+    ]
+  end
+
+  defp find_by_value(list, value) do
+    value = for item <- list, item.value == value, do: item
+    List.first(value)
   end
 end
