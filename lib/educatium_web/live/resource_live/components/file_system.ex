@@ -19,7 +19,7 @@ defmodule EducatiumWeb.ResourceLive.Components.FileSystem do
               <div class="absolute left-0 whitespace-nowrap py-4 pr-4 pl-3 text-left text-sm font-medium sm:pr-6">
                 <%= if @directory.directory_id do %>
                   <div
-                    phx-click="load-prev-directory"
+                    phx-click="load-directory"
                     phx-value-dir_id={@directory.directory_id}
                     class="cursor-pointer hover:text-orange-600 hover:underline"
                   >

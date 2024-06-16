@@ -10,7 +10,11 @@
   </:subtitle>
 
   <:actions>
-    <.link phx-click={JS.push_focus()}>
+    <.link
+      :if={@is_owner}
+      patch={~p"/resources/#{@resource}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
       <.button>Edit resource</.button>
     </.link>
     <.link :if={@directory} href={~p"/directories/#{@resource.directory.id}"}>

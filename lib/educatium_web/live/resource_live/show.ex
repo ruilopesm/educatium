@@ -12,19 +12,19 @@ defmodule EducatiumWeb.ResourceLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    resource = Resources.get_resource!(id, [:directory, :user])
+    resource = Resources.get_resource!(id, [:directory, :user, :tags])
     tags = Resources.list_tags_by_resource(resource.id)
+    directory = maybe_get_directory!(resource.directory)
 
-    directory =
-      if resource.directory,
-        do: Resources.get_directory!(resource.directory.id, [:files, :subdirectories]),
-        else: nil
+    is_owner = resource.user_id == socket.assigns.current_user.id
 
     {:noreply,
      socket
+     |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:resource, resource)
      |> assign(:tags, tags)
-     |> assign(:directory, directory)}
+     |> assign(:directory, directory)
+     |> assign(:is_owner, is_owner)}
   end
 
   @impl true
@@ -33,9 +33,11 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply, assign(socket, directory: directory)}
   end
 
-  @impl true
-  def handle_event("load-prev-directory", %{"dir_id" => dir_id}, socket) do
-    directory = Resources.get_directory!(dir_id, [:files, :subdirectories])
-    {:noreply, assign(socket, directory: directory)}
-  end
+  defp maybe_get_directory!(nil), do: nil
+
+  defp maybe_get_directory!(directory),
+    do: Resources.get_directory!(directory.id, [:files, :subdirectories])
+
+  defp page_title(:show), do: gettext("Showing Resource")
+  defp page_title(:edit), do: gettext("Editing Resource")
 end

@@ -24,7 +24,7 @@ defmodule Educatium.Resources.Resource do
 
     has_one :directory, Directory
 
-    many_to_many :tags, Tag, join_through: ResourceTag
+    many_to_many :tags, Tag, on_replace: :delete, join_through: ResourceTag
 
     timestamps(type: :utc_datetime)
   end
