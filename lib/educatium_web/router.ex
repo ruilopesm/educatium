@@ -101,9 +101,16 @@ defmodule EducatiumWeb.Router do
   scope "/admin", EducatiumWeb.Admin, as: :admin do
     pipe_through [:browser, :require_admin]
 
-    live "/users", UserLive.Index, :index
-    live "/users/new", UserLive.Index, :new
-    live "/users/:handle/edit", UserLive.Index, :edit
+    scope "/users" do
+      live "/", UserLive.Index, :index
+      live "/new", UserLive.Index, :new
+      live "/:handle/edit", UserLive.Index, :edit
+    end
+
+    scope "/posts" do
+      live "/", PostLive.Index, :index
+      live "/:id/edit", PostLive.Index, :edit
+    end
   end
 
   scope "/", EducatiumWeb do

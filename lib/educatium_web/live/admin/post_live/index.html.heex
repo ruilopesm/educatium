@@ -1,0 +1,34 @@
+<.header>
+  <%= gettext("Listing Posts") %>
+  <:actions>
+    <.link patch={~p"/posts/new"}>
+      <.button><%= gettext("New Post") %></.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="posts"
+  rows={@streams.posts}
+  row_click={fn {_id, post} -> if post.type == :resource, do: JS.navigate(~p"/resources/#{post.resource.id}") end}
+>
+  <:col :let={{_id, post}} label={gettext("Type")}><%= display_atom(post.type) %></:col>
+  <:col :let={{_id, post}} label={gettext("Views")}><%= post.view_count %></:col>
+  <:col :let={{_id, post}} label={gettext("Upvotes")}><%= post.upvote_count %></:col>
+  <:col :let={{_id, post}} label={gettext("Downvotes")}><%= post.downvote_count %></:col>
+  <:col :let={{_id, post}} label={gettext("Comments")}><%= post.comment_count %></:col>
+  <:action :let={{_id, post}}>
+    <.link patch={~p"/admin/posts/#{post}/edit"}><%= gettext("Edit") %></.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="post-modal" show on_cancel={JS.patch(~p"/admin/posts")}>
+  <.live_component
+    module={EducatiumWeb.Admin.PostLive.FormComponent}
+    id={@post.id || :new}
+    title={@page_title}
+    action={@live_action}
+    post={@post}
+    patch={~p"/admin/posts"}
+  />
+</.modal>

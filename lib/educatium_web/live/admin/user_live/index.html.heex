@@ -14,15 +14,10 @@
 >
   <:col :let={{_id, user}} label={gettext("Handle")}><%= user.handle %></:col>
   <:col :let={{_id, user}} label={gettext("Email")}><%= user.email %></:col>
-  <:col :let={{_id, user}} label={gettext("First name")}><%= user.first_name %></:col>
-  <:col :let={{_id, user}} label={gettext("Last name")}><%= user.last_name %></:col>
-  <:col :let={{_id, user}} label={gettext("Course")}><%= user.course %></:col>
-  <:col :let={{_id, user}} label={gettext("University")}><%= user.university %></:col>
+  <:col :let={{_id, user}} label={gettext("Name")}><%= display_name(user) %></:col>
+  <:col :let={{_id, user}} label={gettext("Education")}><%= user.course %>, <%= user.university %></:col>
   <:col :let={{_id, user}} label={gettext("Role")}><%= display_atom(user.role) %></:col>
   <:action :let={{_id, user}}>
-    <div class="sr-only">
-      <.link navigate={~p"/users/#{user}"}><%= gettext("Show") %></.link>
-    </div>
     <.link patch={~p"/admin/users/#{user}/edit"}><%= gettext("Edit") %></.link>
   </:action>
 </.table>
