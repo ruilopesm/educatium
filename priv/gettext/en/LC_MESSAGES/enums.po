@@ -20,6 +20,9 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
+msgid "Resource"
+msgstr ""
+
 msgid "Public"
 msgstr ""
 

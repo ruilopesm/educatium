@@ -19,7 +19,7 @@ defmodule EducatiumWeb.Admin.TagLiveTest do
     test "lists all tag", %{conn: conn, tag: tag} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/tag")
 
-      assert html =~ "Listing Tag"
+      assert html =~ "Listing Tags"
       assert html =~ tag.name
     end
 
