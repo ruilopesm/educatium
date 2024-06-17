@@ -1,0 +1,41 @@
+<.header>
+  <%= gettext("Listing Users") %>
+  <:actions>
+    <.link patch={~p"/admin/users/new"}>
+      <.button><%= gettext("Create User") %></.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="users"
+  rows={@streams.users}
+  row_click={fn {_id, user} -> JS.navigate(~p"/users/#{user}") end}
+>
+  <:col :let={{_id, user}} label={gettext("Handle")}><%= user.handle %></:col>
+  <:col :let={{_id, user}} label={gettext("Email")}><%= user.email %></:col>
+  <:col :let={{_id, user}} label={gettext("Name")}><%= display_name(user) %></:col>
+  <:col :let={{_id, user}} label={gettext("Education")}>
+    <%= user.course %>, <%= user.university %>
+  </:col>
+  <:col :let={{_id, user}} label={gettext("Role")}><%= display_atom(user.role) %></:col>
+  <:action :let={{_id, user}}>
+    <.link patch={~p"/admin/users/#{user}/edit"}><%= gettext("Edit") %></.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="user-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/users")}
+>
+  <.live_component
+    module={EducatiumWeb.Admin.UserLive.FormComponent}
+    id={@user.id || :new}
+    title={@page_title}
+    action={@live_action}
+    user={@user}
+    patch={~p"/admin/users"}
+  />
+</.modal>

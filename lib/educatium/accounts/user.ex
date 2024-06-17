@@ -4,7 +4,7 @@ defmodule Educatium.Accounts.User do
   alias Educatium.Resources.Resource
   alias Educatium.Uploaders.Avatar
 
-  @roles ~w(student teacher)a
+  @roles ~w(student teacher admin)a
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active)a

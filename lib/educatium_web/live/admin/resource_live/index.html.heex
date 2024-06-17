@@ -1,0 +1,19 @@
+<.header>
+  <%= gettext("Listing Resources") %>
+</.header>
+
+<.table
+  id="resources"
+  rows={@streams.resources}
+  row_click={fn {_id, resource} -> JS.navigate(~p"/resources/#{resource}") end}
+>
+  <:col :let={{_id, resource}} label={gettext("Title")}><%= resource.title %></:col>
+  <:col :let={{_id, resource}} label={gettext("Description")}><%= resource.description %></:col>
+  <:col :let={{_id, resource}} label={gettext("Type")}><%= display_atom(resource.type) %></:col>
+  <:col :let={{_id, resource}} label={gettext("Number of Tags")}>
+    <%= length(resource.tags) %>
+  </:col>
+  <:col :let={{_id, resource}} label={gettext("Visibility")}>
+    <%= display_atom(resource.visibility) %>
+  </:col>
+</.table>

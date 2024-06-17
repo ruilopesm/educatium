@@ -16,7 +16,7 @@
             class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500"
           >
             <span class="absolute -inset-1.5"></span>
-            <span class="sr-only">View notifications</span>
+            <span class="sr-only"><%= gettext("View notifications") %></span>
             <.icon name="hero-bell" />
           </button>
           <!-- Profile dropdown -->
@@ -33,7 +33,7 @@
                 @keydown.escape="open = false"
               >
                 <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">Open user menu</span>
+                <span class="sr-only"><%= gettext("Open user menu") %></span>
                 <%= if @current_user.avatar do %>
                   <.avatar
                     src={
@@ -76,6 +76,49 @@
               >
                 <%= gettext("Profile") %>
               </.link>
+
+              <%= if @current_user.role == :admin do %>
+                <.link
+                  href={~p"/admin/users"}
+                  class="block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-1"
+                >
+                  <%= gettext("Users") %>
+                </.link>
+
+                <.link
+                  href={~p"/admin/posts"}
+                  class="block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-2"
+                >
+                  <%= gettext("Posts") %>
+                </.link>
+
+                <.link
+                  href={~p"/admin/resources"}
+                  class="block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-3"
+                >
+                  <%= gettext("Resources") %>
+                </.link>
+
+                <.link
+                  href={~p"/admin/tags"}
+                  class="block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-4"
+                >
+                  <%= gettext("Tags") %>
+                </.link>
+              <% end %>
+
               <.link
                 href={~p"/users/settings"}
                 class="block px-4 py-2 text-sm hover:bg-gray-100"

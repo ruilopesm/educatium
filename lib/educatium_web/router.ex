@@ -17,6 +17,7 @@ defmodule EducatiumWeb.Router do
   end
 
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
+  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.EnsureAdmin)
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
@@ -93,6 +94,33 @@ defmodule EducatiumWeb.Router do
     end
 
     get "/directories/:id", DirectoryController, :download_directory
+  end
+
+  ## Admin routes
+
+  scope "/admin", EducatiumWeb.Admin, as: :admin do
+    pipe_through [:browser, :require_admin]
+
+    scope "/users" do
+      live "/", UserLive.Index, :index
+      live "/new", UserLive.Index, :new
+      live "/:handle/edit", UserLive.Index, :edit
+    end
+
+    scope "/posts" do
+      live "/", PostLive.Index, :index
+      live "/:id/edit", PostLive.Index, :edit
+    end
+
+    scope "/resources" do
+      live "/", ResourceLive.Index, :index
+    end
+
+    scope "/tags" do
+      live "/", TagLive.Index, :index
+      live "/new", TagLive.Index, :new
+      live "/:id/edit", TagLive.Index, :edit
+    end
   end
 
   scope "/", EducatiumWeb do
