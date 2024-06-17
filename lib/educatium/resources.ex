@@ -102,6 +102,7 @@ defmodule Educatium.Resources do
   def create_resource(attrs, path \\ nil)
 
   def create_resource(%{"visibility" => "public"} = attrs, path) do
+    IO.puts("Creating public resource")
     create_resource_with_post(attrs, path)
   end
 

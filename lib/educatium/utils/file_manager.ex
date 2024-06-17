@@ -144,4 +144,21 @@ defmodule Educatium.Utils.FileManager do
       end
     end)
   end
+
+  def write_zip_to_path(zip, path) do
+    Unzip.list_entries(zip)
+    |> Enum.each(fn entry ->
+      file_name = entry.file_name
+
+      stream_entry = Unzip.file_stream!(zip, file_name) |> Enum.to_list()
+
+      Elixir.File.mkdir_p!(Path.join(path, Path.dirname(file_name)))
+      Elixir.File.write!(Path.join(path, file_name), stream_entry)
+    end)
+
+    dir = Elixir.File.ls!(path)
+    |> Enum.at(0)
+
+    Path.join(path, dir)
+  end
 end

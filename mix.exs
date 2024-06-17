@@ -72,6 +72,7 @@ defmodule Educatium.MixProject do
       # uploads
       {:waffle_ecto, "~> 0.0"},
       {:waffle, "~> 1.1"},
+      {:unzip, "~> 0.11.0"},
 
       # files
       {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},
