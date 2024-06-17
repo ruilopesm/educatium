@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/educatium_web/components/core_components.ex:636
+#: lib/educatium_web/components/core_components.ex:652
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -37,10 +37,13 @@ msgstr ""
 msgid "Register for an account"
 msgstr ""
 
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:300
 #, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
 msgstr ""
 
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:11
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:226
 #, elixir-autogen, elixir-format
 msgid "Account Settings"
 msgstr ""
@@ -55,18 +58,18 @@ msgstr ""
 msgid "Already registered?"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:124
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:133
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:169
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:178
 #, elixir-autogen, elixir-format
 msgid "Change Password"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:123
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:168
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:132
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:177
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr ""
@@ -82,7 +85,7 @@ msgid "Confirm my account"
 msgstr ""
 
 #: lib/educatium_web/live/auth_live/user_reset_password_live.ex:26
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:155
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:164
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr ""
@@ -97,8 +100,8 @@ msgstr ""
 msgid "Creating account..."
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:118
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:161
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:127
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:170
 #, elixir-autogen, elixir-format
 msgid "Current password"
 msgstr ""
@@ -108,6 +111,8 @@ msgstr ""
 msgid "Don't have an account?"
 msgstr ""
 
+#: lib/educatium_web/live/admin/user_live/form_component.ex:25
+#: lib/educatium_web/live/admin/user_live/index.html.heex:16
 #: lib/educatium_web/live/auth_live/user_login_live.ex:25
 #: lib/educatium_web/live/auth_live/user_settings_live.ex:33
 #: lib/educatium_web/live/user_live/show.html.heex:28
@@ -115,19 +120,19 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:190
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:211
 #, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:187
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:208
 #, elixir-autogen, elixir-format
 msgid "Email changed successfully."
 msgstr ""
 
 #: lib/educatium_web/live/auth_live/user_forgot_password_live.ex:10
 #: lib/educatium_web/live/auth_live/user_login_live.ex:30
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:172
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:181
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
@@ -152,6 +157,7 @@ msgstr ""
 msgid "Keep me logged in"
 msgstr ""
 
+#: lib/educatium_web/components/layouts/navbar.html.heex:161
 #: lib/educatium_web/live/auth_live/user_confirmation_instructions_live.ex:32
 #: lib/educatium_web/live/auth_live/user_confirmation_live.ex:22
 #: lib/educatium_web/live/auth_live/user_forgot_password_live.ex:24
@@ -178,7 +184,7 @@ msgid "Manage your account email address and password settings"
 msgstr ""
 
 #: lib/educatium_web/live/auth_live/user_reset_password_live.ex:22
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:149
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:158
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
@@ -290,12 +296,15 @@ msgstr ""
 msgid "Account registration completed successfully"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:95
+#: lib/educatium_web/live/admin/user_live/form_component.ex:28
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:104
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:30
 #, elixir-autogen, elixir-format
 msgid "Course"
 msgstr ""
 
+#: lib/educatium_web/live/user_live/show.html.heex:35
+#: lib/educatium_web/live/user_live/show.html.heex:211
 #, elixir-autogen, elixir-format
 msgid "Create resource"
 msgstr ""
@@ -305,12 +314,14 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
+#: lib/educatium_web/live/admin/user_live/index.html.heex:18
 #: lib/educatium_web/live/user_live/show.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Education"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:93
+#: lib/educatium_web/live/admin/user_live/form_component.ex:26
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:102
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:28
 #, elixir-autogen, elixir-format
 msgid "First name"
@@ -321,17 +332,14 @@ msgstr ""
 msgid "Follow"
 msgstr ""
 
+#: lib/educatium_web/live/user_live/show.html.heex:203
 #, elixir-autogen, elixir-format
 msgid "Get started by creating a new resource"
 msgstr ""
 
-#: lib/educatium_web/controllers/error_html/404.html.heex:27
-#: lib/educatium_web/controllers/error_html/500.html.heex:27
-#, elixir-autogen, elixir-format
-msgid "Go back home"
-msgstr ""
-
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:92
+#: lib/educatium_web/live/admin/user_live/form_component.ex:24
+#: lib/educatium_web/live/admin/user_live/index.html.heex:15
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:101
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:26
 #, elixir-autogen, elixir-format
 msgid "Handle"
@@ -342,12 +350,14 @@ msgstr ""
 msgid "If you didn't receive the confirmation email resend it bellow"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:94
+#: lib/educatium_web/live/admin/user_live/form_component.ex:27
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:103
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:29
 #, elixir-autogen, elixir-format
 msgid "Last name"
 msgstr ""
 
+#: lib/educatium_web/components/layouts/navbar.html.heex:149
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr ""
@@ -357,28 +367,30 @@ msgstr ""
 msgid "Logging in..."
 msgstr ""
 
+#: lib/educatium_web/live/user_live/show.html.heex:96
+#: lib/educatium_web/live/user_live/show.html.heex:137
+#: lib/educatium_web/live/user_live/show.html.heex:176
 #, elixir-autogen, elixir-format
 msgid "More details"
 msgstr ""
 
+#: lib/educatium_web/live/user_live/show.html.heex:200
 #, elixir-autogen, elixir-format
 msgid "No resources"
 msgstr ""
 
-#: lib/educatium_web/controllers/error_html/404.html.heex:17
-#, elixir-autogen, elixir-format
-msgid "Page not found"
-msgstr ""
-
+#: lib/educatium_web/plugs/active_user.ex:44
 #, elixir-autogen, elixir-format
 msgid "Please complete your account setup"
 msgstr ""
 
+#: lib/educatium_web/plugs/active_user.ex:33
 #, elixir-autogen, elixir-format
 msgid "Please confirm your account"
 msgstr ""
 
 #: lib/educatium_web/components/layouts/navbar.html.heex:77
+#: lib/educatium_web/live/user_live/show.ex:36
 #, elixir-autogen, elixir-format
 msgid "Profile"
 msgstr ""
@@ -410,7 +422,6 @@ msgstr ""
 msgid "Select the type of account you want to create"
 msgstr ""
 
-#: lib/educatium_web/components/layouts/navbar.html.heex:86
 #: lib/educatium_web/components/layouts/navbar.html.heex:139
 #, elixir-autogen, elixir-format
 msgid "Settings"
@@ -423,20 +434,9 @@ msgid_plural "Show %{count} new posts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/educatium_web/controllers/error_html/500.html.heex:20
-#, elixir-autogen, elixir-format, fuzzy
-msgid "Sorry, something went wrong."
-msgstr ""
-
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:246
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:247
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:269
 #, elixir-autogen, elixir-format
 msgid "There was an error updating your details."
-msgstr ""
-
-#: lib/educatium_web/live/user_live/show.html.heex:95
-#, elixir-autogen, elixir-format
-msgid "This user has not created any resources yet"
 msgstr ""
 
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:13
@@ -445,20 +445,19 @@ msgid "To finish your account registration please provide some additional inform
 msgstr ""
 
 #: lib/educatium_web/live/admin/user_live/form_component.ex:29
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:96
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:105
 #: lib/educatium_web/live/auth_live/user_setup_live.ex:31
 #, elixir-autogen, elixir-format
 msgid "University"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:99
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:108
 #, elixir-autogen, elixir-format
 msgid "Update details"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:98
 #: lib/educatium_web/live/announcement_live/form_component.ex:27
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:98
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:107
 #: lib/educatium_web/live/resource_live/form_component.ex:47
 #, elixir-autogen, elixir-format
 msgid "Updating..."
@@ -469,8 +468,7 @@ msgstr ""
 msgid "Verify your inbox for the confirmation email"
 msgstr ""
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:240
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:241
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:263
 #, elixir-autogen, elixir-format
 msgid "Your details have been updated."
 msgstr ""
@@ -485,13 +483,11 @@ msgstr ""
 msgid "you"
 msgstr ""
 
-#: lib/educatium/accounts/user.ex:178
-#: lib/educatium/accounts/user.ex:177
+#: lib/educatium/accounts/user.ex:181
 #, elixir-autogen, elixir-format, fuzzy
 msgid "must only contain alphanumeric characters, underscores and periods"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/components/post.ex:49
 #: lib/educatium_web/live/home_live/components/post.ex:52
 #, elixir-autogen, elixir-format
 msgid "added a new resource"
@@ -519,21 +515,18 @@ msgstr ""
 msgid "Comment successfully created!"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:50
 #: lib/educatium_web/live/admin/post_live/form_component.ex:34
 #: lib/educatium_web/live/admin/post_live/index.html.heex:23
-#: lib/educatium_web/live/home_live/index.ex:55
+#: lib/educatium_web/live/home_live/index.ex:59
 #, elixir-autogen, elixir-format
 msgid "Comments"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:134
 #: lib/educatium_web/live/home_live/form_component.ex:160
 #, elixir-autogen, elixir-format
 msgid "Compressing files..."
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:85
 #: lib/educatium_web/live/home_live/form_component.ex:86
 #: lib/educatium_web/live/home_live/form_component.ex:102
 #: lib/educatium_web/live/home_live/index.html.heex:30
@@ -541,14 +534,12 @@ msgstr ""
 msgid "Create post"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:85
 #: lib/educatium_web/live/home_live/form_component.ex:86
 #: lib/educatium_web/live/home_live/form_component.ex:102
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Creating..."
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:44
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:16
 #: lib/educatium_web/live/home_live/form_component.ex:45
 #: lib/educatium_web/live/resource_live/form_component.ex:26
@@ -557,7 +548,6 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:212
 #: lib/educatium_web/live/home_live/form_component.ex:266
 #, elixir-autogen, elixir-format
 msgid "Directory %{name} was successfully uploaded (%{length} files)"
@@ -569,20 +559,17 @@ msgstr ""
 msgid "Filter by"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:198
-#: lib/educatium_web/live/home_live/index.ex:203
+#: lib/educatium_web/live/home_live/index.ex:207
 #, elixir-autogen, elixir-format
 msgid "Most viewed"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:38
-#: lib/educatium_web/live/home_live/index.ex:45
+#: lib/educatium_web/live/home_live/index.ex:49
 #, elixir-autogen, elixir-format
 msgid "New post"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:196
-#: lib/educatium_web/live/home_live/index.ex:201
+#: lib/educatium_web/live/home_live/index.ex:205
 #, elixir-autogen, elixir-format
 msgid "Newest"
 msgstr ""
@@ -592,48 +579,31 @@ msgstr ""
 msgid "None selected"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:188
-#: lib/educatium_web/live/home_live/index.ex:193
+#: lib/educatium_web/live/home_live/index.ex:197
 #, elixir-autogen, elixir-format
 msgid "Nothing"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/index.ex:197
-#: lib/educatium_web/live/home_live/index.ex:202
+#: lib/educatium_web/live/home_live/index.ex:206
 #, elixir-autogen, elixir-format
 msgid "Oldest"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:55
 #: lib/educatium_web/live/home_live/form_component.ex:56
 #: lib/educatium_web/live/resource_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Original publication date"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:168
 #: lib/educatium_web/live/home_live/form_component.ex:194
 #, elixir-autogen, elixir-format
 msgid "Resource created successfully."
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:61
 #: lib/educatium_web/live/home_live/form_component.ex:62
 #: lib/educatium_web/live/resource_live/form_component.ex:39
 #, elixir-autogen, elixir-format
 msgid "Select one or more tags"
-msgstr ""
-
-#: lib/educatium_web/live/home_live/components/comments.ex:14
-#, elixir-autogen, elixir-format
-msgid "Showing a total of %{count} comments"
-msgid_plural "Showing a total of %{count} comments"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lib/educatium_web/controllers/error_html/404.html.heex:20
-#, elixir-autogen, elixir-format, fuzzy
-msgid "Sorry, we couldn't find the page you're looking for."
 msgstr ""
 
 #: lib/educatium_web/live/home_live/index.html.heex:26
@@ -642,7 +612,6 @@ msgstr ""
 msgid "Sort by"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:42
 #: lib/educatium_web/live/admin/announcement_live/form_component.ex:23
 #: lib/educatium_web/live/admin/announcement_live/index.html.heex:15
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:15
@@ -654,7 +623,6 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:50
 #: lib/educatium_web/live/admin/post_live/form_component.ex:27
 #: lib/educatium_web/live/admin/post_live/index.html.heex:19
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:17
@@ -665,25 +633,21 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:28
 #: lib/educatium_web/live/home_live/form_component.ex:29
 #, elixir-autogen, elixir-format
 msgid "Type of post to create"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:70
 #: lib/educatium_web/live/home_live/form_component.ex:71
-#, elixir-autogen, elixir-format
+#, elixir-autogen
 msgid "Upload a directory to join your resource"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:220
 #: lib/educatium_web/live/home_live/form_component.ex:274
 #, elixir-autogen, elixir-format
 msgid "Uploading %{progress}%"
 msgstr ""
 
-#: lib/educatium_web/live/home_live/form_component.ex:14
 #: lib/educatium_web/live/home_live/form_component.ex:15
 #, elixir-autogen, elixir-format
 msgid "Use this form to create a post for the main feed."
@@ -1078,4 +1042,29 @@ msgstr ""
 #: lib/educatium_web/live/resource_live/show.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Remove bookmark"
+msgstr ""
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "Dev"
+msgstr ""
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:192
+#, elixir-autogen, elixir-format
+msgid "Key"
+msgstr ""
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:194
+#, elixir-autogen, elixir-format
+msgid "Regenerate Key"
+msgstr ""
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:189
+#, elixir-autogen, elixir-format
+msgid "Toggle API Key"
+msgstr ""
+
+#: lib/educatium/accounts/user.ex:73
+#, elixir-autogen, elixir-format
+msgid "must have the @ sign and no spaces"
 msgstr ""

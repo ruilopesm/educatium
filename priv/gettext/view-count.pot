@@ -10,10 +10,3 @@
 #
 msgid ""
 msgstr ""
-
-#: lib/educatium_web/live/home_live/components/post.ex:83
-#, elixir-autogen, elixir-format
-msgid "%{count} view"
-msgid_plural "%{count} views"
-msgstr[0] ""
-msgstr[1] ""
