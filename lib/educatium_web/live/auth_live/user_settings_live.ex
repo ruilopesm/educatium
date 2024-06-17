@@ -33,15 +33,6 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Email") %>
             </button>
           </li>
-          <li class="me-2">
-            <button
-              @click="option = 'dev'"
-              class="inline-block rounded-t-lg border-b-2 p-4"
-              x-bind:class="option == 'dev' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
-            >
-              <%= gettext("Dev") %>
-            </button>
-          </li>
           <li class={@current_user.role != :admin && "me-2"}>
             <button
               @click="option = 'password'"
@@ -49,6 +40,15 @@ defmodule EducatiumWeb.UserSettingsLive do
               x-bind:class="option == 'password' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
             >
               <%= gettext("Password") %>
+            </button>
+          </li>
+          <li class="me-2">
+            <button
+              @click="option = 'dev'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'dev' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Dev") %>
             </button>
           </li>
           <li :if={@current_user.role == :admin} class="me-2">
