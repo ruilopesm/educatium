@@ -12,7 +12,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       <:subtitle><%= gettext("Manage your account email address and password settings") %></:subtitle>
     </.header>
 
-    <div x-data="{ option: 'dev' }">
+    <div x-data="{ option: 'details' }">
       <div class="mt-7 mb-10 flex justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500">
         <ul class="-mb-px flex flex-wrap">
           <li class="me-2">
