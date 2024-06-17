@@ -12,12 +12,12 @@ defmodule EducatiumWeb.Router do
     plug :put_root_layout, html: {EducatiumWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
     plug :fetch_current_user
+    plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
   end
 
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
-  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.EnsureAdmin)
+  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.RequireAdmin)
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do

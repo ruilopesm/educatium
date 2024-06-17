@@ -1,4 +1,4 @@
-defmodule EducatiumWeb.Plugs.EnsureAdmin do
+defmodule EducatiumWeb.Plugs.RequireAdmin do
   @moduledoc """
   A plug that checks if the current user is an admin.
 
