@@ -65,7 +65,7 @@ User: {
 }
 ```
 
-Daqui depreende-se que um utilizador tem um email, uma password, um avatar, um handle, um primeiro nome, um último nome, um curso, uma universidade, um papel, uma data de confirmação e um estado de ativação.
+Daqui depreende-se que um utilizador tem um email, uma password, um avatar, um _handle_, um primeiro nome, um último nome, um curso, uma universidade, um papel, uma data de confirmação e um estado de ativação.
 
 Esta data de confirmação é utilizada para verificar se o utilizador confirmou o seu email.
 
@@ -115,7 +115,7 @@ Resource: {
 }
 ```
 
-Daqui depreende-se que um recurso educativo tem um título, uma descrição, um tipo, uma data, uma visibilidade e um diretoria raíz. Esta diretoria é _uploaded_ pelo utilizador aquando da criação do recurso educativo. Foi criado, também, um mapeamento na base de dados para diretorias e ficheiros de um recurso, de forma a que seja possível fazer uma listagem dos mesmos.
+Daqui depreende-se que um recurso educativo tem um título, uma descrição, um tipo, uma data, uma visibilidade e uma diretoria raiz. Esta diretoria é _uploaded_ pelo utilizador aquando da criação do recurso educativo. Foi criado, também, um mapeamento na base de dados para diretorias e ficheiros de um recurso, de forma que seja possível fazer uma listagem dos mesmos.
 
 Para além da criação simples, através de um formulário, de um recurso, é também possível a criação de múltiplos recursos através do uso de um ficheiro `.json`.
 
@@ -178,9 +178,40 @@ Announcement: {
 
 ### API REST
 
-O grupo decidiu criar uma API REST para a plataforma, de forma a que seja possível a integração com outras aplicações. Esta API é acessível com recurso a uma chave que pode ser gerada na página de definições de um utilizador.
+O grupo decidiu criar uma API REST para a plataforma, de forma que seja possível a integração com outras aplicações. Esta API é acessível com recurso a uma chave que pode ser gerada na página de definições de um utilizador.
 
 #### Endpoints
+
+_Headers_ necessários:
+```HTTP
+Authorization: <token>
+```
+
+Este token pode ser obtido a partir das definições do utilizador na página de desenvolvimento.
+
+- `GET /api` - Endpoint mostrar estado da API (não é necessário token)
+- `GET /api/test` - Endpoint testar validade token
+- `GET /api/myself` - Endpoint ver utilizador associado ao token
+- `GET /api/users/:id` - Endpoint ver utilizador com `id`
+- `GET /api/resources` - Endpoint listar todos os recursos
+- `GET /api/resources/:id` - Endpoint ver informações recurso
+- `POST /api/resources/` - Endpoint publicar recurso (enviar recurso com multipart)
+- `GET /api/tags` - Endpoint listar todas as tags
+- `GET /api/tags/:id` - Endpoint ver informações de uma tag
+- `GET /api/announcements` - Endpoint listar todos os anúncios
+- `GET /api/announcements/:id` - Endpoint ver informações de um anúncio
+
+##### Endpoints para Administrador
+
+Todos estes endpoints só estão disponíveis caso o utilizador associado ao _token_ seja um administrador.
+
+- `GET /api/users` - Endpoint listar todos os utilizadores
+- `POST /api/tags` - Endpoint criar uma tag
+- `PUT /api/tags/:id` - Endpoint editar uma tag
+- `DELETE /api/tags/:id` - Endpoint apagar uma tag
+- `POST /api/announcements` - Endpoint criar um anúncio
+- `PUT /api/announcements/:id` - Endpoint editar um anúncio
+- `DELETE /api/announcements/:id` - Endpoint apagar um anúncio
 
 ### Exportar
 
