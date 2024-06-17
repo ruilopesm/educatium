@@ -52,6 +52,13 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
         />
 
         <.input
+          field={@resource_form[:visibility]}
+          type="select"
+          options={build_options_for_select(Resource.visibilities())}
+          label={gettext("Visibility")}
+        />
+
+        <.input
           field={@resource_form[:date]}
           label={gettext("Original publication date")}
           type="date"
@@ -182,7 +189,6 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
       resource_params
       |> Map.put("tags", tags)
       |> Map.put("user_id", socket.assigns.current_user.id)
-      |> Map.put("visibility", "public")
 
     case Resources.create_resource(resource_params, socket.assigns.path) do
       {:ok, _resource} ->
