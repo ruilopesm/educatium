@@ -33,6 +33,15 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Email") %>
             </button>
           </li>
+          <li class="me-2">
+            <button
+              @click="option = 'dev'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'dev' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Dev") %>
+            </button>
+          </li>
           <li class={@current_user.role != :admin && "me-2"}>
             <button
               @click="option = 'password'"
@@ -183,6 +192,18 @@ defmodule EducatiumWeb.UserSettingsLive do
             </div>
           </:actions>
         </.simple_form>
+      </div>
+
+      <div x-show="option == 'dev'">
+        <div class="flex flex-col space-y-2">
+          <.input type="switch" name={gettext("Toggle API Key")} checked={!is_nil(@api_key)} />
+          <%= if !is_nil(@api_key) do %>
+            <.input name="key" label={gettext("Key")} type="text" value={@api_key} readonly />
+            <.button phx-click="regenerate-key">
+              <%= gettext("Regenerate Key") %>
+            </.button>
+          <% end %>
+        </div>
       </div>
 
       <div x-show="option == 'website'" class="flex flex-col items-center space-y-12">
