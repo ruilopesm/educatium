@@ -15,7 +15,7 @@ Como tal, o grupo decidiu criar um _setup_ com recurso a Docker e Docker Compose
 
 ```bash
 cp .env.dev.sample .env.dev # Copiar o ficheiro de configuração (poderá ser necessário alterar localhost para db em DB_HOST)
-docker-compose -f docker-compose.dev.yml -f {linux,darwin,window}.yml up
+docker-compose -f docker-compose.dev.yml -f {linux,darwin,windows}.yml up
 ```
 
 Atenção na escolha do segundo ficheiro, pois o mesmo é dependente do sistema operativo que está a ser utilizado.
@@ -23,7 +23,7 @@ Atenção na escolha do segundo ficheiro, pois o mesmo é dependente do sistema 
 É, ainda possível, levantar apenas um container com a base de dados, utilizando a web app em modo local.
 
 ```bash
-docker-compose -f docker-compose.dev.yml -f {linux,darwin,window}.yml up db
+docker-compose -f docker-compose.dev.yml -f {linux,darwin,windows}.yml up db
 ```
 
 ### Local
