@@ -20,7 +20,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
 
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(:page_title, page_title(socket.assigns.live_action, resource.title))
      |> assign(:resource, resource)
      |> assign(:tags, tags)
      |> assign(:directory, directory)
@@ -38,6 +38,6 @@ defmodule EducatiumWeb.ResourceLive.Show do
   defp maybe_get_directory!(directory),
     do: Resources.get_directory!(directory.id, [:files, :subdirectories])
 
-  defp page_title(:show), do: gettext("Showing Resource")
-  defp page_title(:edit), do: gettext("Editing Resource")
+  defp page_title(:show, resource_name), do: resource_name
+  defp page_title(:edit, resource_name), do: gettext("Editing %{title}", title: resource_name)
 end

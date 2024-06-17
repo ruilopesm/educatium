@@ -33,6 +33,7 @@ defmodule EducatiumWeb.UserLive.Show do
 
     {:noreply,
      socket
+     |> assign(:page_title, gettext("Profile"))
      |> assign(:user, user)
      |> assign(:is_current_user, is_current_user)
      |> assign(:resources, resources)

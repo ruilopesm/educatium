@@ -42,6 +42,15 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Password") %>
             </button>
           </li>
+          <li class="me-2">
+            <button
+              @click="option = 'website'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'website' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Website") %>
+            </button>
+          </li>
         </ul>
       </div>
 
@@ -175,6 +184,22 @@ defmodule EducatiumWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
+
+      <div x-show="option === 'website'">
+        <.simple_form
+          for={}
+          id=""
+          phx-submit=""
+          phx-change=""
+        >
+          <.input type="select" options={[gettext("Auto"), gettext("Portuguese"), gettext("English")]} field={@user_form[:handle]} label={gettext("Language")} required />
+          <:actions>
+            <.button phx-disable-with={gettext("Updating...")}>
+              <%= gettext("Update settings") %>
+            </.button>
+          </:actions>
+        </.simple_form>
+      </div>
     </div>
     """
   end
@@ -202,6 +227,7 @@ defmodule EducatiumWeb.UserSettingsLive do
 
     socket =
       socket
+      |> assign(:page_title, gettext("Account Settings"))
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
       |> assign(:current_email, user.email)
