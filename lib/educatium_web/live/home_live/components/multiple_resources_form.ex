@@ -30,7 +30,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
 
         <div>
           <p>Available tags:</p>
-          <div class="flex flex-wrap gap-2 mt-4">
+          <div class="mt-4 flex flex-wrap gap-2">
             <%= for tag <- @tags do %>
               <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
                 <%= tag.name %>
@@ -114,6 +114,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
   def handle_event("save-resource", _params, socket) do
     current_user = socket.assigns.current_user
     path = socket.assigns.path
+
     case Resources.create_resources(current_user, path) do
       {:ok, _} ->
         {:noreply,

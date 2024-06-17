@@ -110,6 +110,7 @@ defmodule Educatium.Utils.FileManager do
 
           Resources.create_resource(attrs, path)
         end)
+
         {:ok, :resources_created}
 
       {:error, error} ->
