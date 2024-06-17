@@ -18,7 +18,7 @@ defmodule EducatiumWeb.UserSetupLive do
       <.input
         field={@form[:role]}
         type="select"
-        options={build_options_for_select(User.roles())}
+        options={build_options_for_select(User.roles() -- [:admin])}
         value={@role}
         label={gettext("Select the type of account you want to create")}
       />

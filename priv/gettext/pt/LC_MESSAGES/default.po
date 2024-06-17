@@ -335,7 +335,7 @@ msgstr "Seguir"
 #: lib/educatium_web/live/user_live/show.html.heex:203
 #, elixir-autogen, elixir-format
 msgid "Get started by creating a new resource"
-msgstr "Começa a criar um novo recurso"
+msgstr "Começa por criar um novo recurso"
 
 #: lib/educatium_web/controllers/error_html/404.html.heex:27
 #: lib/educatium_web/controllers/error_html/500.html.heex:27

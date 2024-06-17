@@ -39,7 +39,7 @@ defmodule EducatiumWeb.Router do
   ## Authentication routes
 
   scope "/", EducatiumWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     live "/users/reset_password", UserForgotPasswordLive, :new
     live "/users/reset_password/:token", UserResetPasswordLive, :edit
@@ -56,6 +56,18 @@ defmodule EducatiumWeb.Router do
 
     get "/auth/:provider", OAuthController, :request
     get "/auth/:provider/callback", OAuthController, :callback
+  end
+
+  scope "/", EducatiumWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+
+    live_session :current_user,
+      on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
   end
 
   ## Normal routes
@@ -130,18 +142,6 @@ defmodule EducatiumWeb.Router do
     scope "/announcements" do
       live "/", AnnouncementLive.Index, :index
       live "/:id/edit", AnnouncementLive.Index, :edit
-    end
-  end
-
-  scope "/", EducatiumWeb do
-    pipe_through [:browser]
-
-    delete "/users/log_out", UserSessionController, :delete
-
-    live_session :current_user,
-      on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
 end
