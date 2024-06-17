@@ -108,6 +108,7 @@ defmodule Educatium.Utils.FileManager do
         Enum.each(manifest, fn entry -> 
           attrs = Map.put(entry, "user_id", user_id)
           path = path <> "/#{Map.get(entry, "path")}"
+
           Resources.create_resource(attrs, path)
         end)
 
@@ -126,6 +127,7 @@ defmodule Educatium.Utils.FileManager do
            Map.has_key?(entry, "date") and
            Map.has_key?(entry, "visibility") and
            Map.has_key?(entry, "path") do
+
           :ok
         else
           {:error, "Invalid manifest entry, missing required fields"}

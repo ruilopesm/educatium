@@ -10,9 +10,25 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        <%= gettext("New resources") %>
         <:subtitle><%= gettext("Use this form to create multiple resources.") %></:subtitle>
       </.header>
+      <div class="mt-4 text-gray-600">
+        <p>The submited directory should have a root file called manifest.json just like this:</p>
+        <pre class><code class="language-json">
+  [
+      {
+        "title": "Resource Title 1",
+        "description": "Description",
+        "type": "book",
+        "date": "2023-05-15",
+        "visibility": "public",
+        "path": "resource1"
+      },
+      other resources...
+  ]
+        </code></pre>
+      </div>
 
       <.simple_form
         for={nil}
