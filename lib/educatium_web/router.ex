@@ -62,12 +62,21 @@ defmodule EducatiumWeb.Router do
     get "/tags", TagController, :index
     get "/tags/:id", TagController, :show
 
+    get "/announcements", AnnouncementController, :index
+    get "/announcements/:id", AnnouncementController, :show
+
     pipe_through [:require_admin_api]
 
     scope "/tags" do
       post "/", TagController, :create
       put "/:id", TagController, :update
       delete "/:id", TagController, :delete
+    end
+
+    scope "/announcements" do
+      post "/", AnnouncementController, :create
+      put "/:id", AnnouncementController, :update
+      delete "/:id", AnnouncementController, :delete
     end
   end
 
