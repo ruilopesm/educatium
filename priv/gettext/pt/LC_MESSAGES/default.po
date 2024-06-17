@@ -856,7 +856,7 @@ msgstr "Abrir menu de utilizador"
 #: lib/educatium_web/live/admin/post_live/form_component.ex:70
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Post updated successfully"
-msgstr "Atualização da password feita com sucesso!"
+msgstr "Publicação atualizada com sucesso"
 
 #: lib/educatium_web/components/layouts/navbar.html.heex:98
 #, elixir-autogen, elixir-format
