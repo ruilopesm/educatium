@@ -103,13 +103,14 @@ defmodule Educatium.Utils.FileManager do
       |> Jason.decode!()
 
     case validate_manifest(manifest) do
-      :ok ->
+      {:ok, :valid} ->
         Enum.each(manifest, fn entry ->
           attrs = build_resource_attrs(entry, user_id)
           path = path <> "/#{Map.get(entry, "path")}"
 
           Resources.create_resource(attrs, path)
         end)
+        {:ok, :resources_created}
 
       {:error, error} ->
         {:error, error}
@@ -149,7 +150,7 @@ defmodule Educatium.Utils.FileManager do
   def validate_manifest(manifest) when is_list(manifest) do
     Enum.reduce_while(manifest, {:ok, :valid}, fn entry, _acc ->
       if is_map(entry) do
-        required_keys = ~w(title description type date visibility tags path)a
+        required_keys = ~w(title description type date visibility tags path)
 
         if Enum.all?(required_keys, &Map.has_key?(entry, &1)) do
           {:cont, {:ok, :valid}}

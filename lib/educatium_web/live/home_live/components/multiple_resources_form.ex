@@ -1,9 +1,7 @@
 defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
   use EducatiumWeb, :live_component
 
-  alias Educatium.Feed.Post
   alias Educatium.Resources
-  alias Educatium.Resources.Resource
 
   @impl true
   def render(assigns) do
@@ -124,6 +122,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
          |> push_patch(to: ~p"/posts")}
 
       {:error, error} ->
+        IO.puts("Error creating resources: #{inspect(error)}")
         {:noreply, put_flash(socket, :info, error)}
     end
   end

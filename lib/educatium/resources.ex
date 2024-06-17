@@ -4,6 +4,7 @@ defmodule Educatium.Resources do
   """
   use Educatium, :context
 
+  alias Educatium.Feed
   alias Educatium.Feed.Post
   alias Educatium.Resources.{Bookmark, Directory, File, Resource, ResourceTag, Tag}
   alias Educatium.Utils.FileManager
@@ -117,7 +118,8 @@ defmodule Educatium.Resources do
     |> Repo.transaction()
     |> case do
       {:ok, %{resource: resource, post: post}} ->
-        broadcast({1, post}, :post_created)
+        final_post = Feed.get_post!(post.id, Post.preloads())
+        broadcast({1, final_post}, :post_created)
         {:ok, resource}
 
       error ->
@@ -143,6 +145,14 @@ defmodule Educatium.Resources do
 
   @doc """
   Creates mulitple resources from a directory with a JSON manifest file.
+
+  ## Examples
+
+      iex> create_resources(user, path)
+      {:ok, :resources_created}
+
+      iex> create_resources(user, path)
+      {:error, error}
   """
   def create_resources(user, path) do
     FileManager.process_resources(user.id, path)
@@ -286,6 +296,24 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Gets a single tag.
+
+  Raises `Ecto.NoResultsError` if the Tag does not exist.
+
+  ## Examples
+
+      iex> get_tag!(123)
+      %Tag{}
+
+      iex> get_tag!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tag!(id) do
+    Repo.get!(Tag, id)
+  end
+
+  @doc """
   Creates a tag.
 
   ## Examples
@@ -301,6 +329,37 @@ defmodule Educatium.Resources do
     %Tag{}
     |> Tag.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tag changes.
+
+  ## Examples
+
+      iex> change_tag(tag)
+      %Ecto.Changeset{data: %Tag{}}
+
+  """
+  def change_tag(%Tag{} = tag, attrs \\ %{}) do
+    Tag.changeset(tag, attrs)
+  end
+
+  @doc """
+  Updates a tag.
+
+   ## Examples
+
+       iex> update_tag(tag, %{field: new_value})
+       {:ok, %Tag{}}
+
+       iex> update_tag(tag, %{field: bad_value})
+       {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tag(%Tag{} = tag, attrs \\ %{}) do
+    tag
+    |> Tag.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """

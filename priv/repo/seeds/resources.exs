@@ -53,6 +53,7 @@ defmodule Educatium.Repo.Seeds.Resources do
     type
     |> Atom.to_string()
     |> String.capitalize()
+    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
   end
 end
 

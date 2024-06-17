@@ -16,10 +16,10 @@ defmodule Educatium.Repo.Migrations.CreateUsersAuthTables do
       add :course, :string
       add :university, :string
 
+      add :role, :string
+
       add :confirmed_at, :naive_datetime
       add :active, :boolean, default: false, null: false
-
-      add :role, :string
 
       timestamps(type: :utc_datetime)
     end

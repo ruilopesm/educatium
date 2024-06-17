@@ -1,7 +1,8 @@
 defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
   use EducatiumWeb, :live_component
 
-  alias Educatium.Feed.Post
+  alias Educatium.Feed
+  alias Educatium.Feed.{Announcement, Post}
   alias Educatium.Resources
   alias Educatium.Resources.Resource
 
@@ -24,7 +25,7 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
         <.input
           field={@type_form[:type]}
           type="select"
-          options={build_options_for_select(Post.types())}
+          options={build_options_for_select(if @current_user.role == :admin, do: Post.types(), else: Post.types() -- [:announcement])}
           label={gettext("Type of post to create")}
           value={@type}
         />
@@ -33,7 +34,7 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
       <.simple_form
         :if={@type == "resource"}
         for={@resource_form}
-        id="single-resource-form"
+        id="resource-form"
         phx-target={@myself}
         phx-change="validate-resource"
         phx-submit="save-resource"
@@ -85,6 +86,22 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
           <.button phx-disable-with={gettext("Creating...")}><%= gettext("Create post") %></.button>
         </:actions>
       </.simple_form>
+
+      <.simple_form
+        :if={@type == "announcement"}
+        for={@announcement_form}
+        id="announcement-form"
+        phx-target={@myself}
+        phx-submit="save-announcement"
+        class="mt-10"
+      >
+        <.input field={@announcement_form[:title]} label={gettext("Title")} />
+        <.input field={@announcement_form[:body]} type="textarea" label={gettext("Body")} />
+
+        <:actions>
+          <.button phx-disable-with={gettext("Creating...")}><%= gettext("Create post") %></.button>
+        </:actions>
+      </.simple_form>
     </div>
     """
   end
@@ -92,8 +109,12 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
   @impl true
   def update(assigns, socket) do
     type = Post.types() |> List.first() |> Atom.to_string()
+
     resource = %Resource{}
     resource_changeset = Resources.change_resource(resource)
+
+    announcement = %Announcement{}
+    announcement_changeset = Feed.change_announcement(announcement)
 
     {:ok,
      socket
@@ -102,6 +123,8 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
      |> assign(:type, type)
      |> assign(:resource_form, to_form(resource_changeset))
      |> assign(:resource, resource)
+     |> assign(:announcement_form, to_form(announcement_changeset))
+     |> assign(:announcement, announcement)
      |> assign(:tags, build_tags())
      |> assign(:tag_count, 0)
      |> assign(files: [], status: nil, path: nil)
@@ -174,6 +197,34 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
   end
 
   @impl true
+  def handle_event("validate-announcement", %{"announcement" => announcement_params}, socket) do
+    changeset =
+      socket.assigns.announcement
+      |> Feed.change_announcement(announcement_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, :announcement_form, to_form(changeset))}
+  end
+
+  @impl true
+  def handle_event("save-announcement", %{"announcement" => announcement_params}, socket) do
+    announcement_params =
+      announcement_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+
+    case Feed.create_announcement(announcement_params) do
+      {:ok, _announcement} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Announcement created successfully"))
+         |> push_patch(to: ~p"/posts")}
+
+      {:error, :announcement, %Ecto.Changeset{} = changeset, _post} ->
+        {:noreply, assign(socket, :announcement_form, to_form(changeset))}
+    end
+  end
+
+  @impl true
   def handle_event("change-type", %{"type" => type}, socket) do
     {:noreply, assign(socket, :type, type)}
   end
@@ -193,16 +244,15 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
 
   defp handle_progress(:dir, entry, socket) do
     if entry.done? do
-      upload_dir = @uploads_dir <> socket.assigns.current_user.id
-      File.mkdir_p!(upload_dir)
+      File.mkdir_p!(@uploads_dir)
 
       [{dest, paths}] =
         consume_uploaded_entries(socket, :dir, fn %{path: path}, _entry ->
           {:ok, [{:zip_comment, []}, {:zip_file, first, _, _, _, _} | _]} =
             :zip.list_dir(~c"#{path}")
 
-          dest = Path.join(upload_dir, Path.basename(to_string(first)))
-          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{upload_dir}")
+          dest = Path.join(@uploads_dir, Path.basename(to_string(first)))
+          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{@uploads_dir}")
           {:ok, {dest, paths}}
         end)
 

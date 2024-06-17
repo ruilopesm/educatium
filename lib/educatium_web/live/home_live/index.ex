@@ -20,6 +20,7 @@ defmodule EducatiumWeb.HomeLive.Index do
 
     {:ok,
      socket
+     |> assign(:page_title, gettext("Home"))
      |> stream(:posts, Feed.list_posts(preloads: @preloads))
      |> assign(:form, to_form(%{}, as: "post"))
      |> assign(:new_posts_count, 0)
@@ -30,17 +31,25 @@ defmodule EducatiumWeb.HomeLive.Index do
   end
 
   @impl true
+  def handle_params(%{"type" => type} = params, _url, socket) do
+    {:noreply,
+     socket
+     |> apply_action(socket.assigns.live_action, params)
+     |> assign(:post_type, type)}
+  end
+
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    {:noreply,
+     socket
+     |> apply_action(socket.assigns.live_action, params)
+     |> assign(:post_type, nil)}
   end
 
   defp apply_action(socket, :new, _params) do
     assign(socket, :page_title, gettext("New post"))
   end
 
-  defp apply_action(socket, :index, _params) do
-    assign(socket, :page_title, "Home")
-  end
+  defp apply_action(socket, :index, _params), do: socket
 
   defp apply_action(socket, :comments, %{"id" => id}) do
     post = Feed.get_post!(id, @preloads)

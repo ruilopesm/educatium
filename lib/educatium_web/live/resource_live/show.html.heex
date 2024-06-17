@@ -15,10 +15,25 @@
       patch={~p"/resources/#{@resource}/show/edit"}
       phx-click={JS.push_focus()}
     >
-      <.button>Edit resource</.button>
+      <.button><%= gettext("Edit resource") %></.button>
     </.link>
+
+    <%= if !current_user_bookmarked?(@resource, @current_user) do %>
+      <.link>
+        <.button phx-click="bookmark">
+          <%= gettext("Bookmark") %>
+        </.button>
+      </.link>
+    <% else %>
+      <.link>
+        <.button phx-click="delete-bookmark">
+          <%= gettext("Remove bookmark") %>
+        </.button>
+      </.link>
+    <% end %>
+
     <.link :if={@directory} href={~p"/directories/#{@resource.directory.id}"}>
-      <.button>Download</.button>
+      <.button><%= gettext("Download") %></.button>
     </.link>
   </:actions>
 </.header>

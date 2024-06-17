@@ -1,0 +1,36 @@
+<.header>
+  <%= gettext("Listing Tags") %>
+  <:actions>
+    <.link patch={~p"/admin/tags/new"}>
+      <.button><%= gettext("New Tag") %></.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="tag" rows={@streams.tags}>
+  <:col :let={{_id, tag}} label={gettext("Name")}><%= tag.name %></:col>
+  <:col :let={{_id, tag}} label={gettext("Preview")}>
+    <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
+      <%= tag.name %>
+    </span>
+  </:col>
+  <:action :let={{_id, tag}}>
+    <.link patch={~p"/admin/tags/#{tag}/edit"}><%= gettext("Edit") %></.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="tag-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/tags")}
+>
+  <.live_component
+    module={TagLive.FormComponent}
+    id={@tag.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tag={@tag}
+    patch={~p"/admin/tags"}
+  />
+</.modal>

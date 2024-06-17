@@ -10,7 +10,7 @@ defmodule EducatiumWeb.ResourceLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage resource records in your database.</:subtitle>
+        <:subtitle><%= gettext("Use this form to manage resource records in your database.") %></:subtitle>
       </.header>
 
       <.simple_form
