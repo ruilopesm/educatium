@@ -33,7 +33,7 @@
   on_cancel={JS.patch(~p"/admin/posts")}
 >
   <.live_component
-    module={EducatiumWeb.Admin.PostLive.FormComponent}
+    module={PostLive.FormComponent}
     id={@post.id || :new}
     title={@page_title}
     action={@live_action}

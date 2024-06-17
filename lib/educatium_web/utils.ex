@@ -47,6 +47,25 @@ defmodule EducatiumWeb.Utils do
   end
 
   @doc """
+  Maybe convert an atom to a string.
+
+  ## Examples
+
+     iex> maybe_atom_to_string(:student)
+     "student"
+
+     iex> maybe_atom_to_string("student")
+     "student"
+
+  """
+  def maybe_atom_to_string(value) do
+    case value do
+      atom when is_atom(atom) -> Atom.to_string(atom)
+      _ -> value
+    end
+  end
+
+  @doc """
   Display the handle of a user.
 
   ## Examples
