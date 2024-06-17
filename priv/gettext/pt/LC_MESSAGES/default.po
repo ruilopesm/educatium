@@ -669,7 +669,7 @@ msgstr "Tipo do post para criar"
 #: lib/educatium_web/live/home_live/components/single_resource_form.ex:71
 #, elixir-autogen, elixir-format
 msgid "Upload a directory to join your resource"
-msgstr "Carregar uma posta para juntar ao teu recurso"
+msgstr "Carregar uma pasta para juntar ao teu recurso"
 
 #: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:160
 #: lib/educatium_web/live/home_live/components/single_resource_form.ex:271
