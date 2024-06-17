@@ -116,12 +116,16 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
   def handle_event("save-resource", _params, socket) do
     current_user = socket.assigns.current_user
     path = socket.assigns.path
-    Resources.create_resources(current_user, path)
+    case Resources.create_resources(current_user, path) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Resources created successfully."))
+         |> push_patch(to: ~p"/posts")}
 
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Resources created successfully."))
-     |> push_patch(to: ~p"/posts")}
+      {:error, error} ->
+        {:noreply, put_flash(socket, :info, error)}
+    end
   end
 
   @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]

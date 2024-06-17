@@ -120,8 +120,8 @@ defmodule Educatium.Resources do
         broadcast({1, post}, :post_created)
         {:ok, resource}
 
-      {:error, changeset} ->
-        {:error, changeset}
+      error ->
+        error
     end
   end
 

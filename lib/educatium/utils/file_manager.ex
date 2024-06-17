@@ -127,22 +127,37 @@ defmodule Educatium.Utils.FileManager do
     |> Map.put("user_id", user_id)
   end
 
+  # def validate_manifest(manifest) when is_list(manifest) do
+  #   Enum.each(manifest, fn entry ->
+  #     if is_map(entry) do
+  #       if Map.has_key?(entry, "title") and
+  #            Map.has_key?(entry, "description") and
+  #            Map.has_key?(entry, "type") and
+  #            Map.has_key?(entry, "date") and
+  #            Map.has_key?(entry, "visibility") and
+  #            Map.has_key?(entry, "tags") and
+  #            Map.has_key?(entry, "path") do
+  #         :ok
+  #       else
+  #         {:error, "Invalid manifest entry, missing required fields"}
+  #       end
+  #     else
+  #       {:error, "Invalid manifest format, expected a list"}
+  #     end
+  #   end)
+  # end
   def validate_manifest(manifest) when is_list(manifest) do
-    Enum.each(manifest, fn entry ->
+    Enum.reduce_while(manifest, {:ok, :valid}, fn entry, _acc ->
       if is_map(entry) do
-        if Map.has_key?(entry, "title") and
-             Map.has_key?(entry, "description") and
-             Map.has_key?(entry, "type") and
-             Map.has_key?(entry, "date") and
-             Map.has_key?(entry, "visibility") and
-             Map.has_key?(entry, "tags") and
-             Map.has_key?(entry, "path") do
-          :ok
+        required_keys = ~w(title description type date visibility tags path)a
+
+        if Enum.all?(required_keys, &Map.has_key?(entry, &1)) do
+          {:cont, {:ok, :valid}}
         else
-          {:error, "Invalid manifest entry, missing required fields"}
+          {:halt, {:error, "Invalid manifest entry, missing required fields"}}
         end
       else
-        {:error, "Invalid manifest format, expected a list"}
+        {:halt, {:error, "Invalid manifest format, expected a list of maps"}}
       end
     end)
   end
