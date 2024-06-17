@@ -1,5 +1,10 @@
 <.header>
   <%= gettext("Listing Resources") %>
+  <:actions>
+    <.link patch={~p"/posts/new?type=resource"}>
+      <.button><%= gettext("New Resource") %></.button>
+    </.link>
+  </:actions>
 </.header>
 
 <.table

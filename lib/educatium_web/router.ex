@@ -85,6 +85,11 @@ defmodule EducatiumWeb.Router do
         live "/:id/show/edit", ResourceLive.Show, :edit
       end
 
+      scope "/announcements" do
+        live "/:id", AnnouncementLive.Show, :show
+        live "/:id/show/edit", AnnouncementLive.Show, :edit
+      end
+
       scope "/users" do
         live "/settings", UserSettingsLive, :edit
         live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
@@ -120,6 +125,11 @@ defmodule EducatiumWeb.Router do
       live "/", TagLive.Index, :index
       live "/new", TagLive.Index, :new
       live "/:id/edit", TagLive.Index, :edit
+    end
+
+    scope "/announcements" do
+      live "/", AnnouncementLive.Index, :index
+      live "/:id/edit", AnnouncementLive.Index, :edit
     end
   end
 

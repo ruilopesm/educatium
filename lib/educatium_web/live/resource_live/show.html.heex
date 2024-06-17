@@ -15,10 +15,10 @@
       patch={~p"/resources/#{@resource}/show/edit"}
       phx-click={JS.push_focus()}
     >
-      <.button>Edit resource</.button>
+      <.button><%= gettext("Edit resource") %></.button>
     </.link>
     <.link :if={@directory} href={~p"/directories/#{@resource.directory.id}"}>
-      <.button>Download</.button>
+      <.button><%= gettext("Download") %></.button>
     </.link>
   </:actions>
 </.header>

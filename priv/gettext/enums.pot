@@ -10,6 +10,9 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
+msgid "Announcement"
+msgstr ""
+
 msgid "Public"
 msgstr ""
 
