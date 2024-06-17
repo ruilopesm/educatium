@@ -18,6 +18,7 @@ defmodule EducatiumWeb.Admin.AnnouncementLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        class="mt-10"
       >
         <.input field={@form[:title]} label={gettext("Title")} />
         <.input field={@form[:body]} type="textarea" label={gettext("Body")} />

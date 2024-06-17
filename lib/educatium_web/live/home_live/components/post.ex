@@ -124,9 +124,9 @@ defmodule EducatiumWeb.HomeLive.Components.Post do
         <.icon name="hero-chat-bubble-oval-left" class="size-5" />
         <span><%= @post.comment_count %></span>
       </button>
-
     </div>
-    <div class="right-[22px] absolute bottom-3 mt-6 flex gap-3">
+
+    <div :if={@post.resource.user.id != @current_user.id} class="right-[22px] absolute bottom-3 mt-6 flex gap-3">
       <button
         phx-click="bookmark"
         phx-target={@myself}

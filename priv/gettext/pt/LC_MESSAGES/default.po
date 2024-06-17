@@ -418,7 +418,7 @@ msgstr "Cargo"
 msgid "Save Details"
 msgstr "Guardar detalhes"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:26
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:27
 #: lib/educatium_web/live/admin/post_live/form_component.ex:36
 #: lib/educatium_web/live/admin/tag_live/form_component.ex:35
 #: lib/educatium_web/live/admin/user_live/form_component.ex:39
@@ -559,7 +559,7 @@ msgstr "A criar conta..."
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:16
 #: lib/educatium_web/live/home_live/form_component.ex:45
 #: lib/educatium_web/live/resource_live/form_component.ex:26
-#: lib/educatium_web/live/resource_live/show.html.heex:27
+#: lib/educatium_web/live/resource_live/show.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr "Descrição"
@@ -633,7 +633,7 @@ msgstr "Desculpa, não conseguimos encontrar a página que estavas à procura."
 msgid "Sort by"
 msgstr "Ordenar por"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:22
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:23
 #: lib/educatium_web/live/admin/announcement_live/index.html.heex:15
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:15
 #: lib/educatium_web/live/announcement_live/form_component.ex:23
@@ -649,7 +649,7 @@ msgstr "Título"
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:17
 #: lib/educatium_web/live/home_live/form_component.ex:51
 #: lib/educatium_web/live/resource_live/form_component.ex:32
-#: lib/educatium_web/live/resource_live/show.html.heex:28
+#: lib/educatium_web/live/resource_live/show.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr "Tipo"
@@ -680,11 +680,13 @@ msgid "Search for a post..."
 msgstr "Procurar por uma publicação..."
 
 #: lib/educatium_web/live/home_live/components/post.ex:276
+#: lib/educatium_web/live/resource_live/show.ex:43
 #, elixir-autogen, elixir-format
 msgid "Bookmark from resource has been removed"
 msgstr "Recurso deixou de ser marcado como guardado"
 
 #: lib/educatium_web/live/home_live/components/post.ex:286
+#: lib/educatium_web/live/resource_live/show.ex:60
 #, elixir-autogen, elixir-format
 msgid "Bookmark has been added to resource. Check your bookmarks under your profile!"
 msgstr "Recurso foi marcado como guardado. Confere os recursos guardados no teu perfil!"
@@ -694,7 +696,7 @@ msgstr "Recurso foi marcado como guardado. Confere os recursos guardados no teu 
 msgid "Bookmarked"
 msgstr "Guardados"
 
-#: lib/educatium_web/live/resource_live/show.html.heex:42
+#: lib/educatium_web/live/resource_live/show.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "Date (of the resource itself)"
 msgstr "Data (do recurso em si)"
@@ -723,7 +725,7 @@ msgstr[0] "A mostrar um total de %{count} comentário"
 msgstr[1] "A mostrar um total de %{count} comentários"
 
 #: lib/educatium_web/components/layouts/navbar.html.heex:118
-#: lib/educatium_web/live/resource_live/show.html.heex:29
+#: lib/educatium_web/live/resource_live/show.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "Tags"
 msgstr "Tags"
@@ -747,7 +749,7 @@ msgstr[0] "%{count} visualização"
 msgstr[1] "%{count} visualizações"
 
 #: lib/educatium_web/live/announcement_live/show.ex:26
-#: lib/educatium_web/live/resource_live/show.ex:42
+#: lib/educatium_web/live/resource_live/show.ex:76
 #, elixir-autogen, elixir-format
 msgid "Editing %{title}"
 msgstr "A editar %{title}"
@@ -770,7 +772,6 @@ msgid "Choose a value"
 msgstr "Escolha um valor"
 
 #: lib/educatium_web/live/admin/tag_live/form_component.ex:28
-#: lib/educatium_web/live/admin/tag_live/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Color"
 msgstr "Cor"
@@ -965,13 +966,13 @@ msgstr "Visualizações"
 msgid "Visibility"
 msgstr "Visibilidade"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:79
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:80
 #: lib/educatium_web/live/home_live/form_component.ex:222
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Announcement created successfully"
 msgstr "Anúncio criado com sucesso"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:64
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:65
 #: lib/educatium_web/live/announcement_live/form_component.ex:65
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Announcement updated successfully"
@@ -982,7 +983,7 @@ msgstr "Anúncio atualizado com sucesso"
 msgid "Announcements"
 msgstr "Anúncios"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:23
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:24
 #: lib/educatium_web/live/admin/announcement_live/index.html.heex:16
 #: lib/educatium_web/live/announcement_live/form_component.ex:24
 #: lib/educatium_web/live/announcement_live/show.html.heex:24
@@ -991,7 +992,7 @@ msgstr "Anúncios"
 msgid "Body"
 msgstr "Corpo"
 
-#: lib/educatium_web/live/resource_live/show.html.heex:21
+#: lib/educatium_web/live/resource_live/show.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Download"
 msgstr "Download"
@@ -1023,7 +1024,7 @@ msgstr "Novo anúncio"
 msgid "New Resource"
 msgstr "Novo recurso"
 
-#: lib/educatium_web/live/admin/announcement_live/form_component.ex:26
+#: lib/educatium_web/live/admin/announcement_live/form_component.ex:27
 #, elixir-autogen, elixir-format
 msgid "Save Announcement"
 msgstr "Guardar anúncio"
@@ -1048,3 +1049,18 @@ msgstr "Utilize este formulário para gerir os recursos na sua base de dados"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "added a new announcement"
 msgstr "adicionou um novo anúncio"
+
+#: lib/educatium_web/live/resource_live/show.html.heex:24
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Bookmark"
+msgstr "Marcar como guardado"
+
+#: lib/educatium_web/live/admin/tag_live/index.html.heex:12
+#, elixir-autogen, elixir-format
+msgid "Preview"
+msgstr "Preview"
+
+#: lib/educatium_web/live/resource_live/show.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Remove bookmark"
+msgstr "Remover marcador"

@@ -12,7 +12,7 @@ defmodule EducatiumWeb.ResourceLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    resource = Resources.get_resource!(id, [:directory, :user, :tags])
+    resource = Resources.get_resource!(id, [:directory, :user, :tags, :bookmarks])
     tags = Resources.list_tags_by_resource(resource.id)
     directory = maybe_get_directory!(resource.directory)
 
@@ -28,9 +28,43 @@ defmodule EducatiumWeb.ResourceLive.Show do
   end
 
   @impl true
+  def handle_event("bookmark", _, socket) do
+    user = socket.assigns.current_user
+    bookmark_post(socket, socket.assigns.resource, user)
+  end
+
+  @impl true
+  def handle_event("delete-bookmark", _, socket) do
+    user = socket.assigns.current_user
+    Resources.delete_bookmark!(socket.assigns.resource, user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Bookmark from resource has been removed"))
+     |> push_patch(to: ~p"/resources/#{socket.assigns.resource.id}")}
+  end
+
+  @impl true
   def handle_event("load-directory", %{"dir_id" => dir_id}, socket) do
     directory = Resources.get_directory!(dir_id, [:files, :subdirectories])
     {:noreply, assign(socket, directory: directory)}
+  end
+
+  defp bookmark_post(socket, resource, user) do
+    Resources.bookmark_resource!(resource, user)
+
+    {:noreply,
+     socket
+     |> put_flash(
+       :info,
+       gettext("Bookmark has been added to resource. Check your bookmarks under your profile!")
+     )
+     |> push_patch(to: ~p"/resources/#{resource}")}
+  end
+
+  defp current_user_bookmarked?(resource, user) do
+    resource.bookmarks
+    |> Enum.any?(&(&1.user_id == user.id))
   end
 
   defp maybe_get_directory!(nil), do: nil
