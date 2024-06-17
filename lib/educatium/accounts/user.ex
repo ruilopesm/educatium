@@ -7,7 +7,7 @@ defmodule Educatium.Accounts.User do
   @roles ~w(student teacher admin)a
 
   @required_fields ~w(email password)a
-  @optional_fields ~w(confirmed_at active)a
+  @optional_fields ~w(confirmed_at active api_key)a
   @setup_fields ~w(handle first_name last_name course university role)a
 
   @derive {Phoenix.Param, key: :handle}
@@ -16,6 +16,8 @@ defmodule Educatium.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+
+    field :api_key, :string
 
     field :avatar, Avatar.Type
     field :handle, :string
@@ -67,7 +69,9 @@ defmodule Educatium.Accounts.User do
   defp validate_email(changeset, opts \\ []) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
+      message: gettext("must have the @ sign and no spaces")
+    )
     |> validate_length(:email, max: 160)
     |> maybe_validate_unique_email(opts)
   end

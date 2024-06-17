@@ -1,0 +1,75 @@
+@token = r33xZ2clDZlSQO4gTGoyBurGlstXAamz8SKicvYJVNE=
+@host = http://localhost:4000
+
+### API info endpoint
+GET {{host}}/api
+
+### Test endpoint
+GET {{host}}/api/test HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+### Myself endpoint
+GET {{host}}/api/myself HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+### Get users endpoint
+GET {{host}}/api/users HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+### Get user endpoint
+GET {{host}}/api/users/fa76bee3-1a2a-41f6-bbf8-297cbc1f5db9 HTTP/1.1
+content-type: application/json
+Authorization: {{token}}
+
+### Get resource endpoint
+GET {{host}}/api/resources/4130ccba-f232-403e-98cc-081dc9ace087 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### Get resources endpoint
+GET {{host}}/api/resources/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### Get tags
+GET {{host}}/api/tags/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### Post tags
+POST {{host}}/api/tags/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{  
+    "tag": {
+        "name": "tag1",
+        "color": "white"
+    }
+}
+
+### Get announcements
+GET {{host}}/api/announcements/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+### Post announcements
+POST {{host}}/api/announcements/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "announcement": {
+        "title": "Test post",
+        "body": "Body of test post",
+        "user_id": "fa76bee3-1a2a-41f6-bbf8-297cbc1f5db9"
+    }
+}
+
+### Delete announcements
+DELETE {{host}}/api/announcements/2d4b2025-541c-4073-b9fd-9f74b6ce34fc HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}

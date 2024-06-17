@@ -16,8 +16,19 @@ defmodule EducatiumWeb.Router do
     plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
   end
 
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
-  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.RequireAdmin)
+
+  pipeline :require_admin_web do
+    plug EducatiumWeb.Plugs.RequireAdmin, type: :web
+  end
+
+  pipeline :require_admin_api do
+    plug EducatiumWeb.Plugs.RequireAdmin, type: :api
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
@@ -33,6 +44,42 @@ defmodule EducatiumWeb.Router do
 
       live_dashboard "/dashboard", metrics: EducatiumWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+  end
+
+  ## API routes
+
+  scope "/api", EducatiumWeb do
+    pipe_through :api
+    get "/", HelloController, :hello
+
+    pipe_through EducatiumWeb.Plugs.EnsureAPIKey
+    get "/test", HelloController, :test
+    get "/myself", UserController, :myself
+    get "/users/:id", UserController, :show
+
+    resources "/resources", ResourceController, except: [:new, :edit]
+
+    get "/tags", TagController, :index
+    get "/tags/:id", TagController, :show
+
+    get "/announcements", AnnouncementController, :index
+    get "/announcements/:id", AnnouncementController, :show
+
+    pipe_through [:require_admin_api]
+
+    get "/users", UserController, :index
+
+    scope "/tags" do
+      post "/", TagController, :create
+      put "/:id", TagController, :update
+      delete "/:id", TagController, :delete
+    end
+
+    scope "/announcements" do
+      post "/", AnnouncementController, :create
+      put "/:id", AnnouncementController, :update
+      delete "/:id", AnnouncementController, :delete
     end
   end
 
@@ -117,7 +164,7 @@ defmodule EducatiumWeb.Router do
   ## Admin routes
 
   scope "/admin", EducatiumWeb.Admin, as: :admin do
-    pipe_through [:browser, :require_admin]
+    pipe_through [:browser, :require_admin_web]
 
     scope "/users" do
       live "/", UserLive.Index, :index

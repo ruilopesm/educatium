@@ -24,6 +24,18 @@ defmodule Educatium.Resources do
     |> Repo.all()
   end
 
+  def list_resources_which_user_can_see(user_id, opts \\ []) do
+    # if owner id is user id, can see private posts, otherwise only public posts
+    Resource
+    |> where([r], r.user_id == ^user_id or r.visibility == :public)
+    |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  def can_see_resource(user_id, resource) do
+    resource.user_id == user_id or resource.visibility == :public
+  end
+
   @doc """
   Returns the list of resources by user.
 
@@ -90,6 +102,7 @@ defmodule Educatium.Resources do
   def create_resource(attrs, path \\ nil)
 
   def create_resource(%{"visibility" => "public"} = attrs, path) do
+    IO.puts("Creating public resource")
     create_resource_with_post(attrs, path)
   end
 
@@ -360,6 +373,22 @@ defmodule Educatium.Resources do
     tag
     |> Tag.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Deletes a tag.
+
+  ## Examples
+
+      iex> delete_tag(tag)
+      {:ok, %Tag{}}
+
+      iex> delete_tag(tag)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tag(%Tag{} = tag) do
+    Repo.delete(tag)
   end
 
   @doc """

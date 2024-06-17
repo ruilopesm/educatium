@@ -7,7 +7,7 @@ defmodule EducatiumWeb.Admin.PostLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :posts, Feed.list_posts(preloads: :resource))}
+    {:ok, stream(socket, :posts, Feed.list_posts(preloads: [:resource, :announcement]))}
   end
 
   @impl true

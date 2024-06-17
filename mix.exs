@@ -1,10 +1,15 @@
 defmodule Educatium.MixProject do
   use Mix.Project
 
+  @app :educatium
+  @name "Educatium"
+  @version "0.1.0"
+
   def project do
     [
-      app: :educatium,
-      version: "0.1.0",
+      app: @app,
+      name: @name,
+      version: @version,
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -67,6 +72,7 @@ defmodule Educatium.MixProject do
       # uploads
       {:waffle_ecto, "~> 0.0"},
       {:waffle, "~> 1.1"},
+      {:unzip, "~> 0.11.0"},
 
       # files
       {:http_stream, "~> 1.0.0", git: "https://github.com/coders51/http_stream"},

@@ -7,6 +7,8 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
   """
   import EducatiumWeb.Gettext
 
+  @behaviour Plug
+
   def init(opts), do: opts
 
   def call(conn, _opts) when is_map(conn.assigns.current_user) do
