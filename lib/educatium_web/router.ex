@@ -55,7 +55,8 @@ defmodule EducatiumWeb.Router do
 
     pipe_through EducatiumWeb.Plugs.EnsureAPIKey
     get "/test", HelloController, :test
-    get "/user", UserController, :user
+    get "/myself", UserController, :myself
+    get "/users/:id", UserController, :show
 
     resources "/resources", ResourceController, except: [:new, :edit]
 
@@ -66,6 +67,8 @@ defmodule EducatiumWeb.Router do
     get "/announcements/:id", AnnouncementController, :show
 
     pipe_through [:require_admin_api]
+
+    get "/users", UserController, :index
 
     scope "/tags" do
       post "/", TagController, :create
