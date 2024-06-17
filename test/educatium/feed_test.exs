@@ -56,4 +56,62 @@ defmodule Educatium.FeedTest do
       assert %Ecto.Changeset{} = Feed.change_post(post)
     end
   end
+
+  describe "announcements" do
+    alias Educatium.Feed.Announcement
+
+    import Educatium.FeedFixtures
+
+    @invalid_attrs %{title: nil, body: nil}
+
+    test "list_announcements/0 returns all announcements" do
+      announcement = announcement_fixture()
+      assert Feed.list_announcements() == [announcement]
+    end
+
+    test "get_announcement!/1 returns the announcement with given id" do
+      announcement = announcement_fixture()
+      assert Feed.get_announcement!(announcement.id) == announcement
+    end
+
+    test "create_announcement/1 with valid data creates a announcement" do
+      valid_attrs = %{title: "some title", body: "some body"}
+
+      assert {:ok, %Announcement{} = announcement} = Feed.create_announcement(valid_attrs)
+      assert announcement.title == "some title"
+      assert announcement.body == "some body"
+    end
+
+    test "create_announcement/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Feed.create_announcement(@invalid_attrs)
+    end
+
+    test "update_announcement/2 with valid data updates the announcement" do
+      announcement = announcement_fixture()
+      update_attrs = %{title: "some updated title", body: "some updated body"}
+
+      assert {:ok, %Announcement{} = announcement} =
+               Feed.update_announcement(announcement, update_attrs)
+
+      assert announcement.title == "some updated title"
+      assert announcement.body == "some updated body"
+    end
+
+    test "update_announcement/2 with invalid data returns error changeset" do
+      announcement = announcement_fixture()
+      assert {:error, %Ecto.Changeset{}} = Feed.update_announcement(announcement, @invalid_attrs)
+      assert announcement == Feed.get_announcement!(announcement.id)
+    end
+
+    test "delete_announcement/1 deletes the announcement" do
+      announcement = announcement_fixture()
+      assert {:ok, %Announcement{}} = Feed.delete_announcement(announcement)
+      assert_raise Ecto.NoResultsError, fn -> Feed.get_announcement!(announcement.id) end
+    end
+
+    test "change_announcement/1 returns a announcement changeset" do
+      announcement = announcement_fixture()
+      assert %Ecto.Changeset{} = Feed.change_announcement(announcement)
+    end
+  end
 end

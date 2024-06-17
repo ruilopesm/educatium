@@ -1,11 +1,9 @@
 defmodule EducatiumWeb.ResourceLive.Show do
   use EducatiumWeb, :live_view
 
-  alias EducatiumWeb.Utils
-
   alias Educatium.Resources
-  alias Educatium.Resources.File
-  alias Educatium.Uploaders.File
+
+  import EducatiumWeb.ResourceLive.Components.FileSystem
 
   @impl true
   def mount(_params, _session, socket) do
@@ -14,18 +12,36 @@ defmodule EducatiumWeb.ResourceLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    resource = Resources.get_resource!(id, [:directory])
+    resource = Resources.get_resource!(id, [:directory, :user, :tags, :bookmarks])
+    tags = Resources.list_tags_by_resource(resource.id)
+    directory = maybe_get_directory!(resource.directory)
 
-    directory =
-      if resource != nil,
-        do: Resources.get_directory!(resource.directory.id, [:files, :subdirectories]),
-        else: nil
+    is_owner = resource.user_id == socket.assigns.current_user.id
 
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(:page_title, page_title(socket.assigns.live_action, resource.title))
      |> assign(:resource, resource)
-     |> assign(:directory, directory)}
+     |> assign(:tags, tags)
+     |> assign(:directory, directory)
+     |> assign(:is_owner, is_owner)}
+  end
+
+  @impl true
+  def handle_event("bookmark", _, socket) do
+    user = socket.assigns.current_user
+    bookmark_post(socket, socket.assigns.resource, user)
+  end
+
+  @impl true
+  def handle_event("delete-bookmark", _, socket) do
+    user = socket.assigns.current_user
+    Resources.delete_bookmark!(socket.assigns.resource, user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Bookmark from resource has been removed"))
+     |> push_patch(to: ~p"/resources/#{socket.assigns.resource.id}")}
   end
 
   @impl true
@@ -34,34 +50,28 @@ defmodule EducatiumWeb.ResourceLive.Show do
     {:noreply, assign(socket, directory: directory)}
   end
 
-  @impl true
-  def handle_event("load-prev-directory", %{"dir_id" => dir_id}, socket) do
-    directory = Resources.get_directory!(dir_id, [:files, :subdirectories])
-    {:noreply, assign(socket, directory: directory)}
+  defp bookmark_post(socket, resource, user) do
+    Resources.bookmark_resource!(resource, user)
+
+    {:noreply,
+     socket
+     |> put_flash(
+       :info,
+       gettext("Bookmark has been added to resource. Check your bookmarks under your profile!")
+     )
+     |> push_patch(to: ~p"/resources/#{resource}")}
   end
 
-  defp get_file_path(file_id) do
-    file = Resources.get_file!(file_id)
-    File.url({file.file, file}, :original)
+  defp current_user_bookmarked?(resource, user) do
+    resource.bookmarks
+    |> Enum.any?(&(&1.user_id == user.id))
   end
 
-  defp build_directory_path(directory_id) do
-    directory = Resources.get_directory!(directory_id)
+  defp maybe_get_directory!(nil), do: nil
 
-    if directory.directory_id == nil do
-      "/#{directory.name}"
-    else
-      build_directory_path(directory.directory_id) <> "/#{directory.name}"
-    end
-  end
+  defp maybe_get_directory!(directory),
+    do: Resources.get_directory!(directory.id, [:files, :subdirectories])
 
-  defp directory_n_items(directory_id) do
-    directory = Resources.get_directory!(directory_id, [:files, :subdirectories])
-    n_items = Enum.count(directory.files) + Enum.count(directory.subdirectories)
-
-    if n_items == 1, do: "#{n_items} item", else: "#{n_items} items"
-  end
-
-  defp page_title(:show), do: "Show Resource"
-  defp page_title(:edit), do: "Edit Resource"
+  defp page_title(:show, resource_name), do: resource_name
+  defp page_title(:edit, resource_name), do: gettext("Editing %{title}", title: resource_name)
 end

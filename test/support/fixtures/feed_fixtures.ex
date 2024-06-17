@@ -17,4 +17,19 @@ defmodule Educatium.FeedFixtures do
 
     post
   end
+
+  @doc """
+  Generate a announcement.
+  """
+  def announcement_fixture(attrs \\ %{}) do
+    {:ok, announcement} =
+      attrs
+      |> Enum.into(%{
+        body: "some body",
+        title: "some title"
+      })
+      |> Educatium.Feed.create_announcement()
+
+    announcement
+  end
 end

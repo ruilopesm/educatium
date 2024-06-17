@@ -9,6 +9,37 @@ defmodule Educatium.Accounts do
   ## Database getters
 
   @doc """
+  List all users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, %User{}]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
+  Creates a user.
+
+  ## Examples
+
+      iex> create_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user(attrs) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Gets a user by email.
 
   ## Examples
@@ -395,6 +426,19 @@ defmodule Educatium.Accounts do
   def delete_user_session_token(token) do
     Repo.delete_all(UserToken.by_token_and_context_query(token, "session"))
     :ok
+  end
+
+  @doc """
+  Deletes an user.
+
+  ## Examples
+
+      iex> delete_user(user)
+      {:ok, %User{}}
+
+  """
+  def delete_user(user) do
+    Repo.delete(user)
   end
 
   ## Confirmation

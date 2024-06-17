@@ -12,8 +12,8 @@ defmodule EducatiumWeb.Router do
     plug :put_root_layout, html: {EducatiumWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
     plug :fetch_current_user
+    plug EducatiumWeb.Plugs.SetLocale, gettext: Gettext, default_locale: Gettext.default_locale()
   end
 
   pipeline :api do
@@ -21,6 +21,7 @@ defmodule EducatiumWeb.Router do
   end
 
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
+  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.RequireAdmin)
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
@@ -55,7 +56,7 @@ defmodule EducatiumWeb.Router do
   ## Authentication routes
 
   scope "/", EducatiumWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     live "/users/reset_password", UserForgotPasswordLive, :new
     live "/users/reset_password/:token", UserResetPasswordLive, :edit
@@ -72,6 +73,18 @@ defmodule EducatiumWeb.Router do
 
     get "/auth/:provider", OAuthController, :request
     get "/auth/:provider/callback", OAuthController, :callback
+  end
+
+  scope "/", EducatiumWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+
+    live_session :current_user,
+      on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    end
   end
 
   ## Normal routes
@@ -96,7 +109,15 @@ defmodule EducatiumWeb.Router do
         live "/:id/comments", HomeLive.Index, :comments
       end
 
-      live "/resources/:id", ResourceLive.Show, :show
+      scope "/resources" do
+        live "/:id", ResourceLive.Show, :show
+        live "/:id/show/edit", ResourceLive.Show, :edit
+      end
+
+      scope "/announcements" do
+        live "/:id", AnnouncementLive.Show, :show
+        live "/:id/show/edit", AnnouncementLive.Show, :edit
+      end
 
       scope "/users" do
         live "/settings", UserSettingsLive, :edit
@@ -109,15 +130,35 @@ defmodule EducatiumWeb.Router do
     get "/directories/:id", DirectoryController, :download_directory
   end
 
-  scope "/", EducatiumWeb do
-    pipe_through [:browser]
+  ## Admin routes
 
-    delete "/users/log_out", UserSessionController, :delete
+  scope "/admin", EducatiumWeb.Admin, as: :admin do
+    pipe_through [:browser, :require_admin]
 
-    live_session :current_user,
-      on_mount: [{EducatiumWeb.UserAuth, :mount_current_user}] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
+    scope "/users" do
+      live "/", UserLive.Index, :index
+      live "/new", UserLive.Index, :new
+      live "/:handle/edit", UserLive.Index, :edit
+    end
+
+    scope "/posts" do
+      live "/", PostLive.Index, :index
+      live "/:id/edit", PostLive.Index, :edit
+    end
+
+    scope "/resources" do
+      live "/", ResourceLive.Index, :index
+    end
+
+    scope "/tags" do
+      live "/", TagLive.Index, :index
+      live "/new", TagLive.Index, :new
+      live "/:id/edit", TagLive.Index, :edit
+    end
+
+    scope "/announcements" do
+      live "/", AnnouncementLive.Index, :index
+      live "/:id/edit", AnnouncementLive.Index, :edit
     end
   end
 end

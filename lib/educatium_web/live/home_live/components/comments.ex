@@ -49,7 +49,7 @@ defmodule EducatiumWeb.HomeLive.Components.Comments do
                 >
                   <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
                 </svg>
-                <span class="sr-only">Comment settings</span>
+                <span class="sr-only"><%= gettext("Comment settings") %></span>
               </button>
               <!-- Dropdown menu -->
               <div class="z-10 hidden w-36 divide-y divide-gray-100 rounded bg-white shadow">

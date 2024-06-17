@@ -4,8 +4,9 @@ defmodule Educatium.Resources do
   """
   use Educatium, :context
 
+  alias Educatium.Feed
   alias Educatium.Feed.Post
-  alias Educatium.Resources.{Directory, File, Resource, ResourceTag, Tag}
+  alias Educatium.Resources.{Bookmark, Directory, File, Resource, ResourceTag, Tag}
 
   @doc """
   Returns the list of resources.
@@ -41,11 +42,28 @@ defmodule Educatium.Resources do
 
       iex> list_resources_by_user(123)
       [%Resource{}, ...]
+
   """
   def list_resources_by_user(user_id, opts \\ []) do
     Resource
     |> where(user_id: ^user_id)
     |> apply_filters(opts)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of resources bookmarked by user.
+
+  ## Examples
+
+      iex> list_bookmarked_resources_by_user(123)
+      [%Resource{}, ...]
+
+  """
+  def list_bookmarked_resources_by_user(user_id) do
+    Resource
+    |> join(:inner, [r], b in Bookmark, on: b.resource_id == r.id)
+    |> where([r, b], b.user_id == ^user_id)
     |> Repo.all()
   end
 
@@ -111,7 +129,8 @@ defmodule Educatium.Resources do
     |> Repo.transaction()
     |> case do
       {:ok, %{resource: resource, post: post}} ->
-        broadcast({1, post}, :post_created)
+        final_post = Feed.get_post!(post.id, Post.preloads())
+        broadcast({1, final_post}, :post_created)
         {:ok, resource}
 
       {:error, changeset} ->
@@ -147,7 +166,7 @@ defmodule Educatium.Resources do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_resource(%Resource{} = resource, attrs, path) do
+  def update_resource(%Resource{} = resource, attrs, path \\ nil) do
     Multi.new()
     |> Multi.update(:resource, Resource.changeset(resource, attrs))
     |> Multi.run(:files, fn _repo, %{resource: resource} ->
@@ -273,6 +292,24 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Gets a single tag.
+
+  Raises `Ecto.NoResultsError` if the Tag does not exist.
+
+  ## Examples
+
+      iex> get_tag!(123)
+      %Tag{}
+
+      iex> get_tag!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tag!(id) do
+    Repo.get!(Tag, id)
+  end
+
+  @doc """
   Creates a tag.
 
   ## Examples
@@ -288,6 +325,37 @@ defmodule Educatium.Resources do
     %Tag{}
     |> Tag.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tag changes.
+
+  ## Examples
+
+      iex> change_tag(tag)
+      %Ecto.Changeset{data: %Tag{}}
+
+  """
+  def change_tag(%Tag{} = tag, attrs \\ %{}) do
+    Tag.changeset(tag, attrs)
+  end
+
+  @doc """
+  Updates a tag.
+
+   ## Examples
+
+       iex> update_tag(tag, %{field: new_value})
+       {:ok, %Tag{}}
+
+       iex> update_tag(tag, %{field: bad_value})
+       {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tag(%Tag{} = tag, attrs \\ %{}) do
+    tag
+    |> Tag.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -435,5 +503,66 @@ defmodule Educatium.Resources do
   defp broadcast({1, post}, event) do
     Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
     {:ok, post}
+  end
+
+  @doc """
+  Gets a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> get_bookmark(resource, user)
+      %Bookmark{}
+
+  """
+  def get_bookmark(resource, user) do
+    Bookmark
+    |> where([b], b.resource_id == ^resource.id and b.user_id == ^user.id)
+    |> Repo.one()
+  end
+
+  @doc """
+  Creates a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> bookmark_resource(resource, user)
+      %Resource{}
+
+  """
+  def bookmark_resource!(resource, user) do
+    %Bookmark{}
+    |> Bookmark.changeset(%{resource_id: resource.id, user_id: user.id})
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Deletes a bookmark for the given post and user.
+
+  ## Examples
+
+      iex> delete_bookmark(resource, user)
+      {:ok, %Resource{}}
+
+      iex> delete_bookmark(resource, user)
+      {:error, %Ecto.Changeset{}}
+  """
+  def delete_bookmark!(resource, user) do
+    get_bookmark(resource, user)
+    |> Repo.delete()
+  end
+
+  @doc """
+  Lists the bookmarks for the given user.
+
+  ## Examples
+
+      iex> list_user_bookmarks(user)
+      [%Bookmark{}, ...]
+
+  """
+  def list_user_bookmarks(user) do
+    Bookmark
+    |> where([b], b.user_id == ^user.id)
+    |> Repo.all()
   end
 end

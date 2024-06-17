@@ -11,22 +11,20 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
 
   def init(opts), do: opts
 
-  def call(conn, _opts) do
+  def call(conn, _opts) when is_map(conn.assigns.current_user) do
     current_user = conn.assigns.current_user
 
-    if current_user do
-      with {:ok, conn} <- user_confirmed(conn, current_user),
-           {:ok, conn} <- user_active(conn, current_user) do
-        conn
-      else
-        {:error, conn} -> conn
-      end
-    else
+    with {:ok, conn} <- user_is_confirmed?(conn, current_user),
+         {:ok, conn} <- user_is_active?(conn, current_user) do
       conn
+    else
+      {:error, conn} -> conn
     end
   end
 
-  defp user_confirmed(conn, current_user) do
+  def call(conn, _opts), do: conn
+
+  defp user_is_confirmed?(conn, current_user) do
     if current_user.confirmed_at do
       {:ok, conn}
     else
@@ -37,7 +35,7 @@ defmodule EducatiumWeb.Plugs.ActiveUser do
     end
   end
 
-  defp user_active(conn, current_user) do
+  defp user_is_active?(conn, current_user) do
     if current_user.active do
       {:ok, conn}
     else

@@ -12,7 +12,7 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
     <div x-data="{ open: false }" class="relative inline-block text-left">
       <button
         type="button"
-        class="h-[28px] flex items-center rounded-full border border-gray-400 bg-zinc-50 px-4 py-1.5 text-sm text-gray-800 focus:border-gray-500"
+        class="h-[28px] flex items-center rounded-full border border-gray-400 bg-zinc-50 px-4 py-1.5 text-xs text-gray-800 focus:border-gray-500 md:text-sm"
         aria-expanded="false"
         aria-haspopup="true"
         @click="open = !open"
@@ -20,7 +20,7 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
         @keydown.escape="open = false"
       >
         <span><%= @title %></span>
-        <span class="sr-only">Open dropdown</span>
+        <span class="sr-only"><%= gettext("Open dropdown") %></span>
         <span class="px-1 text-gray-400"><%= @current.label %></span>
         <.icon
           name="hero-chevron-down"
@@ -45,7 +45,10 @@ defmodule EducatiumWeb.HomeLive.Components.Dropdown do
             phx-click="entry-changed"
             phx-value-name={@name}
             phx-value-entry={entry.value}
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class={[
+              "block px-4 py-2 text-xs md:text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer",
+              entry.value == @current.value && "bg-gray-100 text-gray-900"
+            ]}
             role="menuitem"
             tabindex="-1"
           >

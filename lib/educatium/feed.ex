@@ -5,7 +5,7 @@ defmodule Educatium.Feed do
   use Educatium, :context
 
   alias Educatium.Accounts.User
-  alias Educatium.Feed.{Comment, Downvote, Post, Upvote}
+  alias Educatium.Feed.{Announcement, Comment, Downvote, Post, Upvote}
   alias Educatium.Resources.Resource
 
   @doc """
@@ -20,7 +20,8 @@ defmodule Educatium.Feed do
   def list_posts(opts \\ []) do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
-    |> where([_, r], r.visibility == :public)
+    |> join(:left, [p, _], a in Announcement, on: a.post_id == p.id)
+    |> where([_, r, a], r.visibility == :public or not is_nil(a.id))
     |> apply_filters(opts)
     |> Repo.all()
   end
@@ -37,7 +38,8 @@ defmodule Educatium.Feed do
   def search_posts(query, opts \\ []) do
     Post
     |> join(:left, [p], r in Resource, on: r.post_id == p.id)
-    |> where([_, r], ilike(r.title, ^"%#{query}%"))
+    |> join(:left, [p, _], a in Announcement, on: a.post_id == p.id)
+    |> where([_, r, a], ilike(r.title, ^"%#{query}%") or ilike(a.title, ^"%#{query}%"))
     |> apply_filters(opts)
     |> Repo.all()
   end
@@ -332,5 +334,121 @@ defmodule Educatium.Feed do
   defp broadcast({1, post}, event) do
     Phoenix.PubSub.broadcast(Educatium.PubSub, @topic, {event, post})
     {:ok, post}
+  end
+
+  alias Educatium.Feed.Announcement
+
+  @doc """
+  Returns the list of announcements.
+
+  ## Examples
+
+      iex> list_announcements()
+      [%Announcement{}, ...]
+
+  """
+  def list_announcements do
+    Repo.all(Announcement)
+  end
+
+  @doc """
+  Gets a single announcement.
+
+  Raises `Ecto.NoResultsError` if the Announcement does not exist.
+
+  ## Examples
+
+      iex> get_announcement!(123)
+      %Announcement{}
+
+      iex> get_announcement!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_announcement!(id, preloads \\ []) do
+    Repo.get!(Announcement, id)
+    |> Repo.preload(preloads)
+  end
+
+  @doc """
+  Creates a announcement with its respective post.
+  Unlike a resource, an announcement is always tied to a post.
+
+  ## Examples
+
+      iex> create_announcement(%{field: value})
+      {:ok, %Announcement{}}
+
+      iex> create_announcement(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_announcement(attrs \\ %{}) do
+    Multi.new()
+    |> Multi.insert(:post, fn _ ->
+      %Post{}
+      |> Post.changeset(%{type: :announcement})
+    end)
+    |> Multi.insert(:announcement, fn %{post: post} ->
+      %Announcement{}
+      |> Announcement.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:post, post)
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{announcement: announcement, post: post}} ->
+        broadcast({1, post}, :post_created)
+        {:ok, announcement}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  @doc """
+  Updates a announcement.
+
+  ## Examples
+
+      iex> update_announcement(announcement, %{field: new_value})
+      {:ok, %Announcement{}}
+
+      iex> update_announcement(announcement, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_announcement(%Announcement{} = announcement, attrs) do
+    announcement
+    |> Announcement.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a announcement.
+
+  ## Examples
+
+      iex> delete_announcement(announcement)
+      {:ok, %Announcement{}}
+
+      iex> delete_announcement(announcement)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_announcement(%Announcement{} = announcement) do
+    Repo.delete(announcement)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking announcement changes.
+
+  ## Examples
+
+      iex> change_announcement(announcement)
+      %Ecto.Changeset{data: %Announcement{}}
+
+  """
+  def change_announcement(%Announcement{} = announcement, attrs \\ %{}) do
+    Announcement.changeset(announcement, attrs)
   end
 end

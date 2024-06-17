@@ -6,7 +6,7 @@ defmodule Educatium.Repo.Seeds.Tags do
   alias Educatium.Resources
   alias Educatium.Resources.{Resource, Tag}
 
-  @names Resource.types() ++ ~w(
+  @names ~w(
     WebDev
     Graphics
     Math

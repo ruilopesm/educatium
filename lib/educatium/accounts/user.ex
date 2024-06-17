@@ -4,7 +4,7 @@ defmodule Educatium.Accounts.User do
   alias Educatium.Resources.Resource
   alias Educatium.Uploaders.Avatar
 
-  @roles ~w(student teacher)a
+  @roles ~w(student teacher admin)a
 
   @required_fields ~w(email password)a
   @optional_fields ~w(confirmed_at active api_key)a
@@ -178,8 +178,7 @@ defmodule Educatium.Accounts.User do
   defp validate_handle(changeset) do
     changeset
     |> validate_format(:handle, ~r/^[a-zA-Z0-9_.]+$/,
-      message:
-        gettext("must only contain alphanumeric characters, underscores and periods")
+      message: gettext("must only contain alphanumeric characters, underscores and periods")
     )
     |> validate_length(:handle, min: 3, max: 30)
     |> unsafe_validate_unique(:handle, Educatium.Repo)

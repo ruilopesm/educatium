@@ -1,0 +1,36 @@
+<.header>
+  <%= gettext("Listing Announcements") %>
+  <:actions>
+    <.link patch={~p"/posts/new?type=announcement"}>
+      <.button><%= gettext("New Announcement") %></.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="announcements"
+  rows={@streams.announcements}
+  row_click={fn {_id, announcement} -> JS.navigate(~p"/announcements/#{announcement}") end}
+>
+  <:col :let={{_id, announcement}} label={gettext("Title")}><%= announcement.title %></:col>
+  <:col :let={{_id, announcement}} label={gettext("Body")}><%= announcement.body %></:col>
+  <:action :let={{_id, announcement}}>
+    <.link patch={~p"/admin/announcements/#{announcement}/edit"}><%= gettext("Edit") %></.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:edit]}
+  id="announcement-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/announcements")}
+>
+  <.live_component
+    module={AnnouncementLive.FormComponent}
+    id={@announcement.id}
+    title={@page_title}
+    action={@live_action}
+    announcement={@announcement}
+    patch={~p"/admin/announcements"}
+  />
+</.modal>

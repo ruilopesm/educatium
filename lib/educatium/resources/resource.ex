@@ -4,12 +4,12 @@ defmodule Educatium.Resources.Resource do
   alias Educatium.Accounts.User
   alias Educatium.Feed.Post
   alias Educatium.Resources
-  alias Educatium.Resources.{Directory, ResourceTag, Tag}
+  alias Educatium.Resources.{Bookmark, Directory, ResourceTag, Tag}
 
   @types ~w(book article presentation project report exam assignment solution)a
-  @visibilities ~w(protected private public)a
+  @visibilities ~w(private public)a
 
-  @required_fields ~w(title description type visibility user_id)a
+  @required_fields ~w(title description type date visibility user_id)a
   @optional_fields ~w()a
 
   schema "resources" do
@@ -23,6 +23,8 @@ defmodule Educatium.Resources.Resource do
     belongs_to :post, Post
 
     has_one :directory, Directory
+
+    has_many :bookmarks, Bookmark
 
     many_to_many :tags, Tag, join_through: ResourceTag
 

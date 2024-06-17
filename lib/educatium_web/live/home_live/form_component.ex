@@ -1,7 +1,8 @@
 defmodule EducatiumWeb.HomeLive.FormComponent do
   use EducatiumWeb, :live_component
 
-  alias Educatium.Feed.Post
+  alias Educatium.Feed
+  alias Educatium.Feed.{Announcement, Post}
   alias Educatium.Resources
   alias Educatium.Resources.Resource
 
@@ -24,7 +25,7 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
         <.input
           field={@type_form[:type]}
           type="select"
-          options={build_options_for_select(Post.types())}
+          options={build_options_for_select(if @current_user.role == :admin, do: Post.types(), else: Post.types() -- [:announcement])}
           label={gettext("Type of post to create")}
           value={@type}
         />
@@ -85,15 +86,38 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
           <.button phx-disable-with={gettext("Creating...")}><%= gettext("Create post") %></.button>
         </:actions>
       </.simple_form>
+
+      <.simple_form
+        :if={@type == "announcement"}
+        for={@announcement_form}
+        id="announcement-form"
+        phx-target={@myself}
+        phx-submit="save-announcement"
+        class="mt-10"
+      >
+        <.input field={@announcement_form[:title]} label={gettext("Title")} />
+        <.input field={@announcement_form[:body]} type="textarea" label={gettext("Body")} />
+
+        <:actions>
+          <.button phx-disable-with={gettext("Creating...")}><%= gettext("Create post") %></.button>
+        </:actions>
+      </.simple_form>
     </div>
     """
   end
 
   @impl true
   def update(assigns, socket) do
-    type = Post.types() |> List.first() |> Atom.to_string()
+    type =
+      if assigns.post_type,
+        do: assigns.post_type,
+        else: Post.types() |> List.first() |> Atom.to_string()
+
     resource = %Resource{}
     resource_changeset = Resources.change_resource(resource)
+
+    announcement = %Announcement{}
+    announcement_changeset = Feed.change_announcement(announcement)
 
     {:ok,
      socket
@@ -102,6 +126,8 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
      |> assign(:type, type)
      |> assign(:resource_form, to_form(resource_changeset))
      |> assign(:resource, resource)
+     |> assign(:announcement_form, to_form(announcement_changeset))
+     |> assign(:announcement, announcement)
      |> assign(:tags, build_tags())
      |> assign(:tag_count, 0)
      |> assign(files: [], status: nil, path: nil)
@@ -170,6 +196,34 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
 
       {:error, :resource, %Ecto.Changeset{} = changeset, _post} ->
         {:noreply, assign(socket, :resource_form, to_form(changeset))}
+    end
+  end
+
+  @impl true
+  def handle_event("validate-announcement", %{"announcement" => announcement_params}, socket) do
+    changeset =
+      socket.assigns.announcement
+      |> Feed.change_announcement(announcement_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, :announcement_form, to_form(changeset))}
+  end
+
+  @impl true
+  def handle_event("save-announcement", %{"announcement" => announcement_params}, socket) do
+    announcement_params =
+      announcement_params
+      |> Map.put("user_id", socket.assigns.current_user.id)
+
+    case Feed.create_announcement(announcement_params) do
+      {:ok, _announcement} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Announcement created successfully"))
+         |> push_patch(to: ~p"/posts")}
+
+      {:error, :announcement, %Ecto.Changeset{} = changeset, _post} ->
+        {:noreply, assign(socket, :announcement_form, to_form(changeset))}
     end
   end
 

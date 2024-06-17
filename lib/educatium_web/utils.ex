@@ -15,7 +15,7 @@ defmodule EducatiumWeb.Utils do
   def build_options_for_select(roles) do
     Enum.map(roles, fn role ->
       str = Atom.to_string(role)
-      {String.capitalize(str), str}
+      {Gettext.dgettext(EducatiumWeb.Gettext, "enums", String.capitalize(str)), str}
     end)
   end
 
@@ -32,15 +32,37 @@ defmodule EducatiumWeb.Utils do
   end
 
   @doc """
-  Display the role of a user.
+  Stringify an atom and capitalize it.
 
   ## Examples
 
-     iex> display_role(:student)
+     iex> display_atom(:student)
      "Student"
   """
-  def display_role(role) do
-    String.capitalize(Atom.to_string(role))
+  def display_atom(atom) do
+    atom
+    |> Atom.to_string()
+    |> String.capitalize()
+    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
+  end
+
+  @doc """
+  Maybe convert an atom to a string.
+
+  ## Examples
+
+     iex> maybe_atom_to_string(:student)
+     "student"
+
+     iex> maybe_atom_to_string("student")
+     "student"
+
+  """
+  def maybe_atom_to_string(value) do
+    case value do
+      atom when is_atom(atom) -> Atom.to_string(atom)
+      _ -> value
+    end
   end
 
   @doc """
@@ -115,7 +137,7 @@ defmodule EducatiumWeb.Utils do
 
   """
   def relative_datetime(datetime) do
-    Relative.lformat!(datetime, "{relative}", Gettext.get_locale())
+    Relative.lformat!(datetime, "{relative}", Gettext.get_locale(EducatiumWeb.Gettext))
   end
 
   @doc """
@@ -143,5 +165,6 @@ defmodule EducatiumWeb.Utils do
     atom
     |> Atom.to_string()
     |> String.capitalize()
+    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
   end
 end

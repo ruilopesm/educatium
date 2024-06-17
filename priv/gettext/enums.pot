@@ -1,0 +1,44 @@
+msgid "Student"
+msgstr ""
+
+msgid "Teacher"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "Announcement"
+msgstr ""
+
+msgid "Public"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid "Book"
+msgstr ""
+
+msgid "Article"
+msgstr ""
+
+msgid "Presentation"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Exam"
+msgstr ""
+
+msgid "Assignment"
+msgstr ""
+
+msgid "Solution"
+msgstr ""

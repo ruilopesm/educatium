@@ -2,11 +2,11 @@ defmodule Educatium.Feed.Post do
   use Educatium, :schema
 
   alias Educatium.Resources.Resource
-  alias Educatium.Feed.{Comment, Downvote, Upvote}
+  alias Educatium.Feed.{Announcement, Comment, Downvote, Upvote}
 
   @preloads ~w(resource upvotes downvotes comments)a
 
-  @types ~w(resource)a
+  @types ~w(resource announcement)a
 
   @required_fields ~w(view_count upvote_count downvote_count comment_count type)a
   @optional_fields ~w()a
@@ -20,6 +20,7 @@ defmodule Educatium.Feed.Post do
     field :type, Ecto.Enum, values: @types
 
     has_one :resource, Resource
+    has_one :announcement, Announcement
 
     has_many :upvotes, Upvote
     has_many :downvotes, Downvote
@@ -35,6 +36,11 @@ defmodule Educatium.Feed.Post do
     |> validate_required(@required_fields)
   end
 
-  def preloads, do: @preloads ++ [resource: :user] ++ [comments: :user]
+  def preloads,
+    do:
+      @preloads ++
+        [announcement: :user] ++
+        [resource: :user] ++ [resource: [:bookmarks]] ++ [comments: :user]
+
   def types, do: @types
 end

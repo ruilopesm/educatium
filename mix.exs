@@ -58,7 +58,12 @@ defmodule Educatium.MixProject do
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:tailwind_formatter, "~> 0.3.7", only: [:dev, :test], runtime: false},
       {:heroicons,
-       github: "tailwindlabs/heroicons", tag: "v2.1.1", sparse: "optimized", app: false, compile: false, depth: 1},
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.1",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1},
 
       # mailer
       {:swoosh, "~> 1.5"},
@@ -93,7 +98,6 @@ defmodule Educatium.MixProject do
       {:dotenvy, "~> 0.8.0"},
       {:temp, "~> 0.4"},
       {:credo, "~> 1.7.6", only: [:dev, :test], runtime: false},
-      {:styler, "~> 0.11.9", only: [:dev, :test], runtime: false},
       {:doctest_formatter, "~> 0.3.0", runtime: false}
     ]
   end
