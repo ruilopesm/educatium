@@ -97,4 +97,42 @@ defmodule Educatium.Utils.FileManager do
     Resources.create_file(attrs)
   end
 
+  def process_resources(user_id, path) do
+    manifest = 
+      path <> "/manifest.json"
+      |> Elixir.File.read!()
+      |> Jason.decode!()
+
+    case validate_manifest(manifest) do
+      :ok ->
+        Enum.each(manifest, fn entry -> 
+          attrs = Map.put(entry, "user_id", user_id)
+          path = path <> "/#{Map.get(entry, "path")}"
+          Resources.create_resource(attrs, path)
+        end)
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @spec validate_manifest(list) :: :ok | {:error, String.t}
+  def validate_manifest(manifest) when is_list(manifest) do
+    Enum.each(manifest, fn entry ->
+      if is_map(entry) do
+        if Map.has_key?(entry, "title") and
+           Map.has_key?(entry, "description") and
+           Map.has_key?(entry, "type") and
+           Map.has_key?(entry, "date") and
+           Map.has_key?(entry, "visibility") and
+           Map.has_key?(entry, "path") do
+          :ok
+        else
+          {:error, "Invalid manifest entry, missing required fields"}
+        end
+      else
+        {:error, "Invalid manifest format, expected a list"}
+      end
+    end)
+  end
 end

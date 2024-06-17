@@ -193,15 +193,16 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
 
   defp handle_progress(:dir, entry, socket) do
     if entry.done? do
-      File.mkdir_p!(@uploads_dir)
+      upload_dir = @uploads_dir <> socket.assigns.current_user.id
+      File.mkdir_p!(upload_dir)
 
       [{dest, paths}] =
         consume_uploaded_entries(socket, :dir, fn %{path: path}, _entry ->
           {:ok, [{:zip_comment, []}, {:zip_file, first, _, _, _, _} | _]} =
             :zip.list_dir(~c"#{path}")
 
-          dest = Path.join(@uploads_dir, Path.basename(to_string(first)))
-          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{@uploads_dir}")
+          dest = Path.join(upload_dir, Path.basename(to_string(first)))
+          {:ok, paths} = :zip.unzip(~c"#{path}", cwd: ~c"#{upload_dir}")
           {:ok, {dest, paths}}
         end)
 
