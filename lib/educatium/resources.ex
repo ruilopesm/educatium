@@ -4,6 +4,7 @@ defmodule Educatium.Resources do
   """
   use Educatium, :context
 
+  alias Educatium.Feed
   alias Educatium.Feed.Post
   alias Educatium.Resources.{Bookmark, Directory, File, Resource, ResourceTag, Tag}
 
@@ -116,7 +117,8 @@ defmodule Educatium.Resources do
     |> Repo.transaction()
     |> case do
       {:ok, %{resource: resource, post: post}} ->
-        broadcast({1, post}, :post_created)
+        final_post = Feed.get_post!(post.id, Post.preloads())
+        broadcast({1, final_post}, :post_created)
         {:ok, resource}
 
       {:error, changeset} ->

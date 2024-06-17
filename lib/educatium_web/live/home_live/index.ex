@@ -38,8 +38,12 @@ defmodule EducatiumWeb.HomeLive.Index do
      |> assign(:post_type, type)}
   end
 
-  def handle_params(params, _url, socket),
-    do: {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  def handle_params(params, _url, socket) do
+    {:noreply,
+     socket
+     |> apply_action(socket.assigns.live_action, params)
+     |> assign(:post_type, nil)}
+  end
 
   defp apply_action(socket, :new, _params) do
     assign(socket, :page_title, gettext("New post"))
