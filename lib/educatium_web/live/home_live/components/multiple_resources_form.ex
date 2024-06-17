@@ -12,7 +12,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
         <:subtitle><%= gettext("Use this form to create multiple resources.") %></:subtitle>
       </.header>
       <div class="mt-4 text-gray-600">
-        <p>The submited directory should have a root file called manifest.json just like this:</p>
+        <p><%= gettext("The submited directory should have a root file called manifest.json just like this:") %></p>
         <pre class><code class="language-json">
     [
       {
@@ -29,7 +29,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
         </code></pre>
 
         <div>
-          <p>Available tags:</p>
+          <p><%= gettext("Available tags:") %></p>
           <div class="mt-4 flex flex-wrap gap-2">
             <%= for tag <- @tags do %>
               <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
@@ -60,7 +60,7 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
             phx-hook="ZipUpload"
           />
           <p class="mt-1 text-sm text-gray-500 hover:cursor-help">
-            Any type of file. Maximum size: 100 MiB
+            <%= gettext("Any type of file. Maximum size: 100 MiB") %>
           </p>
         </div>
 
