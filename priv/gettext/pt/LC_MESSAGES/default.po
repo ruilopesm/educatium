@@ -37,13 +37,13 @@ msgstr "fechar"
 msgid "Register for an account"
 msgstr "Criar uma conta"
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:300
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:309
 #, elixir-autogen, elixir-format
 msgid "A link to confirm your email change has been sent to the new address."
 msgstr "Um link para confirmar a mudança de email foi enviada para o novo endereço."
 
 #: lib/educatium_web/live/auth_live/user_settings_live.ex:11
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:226
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:235
 #, elixir-autogen, elixir-format
 msgid "Account Settings"
 msgstr "Definições de Conta"
@@ -120,12 +120,12 @@ msgstr "Não tem uma conta?"
 msgid "Email"
 msgstr "Email"
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:211
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:220
 #, elixir-autogen, elixir-format
 msgid "Email change link is invalid or it has expired."
 msgstr "O link de mudança de email é inválido ou já expirou."
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:208
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:217
 #, elixir-autogen, elixir-format
 msgid "Email changed successfully."
 msgstr "Email trocado com sucesso."
@@ -434,7 +434,12 @@ msgid_plural "Show %{count} new posts"
 msgstr[0] "Mostrar 1 publicação"
 msgstr[1] "Mostrar %{count} novas publicações"
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:269
+#: lib/educatium_web/controllers/error_html/500.html.heex:20
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Sorry, something went wrong."
+msgstr "Algo correu mal!"
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:278
 #, elixir-autogen, elixir-format
 msgid "There was an error updating your details."
 msgstr "Ocorreu um erro ao atualizar os teus detalhes."
@@ -468,7 +473,7 @@ msgstr "A atualizar..."
 msgid "Verify your inbox for the confirmation email"
 msgstr "Verifica o teu inbox para a confirmação do email"
 
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:263
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:272
 #, elixir-autogen, elixir-format
 msgid "Your details have been updated."
 msgstr "Os teus detalhes foram atualizados."
@@ -522,33 +527,37 @@ msgstr "Conta criada com sucesso!"
 msgid "Comments"
 msgstr "Comentários"
 
-#: lib/educatium_web/live/home_live/form_component.ex:160
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:110
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:157
 #, elixir-autogen, elixir-format
 msgid "Compressing files..."
 msgstr "A comprimir ficheiros..."
 
-#: lib/educatium_web/live/home_live/form_component.ex:86
-#: lib/educatium_web/live/home_live/form_component.ex:102
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:68
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:86
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:102
 #: lib/educatium_web/live/home_live/index.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Create post"
 msgstr "Nova publicação"
 
-#: lib/educatium_web/live/home_live/form_component.ex:86
-#: lib/educatium_web/live/home_live/form_component.ex:102
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:68
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:86
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:102
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Creating..."
 msgstr "A criar conta..."
 
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:16
-#: lib/educatium_web/live/home_live/form_component.ex:45
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:45
 #: lib/educatium_web/live/resource_live/form_component.ex:26
 #: lib/educatium_web/live/resource_live/show.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr "Descrição"
 
-#: lib/educatium_web/live/home_live/form_component.ex:266
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:152
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:263
 #, elixir-autogen, elixir-format
 msgid "Directory %{name} was successfully uploaded (%{length} files)"
 msgstr "Pasta %{name} foi carregado com sucesso (%{length} ficheiros)"
@@ -564,6 +573,8 @@ msgstr "Filtrar por"
 msgid "Most viewed"
 msgstr "Mais visto"
 
+#: lib/educatium_web/live/home_live/form_component.ex:36
+#: lib/educatium_web/live/home_live/form_component.ex:39
 #: lib/educatium_web/live/home_live/index.ex:49
 #, elixir-autogen, elixir-format
 msgid "New post"
@@ -589,18 +600,18 @@ msgstr "Nada"
 msgid "Oldest"
 msgstr "Mais antigo"
 
-#: lib/educatium_web/live/home_live/form_component.ex:56
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:56
 #: lib/educatium_web/live/resource_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Original publication date"
 msgstr "Data de publicação original"
 
-#: lib/educatium_web/live/home_live/form_component.ex:194
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:191
 #, elixir-autogen, elixir-format
 msgid "Resource created successfully."
 msgstr "Recurso criado com sucesso."
 
-#: lib/educatium_web/live/home_live/form_component.ex:62
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:62
 #: lib/educatium_web/live/resource_live/form_component.ex:39
 #, elixir-autogen, elixir-format
 msgid "Select one or more tags"
@@ -616,8 +627,8 @@ msgstr "Ordenar por"
 #: lib/educatium_web/live/admin/announcement_live/index.html.heex:15
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:15
 #: lib/educatium_web/live/announcement_live/form_component.ex:23
-#: lib/educatium_web/live/home_live/form_component.ex:43
-#: lib/educatium_web/live/home_live/form_component.ex:98
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:43
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:98
 #: lib/educatium_web/live/resource_live/form_component.ex:24
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -626,29 +637,31 @@ msgstr "Título"
 #: lib/educatium_web/live/admin/post_live/form_component.ex:27
 #: lib/educatium_web/live/admin/post_live/index.html.heex:19
 #: lib/educatium_web/live/admin/resource_live/index.html.heex:17
-#: lib/educatium_web/live/home_live/form_component.ex:51
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:51
 #: lib/educatium_web/live/resource_live/form_component.ex:32
 #: lib/educatium_web/live/resource_live/show.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr "Tipo"
 
-#: lib/educatium_web/live/home_live/form_component.ex:29
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:29
 #, elixir-autogen, elixir-format
 msgid "Type of post to create"
 msgstr "Tipo do post para criar"
 
-#: lib/educatium_web/live/home_live/form_component.ex:71
-#, elixir-autogen
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:53
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:71
+#, elixir-autogen, elixir-format
 msgid "Upload a directory to join your resource"
-msgstr "Carregar uma posta para juntar ao teu recurso"
+msgstr "Carregar uma pasta para juntar ao teu recurso"
 
-#: lib/educatium_web/live/home_live/form_component.ex:274
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:160
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:271
 #, elixir-autogen, elixir-format
 msgid "Uploading %{progress}%"
 msgstr "A carregar %{progress}%"
 
-#: lib/educatium_web/live/home_live/form_component.ex:15
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:15
 #, elixir-autogen, elixir-format
 msgid "Use this form to create a post for the main feed."
 msgstr "Utiliza este formulário para criar uma publicação para o feed principal."
@@ -946,7 +959,7 @@ msgid "Visibility"
 msgstr "Visibilidade"
 
 #: lib/educatium_web/live/admin/announcement_live/form_component.ex:80
-#: lib/educatium_web/live/home_live/form_component.ex:222
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:219
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Announcement created successfully"
 msgstr "Anúncio criado com sucesso"
@@ -966,7 +979,7 @@ msgstr "Anúncios"
 #: lib/educatium_web/live/admin/announcement_live/index.html.heex:16
 #: lib/educatium_web/live/announcement_live/form_component.ex:24
 #: lib/educatium_web/live/announcement_live/show.html.heex:24
-#: lib/educatium_web/live/home_live/form_component.ex:99
+#: lib/educatium_web/live/home_live/components/single_resource_form.ex:99
 #, elixir-autogen, elixir-format
 msgid "Body"
 msgstr "Corpo"
@@ -1044,27 +1057,67 @@ msgstr "Preview"
 msgid "Remove bookmark"
 msgstr "Remover marcador"
 
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:63
+#, elixir-autogen, elixir-format
+msgid "Any type of file. Maximum size: 100 MiB"
+msgstr "Qualquer tipo de ficheiro. Tamanho máximo: 100 MiB"
+
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:32
+#, elixir-autogen, elixir-format
+msgid "Available tags:"
+msgstr "Tags disponíveis"
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:191
+#, elixir-autogen, elixir-format
+msgid "Export all data"
+msgstr "Exportar todos os dados"
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:190
+#, elixir-autogen, elixir-format
+msgid "Exporting..."
+msgstr "A exportar..."
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:202
+#, elixir-autogen, elixir-format
+msgid "Import data"
+msgstr "Importar dados"
+
+#: lib/educatium_web/live/auth_live/user_settings_live.ex:201
+#, elixir-autogen, elixir-format
+msgid "Importing..."
+msgstr "A importar..."
+
+#: lib/educatium_web/live/home_live/form_component.ex:29
+#, elixir-autogen, elixir-format
+msgid "Multiple resources"
+msgstr "Vários recursos"
+
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:11
+#, elixir-autogen, elixir-format, fuzzy
+msgid "New resources"
+msgstr "Novo recurso"
+
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:122
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Resources created successfully."
+msgstr "Recurso criado com sucesso."
+
+#: lib/educatium_web/live/home_live/form_component.ex:19
+#, elixir-autogen, elixir-format
+msgid "Single resource"
+msgstr "Um recurso"
+
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:15
+#, elixir-autogen, elixir-format
+msgid "The submited directory should have a root file called manifest.json just like this:"
+msgstr "A pasta submetida deve conter um ficheiro na raiz chamado manifest.json assim:"
+
+#: lib/educatium_web/live/home_live/components/multiple_resources_form.ex:12
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Use this form to create multiple resources."
+msgstr "Utiliza este formulário para criar uma publicação para o feed principal."
+
 #: lib/educatium_web/live/auth_live/user_settings_live.ex:51
 #, elixir-autogen, elixir-format
-msgid "Dev"
-msgstr ""
-
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:192
-#, elixir-autogen, elixir-format
-msgid "Key"
-msgstr ""
-
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:194
-#, elixir-autogen, elixir-format
-msgid "Regenerate Key"
-msgstr ""
-
-#: lib/educatium_web/live/auth_live/user_settings_live.ex:189
-#, elixir-autogen, elixir-format
-msgid "Toggle API Key"
-msgstr ""
-
-#: lib/educatium/accounts/user.ex:73
-#, elixir-autogen, elixir-format
-msgid "must have the @ sign and no spaces"
-msgstr ""
+msgid "Website"
+msgstr "Website"

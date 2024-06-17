@@ -33,7 +33,7 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Email") %>
             </button>
           </li>
-          <li class="me-2">
+          <li class={@current_user.role != :admin && "me-2"}>
             <button
               @click="option = 'password'"
               class="inline-block rounded-t-lg border-b-2 p-4"
@@ -42,13 +42,13 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Password") %>
             </button>
           </li>
-          <li class="me-2">
+          <li :if={@current_user.role == :admin} class="me-2">
             <button
-              @click="option = 'dev'"
+              @click="option = 'website'"
               class="inline-block rounded-t-lg border-b-2 p-4"
-              x-bind:class="option == 'dev' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+              x-bind:class="option == 'website' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
             >
-              <%= gettext("Dev") %>
+              <%= gettext("Website") %>
             </button>
           </li>
         </ul>
@@ -184,17 +184,26 @@ defmodule EducatiumWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-      <div x-show="option === 'dev'">
-        <div class="flex flex-col space-y-2">
-          <.input type="switch" name={gettext("Toggle API Key")} checked={!is_nil(@api_key)} />
 
-          <%= if !is_nil(@api_key) do %>
-            <.input name="key" label={gettext("Key")} type="text" value={@api_key} readonly />
-            <.button phx-click="regenerate-key">
-              <%= gettext("Regenerate Key") %>
+      <div x-show="option == 'website'" class="flex flex-col items-center space-y-12">
+        <.link href={~p"/data/export"}>
+          <.button phx-disable-with={gettext("Exporting...")}>
+            <%= gettext("Export all data") %>
+          </.button>
+        </.link>
+
+        <.simple_form
+          for={%{}}
+          id="import_form"
+          phx-submit="import"
+        >
+          <div class="flex items-center justify-center space-x-2 pl-16">
+            <.button phx-disable-with={gettext("Importing...")}>
+              <%= gettext("Import data") %>
             </.button>
-          <% end %>
-        </div>
+            <.live_file_input upload={@uploads.file} required />
+          </div>
+        </.simple_form>
       </div>
     </div>
     """
@@ -233,6 +242,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       |> assign(:trigger_submit, false)
       |> assign(:api_key, user.api_key)
       |> allow_upload(:avatar, accept: Avatar.extensions_whitelist(), max_entries: 1)
+      |> allow_upload(:file, accept: :any, max_entries: 1)
 
     {:ok, socket}
   end

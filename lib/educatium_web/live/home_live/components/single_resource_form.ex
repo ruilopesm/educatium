@@ -78,7 +78,7 @@ defmodule EducatiumWeb.HomeLive.Components.SingleResourceForm do
             phx-hook="ZipUpload"
           />
           <p class="mt-1 text-sm text-gray-500 hover:cursor-help">
-            Any type of file. Maximum size: 100 MiB
+            <%= gettext("Any type of file. Maximum size: 100 MiB") %>
           </p>
         </div>
 
