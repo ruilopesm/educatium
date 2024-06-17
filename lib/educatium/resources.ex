@@ -145,7 +145,7 @@ defmodule Educatium.Resources do
   Creates mulitple resources from a directory with a JSON manifest file.
   """
   def create_resources(user, path) do
-    FileManager.process_resources(user.id, path) 
+    FileManager.process_resources(user.id, path)
   end
 
   @doc """

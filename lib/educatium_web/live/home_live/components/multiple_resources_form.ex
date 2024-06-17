@@ -16,18 +16,30 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
       <div class="mt-4 text-gray-600">
         <p>The submited directory should have a root file called manifest.json just like this:</p>
         <pre class><code class="language-json">
-  [
+    [
       {
         "title": "Resource Title 1",
         "description": "Description",
         "type": "book",
         "date": "2023-05-15",
         "visibility": "public",
+        "tags": ["Webdev", "Video", ...],
         "path": "resource1"
       },
       other resources...
-  ]
+    ]
         </code></pre>
+
+        <div>
+          <p>Available tags:</p>
+          <div class="flex flex-wrap gap-2 mt-4">
+            <%= for tag <- @tags do %>
+              <span class={"bg-#{tag.color}-50 text-#{tag.color}-600 rounded-full px-2.5 py-1 text-center text-xs font-medium leading-4"}>
+                <%= tag.name %>
+              </span>
+            <% end %>
+          </div>
+        </div>
       </div>
 
       <.simple_form
@@ -64,9 +76,12 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
 
   @impl true
   def update(assigns, socket) do
+    tags = Resources.list_tags()
+
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(tags: tags)
      |> assign(files: [], status: nil, path: nil)
      |> allow_upload(:dir,
        accept: :any,
@@ -102,10 +117,11 @@ defmodule EducatiumWeb.HomeLive.Components.MultipleResourcesForm do
     current_user = socket.assigns.current_user
     path = socket.assigns.path
     Resources.create_resources(current_user, path)
-    {:noreply,   
-      socket
-      |> put_flash(:info, gettext("Resources created successfully."))
-      |> push_patch(to: ~p"/posts")}
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Resources created successfully."))
+     |> push_patch(to: ~p"/posts")}
   end
 
   @uploads_dir Application.compile_env(:educatium, Educatium.Uploaders)[:uploads_dir]

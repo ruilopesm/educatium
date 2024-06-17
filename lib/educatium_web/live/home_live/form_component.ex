@@ -44,11 +44,10 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
 
   @impl true
   def update(assigns, socket) do
-    {:ok, 
-      socket
-      |> assign(assigns)
-      |> assign(:form_type, "single-resource")
-    }
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign(:form_type, "single-resource")}
   end
 
   @impl true
@@ -56,11 +55,12 @@ defmodule EducatiumWeb.HomeLive.FormComponent do
     {:noreply, assign(socket, :form_type, form_type)}
   end
 
-  defp selector_class(form_type, selected_form_type) do 
+  defp selector_class(form_type, selected_form_type) do
     class = "inline-block rounded-t-lg border-b-2 p-4 "
-    if selected_form_type == form_type do 
+
+    if selected_form_type == form_type do
       class <> "active border-brand text-brand"
-    else 
+    else
       class <> "border-transparent hover:border-gray-300 hover:text-gray-600"
     end
   end

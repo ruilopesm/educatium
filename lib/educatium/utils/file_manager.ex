@@ -1,8 +1,7 @@
 defmodule Educatium.Utils.FileManager do
-
   alias Educatium.Resources
   alias Educatium.Resources.{Directory, File}
-  
+
   @doc """
   Builds a zip file from a directory.
 
@@ -98,15 +97,15 @@ defmodule Educatium.Utils.FileManager do
   end
 
   def process_resources(user_id, path) do
-    manifest = 
-      path <> "/manifest.json"
+    manifest =
+      (path <> "/manifest.json")
       |> Elixir.File.read!()
       |> Jason.decode!()
 
     case validate_manifest(manifest) do
       :ok ->
-        Enum.each(manifest, fn entry -> 
-          attrs = Map.put(entry, "user_id", user_id)
+        Enum.each(manifest, fn entry ->
+          attrs = build_resource_attrs(entry, user_id)
           path = path <> "/#{Map.get(entry, "path")}"
 
           Resources.create_resource(attrs, path)
@@ -117,17 +116,27 @@ defmodule Educatium.Utils.FileManager do
     end
   end
 
-  @spec validate_manifest(list) :: :ok | {:error, String.t}
+  defp build_resource_attrs(entry, user_id) do
+    tags =
+      Resources.list_tags()
+      |> Enum.filter(fn tag -> tag.name in Map.get(entry, "tags") end)
+      |> Enum.map(fn tag -> tag.id end)
+
+    entry
+    |> Map.put("tags", tags)
+    |> Map.put("user_id", user_id)
+  end
+
   def validate_manifest(manifest) when is_list(manifest) do
     Enum.each(manifest, fn entry ->
       if is_map(entry) do
         if Map.has_key?(entry, "title") and
-           Map.has_key?(entry, "description") and
-           Map.has_key?(entry, "type") and
-           Map.has_key?(entry, "date") and
-           Map.has_key?(entry, "visibility") and
-           Map.has_key?(entry, "path") do
-
+             Map.has_key?(entry, "description") and
+             Map.has_key?(entry, "type") and
+             Map.has_key?(entry, "date") and
+             Map.has_key?(entry, "visibility") and
+             Map.has_key?(entry, "tags") and
+             Map.has_key?(entry, "path") do
           :ok
         else
           {:error, "Invalid manifest entry, missing required fields"}
