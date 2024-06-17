@@ -6,7 +6,7 @@ defmodule Educatium.Resources.Resource do
   alias Educatium.Resources
   alias Educatium.Resources.{Bookmark, Directory, ResourceTag, Tag}
 
-  @types ~w(book article presentation project report exam assignment solution)a
+  @types ~w(book article notes application presentation project report exam assignment thesis solution)a
   @visibilities ~w(private public)a
 
   @required_fields ~w(title description type date visibility user_id)a
