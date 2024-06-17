@@ -111,6 +111,7 @@ defmodule EducatiumWeb.Router do
     end
 
     get "/directories/:id", DirectoryController, :download_directory
+    get "/data/export", DataController, :export
   end
 
   ## Admin routes

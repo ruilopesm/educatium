@@ -1,6 +1,6 @@
 defmodule Educatium.Utils.FileManager do
   alias Educatium.Resources
-  alias Educatium.Resources.{Directory, File}
+  alias Educatium.Resources.Directory
 
   @doc """
   Builds a zip file from a directory.

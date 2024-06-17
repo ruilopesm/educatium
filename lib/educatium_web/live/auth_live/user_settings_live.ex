@@ -12,7 +12,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       <:subtitle><%= gettext("Manage your account email address and password settings") %></:subtitle>
     </.header>
 
-    <div x-data="{ option: 'details' }">
+    <div x-data="{ option: 'website' }">
       <div class="mt-7 mb-10 flex justify-center border-b border-gray-200 text-center text-sm font-medium text-gray-500">
         <ul class="-mb-px flex flex-wrap">
           <li class="me-2">
@@ -33,13 +33,22 @@ defmodule EducatiumWeb.UserSettingsLive do
               <%= gettext("Email") %>
             </button>
           </li>
-          <li class="me-2">
+          <li class={@current_user.role != :admin && "me-2"}>
             <button
               @click="option = 'password'"
               class="inline-block rounded-t-lg border-b-2 p-4"
               x-bind:class="option == 'password' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
             >
               <%= gettext("Password") %>
+            </button>
+          </li>
+          <li :if={@current_user.role == :admin} class="me-2">
+            <button
+              @click="option = 'website'"
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              x-bind:class="option == 'website' ? 'active border-brand text-brand' : 'border-transparent hover:border-gray-300 hover:text-gray-600'"
+            >
+              <%= gettext("Website") %>
             </button>
           </li>
         </ul>
@@ -175,6 +184,27 @@ defmodule EducatiumWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
+
+      <div x-show="option == 'website'" class="flex flex-col items-center space-y-12">
+        <.link href={~p"/data/export"}>
+          <.button phx-disable-with={gettext("Exporting...")}>
+            <%= gettext("Export all data") %>
+          </.button>
+        </.link>
+
+        <.simple_form
+          for={%{}}
+          id="import_form"
+          phx-submit="import"
+        >
+          <div class="flex items-center justify-center space-x-2 pl-16">
+            <.button phx-disable-with={gettext("Importing...")}>
+              <%= gettext("Import data") %>
+            </.button>
+            <.live_file_input upload={@uploads.file} required />
+          </div>
+        </.simple_form>
+      </div>
     </div>
     """
   end
@@ -211,6 +241,7 @@ defmodule EducatiumWeb.UserSettingsLive do
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
       |> allow_upload(:avatar, accept: Avatar.extensions_whitelist(), max_entries: 1)
+      |> allow_upload(:file, accept: :any, max_entries: 1)
 
     {:ok, socket}
   end
