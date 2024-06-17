@@ -11,7 +11,7 @@
 
   <:actions>
     <.link
-      :if={@is_owner}
+      :if={@is_owner || @current_user.role == :admin}
       patch={~p"/resources/#{@resource}/show/edit"}
       phx-click={JS.push_focus()}
     >
