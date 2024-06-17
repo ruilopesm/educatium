@@ -22,19 +22,20 @@ defmodule Educatium.Repo.Seeds.Resources do
   def seed_resources do
     users = Repo.all(User)
 
-    for i <- 1..30 do
-      type = Enum.random(@types)
-
+    "priv/fake/resources.json"
+    |> File.read!()
+    |> Jason.decode!()
+    |> Enum.each(fn resource ->
       %{
-        "title" => "#{stringify_type(type)} #{i}",
-        "date" => Faker.Date.backward(365),
-        "description" => Faker.Lorem.paragraph(),
-        "type" => type,
-        "visibility" => "public",
+        "title" => resource["title"],
+        "description" => resource["description"],
+        "date" => resource["date"],
+        "type" => resource["type"],
+        "visibility" => resource["visibility"],
         "user_id" => Enum.random(users).id
       }
-      |> Resources.create_resource()
-    end
+      |> Resources.create_resource(build_path(resource["path"]))
+    end)
   end
 
   def seed_resources_tags do
@@ -49,12 +50,7 @@ defmodule Educatium.Repo.Seeds.Resources do
     end
   end
 
-  defp stringify_type(type) do
-    type
-    |> Atom.to_string()
-    |> String.capitalize()
-    |> then(&Gettext.dgettext(EducatiumWeb.Gettext, "enums", &1))
-  end
+  defp build_path(path), do: File.cwd!() <> "/priv/fake/resources/" <> path
 end
 
 Educatium.Repo.Seeds.Resources.run()
