@@ -375,6 +375,22 @@ defmodule Educatium.Resources do
   end
 
   @doc """
+  Deletes a tag.
+
+  ## Examples
+
+      iex> delete_tag(tag)
+      {:ok, %Tag{}}
+
+      iex> delete_tag(tag)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tag(%Tag{} = tag) do
+    Repo.delete(tag)
+  end
+
+  @doc """
   Lists all tags for a resource.
   """
   def list_tags_by_resource(resource_id) do

@@ -21,7 +21,14 @@ defmodule EducatiumWeb.Router do
   end
 
   pipeline :active, do: plug(EducatiumWeb.Plugs.ActiveUser)
-  pipeline :require_admin, do: plug(EducatiumWeb.Plugs.RequireAdmin)
+
+  pipeline :require_admin_web do
+    plug EducatiumWeb.Plugs.RequireAdmin, type: :web
+  end
+
+  pipeline :require_admin_api do
+    plug EducatiumWeb.Plugs.RequireAdmin, type: :api
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:educatium, :dev_routes) do
@@ -51,6 +58,17 @@ defmodule EducatiumWeb.Router do
     get "/user", UserController, :user
 
     resources "/resources", ResourceController, except: [:new, :edit]
+
+    get "/tags", TagController, :index
+    get "/tags/:id", TagController, :show
+
+    pipe_through [:require_admin_api]
+
+    scope "/tags" do
+      post "/", TagController, :create
+      put "/:id", TagController, :update
+      delete "/:id", TagController, :delete
+    end
   end
 
   ## Authentication routes
@@ -133,7 +151,7 @@ defmodule EducatiumWeb.Router do
   ## Admin routes
 
   scope "/admin", EducatiumWeb.Admin, as: :admin do
-    pipe_through [:browser, :require_admin]
+    pipe_through [:browser, :require_admin_web]
 
     scope "/users" do
       live "/", UserLive.Index, :index
