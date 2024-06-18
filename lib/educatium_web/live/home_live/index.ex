@@ -21,7 +21,7 @@ defmodule EducatiumWeb.HomeLive.Index do
     {:ok,
      socket
      |> assign(:page_title, gettext("Home"))
-     |> stream(:posts, Feed.list_posts(preloads: @preloads))
+     |> stream(:posts, Feed.list_posts(preloads: @preloads, order_by: [desc: :inserted_at]))
      |> assign(:form, to_form(%{}, as: "post"))
      |> assign(:new_posts_count, 0)
      |> assign(:filters, filters)
