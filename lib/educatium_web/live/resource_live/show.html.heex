@@ -18,18 +18,20 @@
       <.button><%= gettext("Edit resource") %></.button>
     </.link>
 
-    <%= if !current_user_bookmarked?(@resource, @current_user) do %>
-      <.link>
-        <.button phx-click="bookmark">
-          <%= gettext("Bookmark") %>
-        </.button>
-      </.link>
-    <% else %>
-      <.link>
-        <.button phx-click="delete-bookmark">
-          <%= gettext("Remove bookmark") %>
-        </.button>
-      </.link>
+    <%= if @resource.user.id != @current_user.id do %>
+      <%= if !current_user_bookmarked?(@resource, @current_user) do %>
+        <.link>
+          <.button phx-click="bookmark">
+            <%= gettext("Bookmark") %>
+          </.button>
+        </.link>
+      <% else %>
+        <.link>
+          <.button phx-click="delete-bookmark">
+            <%= gettext("Remove bookmark") %>
+          </.button>
+        </.link>
+      <% end %>
     <% end %>
 
     <.link :if={@directory} href={~p"/directories/#{@resource.directory.id}"}>
