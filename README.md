@@ -220,3 +220,13 @@ Todos estes endpoints só estão disponíveis caso o utilizador associado ao _to
 ### Tradução
 
 - Tradução de toda a plataforma para português, onde consoante o idioma do utilizador, a plataforma é traduzida para português ou inglês
+
+### Importar
+
+Para importar dados para a plataforma, pode-se utilizar o seguinte comando:
+
+```bash
+mix run priv/repo/import.exs path/to/data.json
+```
+
+Este comando irá ler o ficheiro `data.json` especificado e importar os dados para a base de dados da plataforma.
