@@ -6,13 +6,5 @@
     "date": "2008-01-01",
     "visibility": "public",
     "path": "programas-em-c"
-  },
-  {
-    "title": "Fichas de RPCW",
-    "description": "Lista de fichas relacionadas à UC de RPCW",
-    "type": "worksheet",
-    "date": "2021-01-01",
-    "visibility": "public",
-    "path": "fichas-de-rpcw"
   }
 ]

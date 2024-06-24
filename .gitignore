@@ -45,3 +45,5 @@ npm-debug.log
 
 # Others
 /docs/bruno/
+/priv/fake/resources/
+/priv/fake/resources.json
