@@ -39,6 +39,118 @@ defmodule EducatiumWeb.DataController do
     send_download(conn, {:file, file}, filename: "export.json")
   end
 
+  def import(conn, %{"file" => file}) do
+    file_path = file.path
+
+    case File.read(file_path) do
+      {:ok, content} ->
+        case Jason.decode(content) do
+          {:ok, data} ->
+            import_data(data)
+            send_resp(conn, 200, "Data imported successfully.")
+          {:error, _} ->
+            send_resp(conn, 400, "Invalid JSON format.")
+        end
+      {:error, _} ->
+        send_resp(conn, 400, "Failed to read the file.")
+    end
+  end
+
+  defp import_data(data) do
+    Enum.each(data, fn {key, value} ->
+      case key do
+        "users" -> import_users(value)
+        "announcements" -> import_announcements(value)
+        "comments" -> import_comments(value)
+        "downvotes" -> import_downvotes(value)
+        "posts" -> import_posts(value)
+        "upvotes" -> import_upvotes(value)
+        "bookmarks" -> import_bookmarks(value)
+        "directories" -> import_directories(value)
+        "files" -> import_files(value)
+        "resources" -> import_resources(value)
+        "tags" -> import_tags(value)
+      end
+    end)
+  end
+
+  defp import_users(users) do
+    Enum.each(users, fn user ->
+      User.changeset(%User{}, user)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_announcements(announcements) do
+    Enum.each(announcements, fn announcement ->
+      Announcement.changeset(%Announcement{}, announcement)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_comments(comments) do
+    Enum.each(comments, fn comment ->
+      Comment.changeset(%Comment{}, comment)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_downvotes(downvotes) do
+    Enum.each(downvotes, fn downvote ->
+      Downvote.changeset(%Downvote{}, downvote)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_posts(posts) do
+    Enum.each(posts, fn post ->
+      Post.changeset(%Post{}, post)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_upvotes(upvotes) do
+    Enum.each(upvotes, fn upvote ->
+      Upvote.changeset(%Upvote{}, upvote)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_bookmarks(bookmarks) do
+    Enum.each(bookmarks, fn bookmark ->
+      Bookmark.changeset(%Bookmark{}, bookmark)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_directories(directories) do
+    Enum.each(directories, fn directory ->
+      Directory.changeset(%Directory{}, directory)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_files(files) do
+    Enum.each(files, fn file ->
+      File.changeset(%File{}, file)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_resources(resources) do
+    Enum.each(resources, fn resource ->
+      Resource.changeset(%Resource{}, resource)
+      |> Repo.insert()
+    end)
+  end
+
+  defp import_tags(tags) do
+    Enum.each(tags, fn tag ->
+      Tag.changeset(%Tag{}, tag)
+      |> Repo.insert()
+    end)
+  end
+
   defp gather_users do
     User
     |> Repo.all()
