@@ -1,6 +1,6 @@
 # Educatium
 
-> Plataforma de Gestão de Recursos Educativos
+> 20/20 :star:
 
 ## Instalação
 
